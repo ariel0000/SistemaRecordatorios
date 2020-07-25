@@ -24,6 +24,7 @@ public class PanelPrincipal extends JPanelCustom {
     private PanelAdVehiculos panelVehiculos;
     private PanelPlanillaNueva panelPlanillaNueva;
     private PanelVerPlanillas panelVerPlanillas;
+    private PanelAdPagos panelAdPagos;
     
     public PanelPrincipal() {
         tablaNotificaciones = new DefaultTableModel(null, getColumnas()){
@@ -90,6 +91,7 @@ public class PanelPrincipal extends JPanelCustom {
         jButtonVerPlanillas = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableNotificaciones = new javax.swing.JTable();
+        jButtonAdPagos = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(1000, 533));
 
@@ -139,6 +141,14 @@ public class PanelPrincipal extends JPanelCustom {
         jTableNotificaciones.setModel(tablaNotificaciones);
         jScrollPane1.setViewportView(jTableNotificaciones);
 
+        jButtonAdPagos.setFont(new java.awt.Font("SansSerif", 0, 24)); // NOI18N
+        jButtonAdPagos.setText("<html><p>Administar</p><p>&nbsp;&nbsp;&nbsp;Pagos</p></html>");
+        jButtonAdPagos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAdPagosActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -150,9 +160,10 @@ public class PanelPrincipal extends JPanelCustom {
                     .addComponent(jButtonAdCamiones, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
                     .addComponent(jButtonNuevaPlanilla, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
                     .addComponent(jButtonVerReparaciones, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
-                    .addComponent(jButtonVerPlanillas, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE))
+                    .addComponent(jButtonVerPlanillas, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                    .addComponent(jButtonAdPagos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(21, 21, 21)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 666, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 735, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -171,6 +182,8 @@ public class PanelPrincipal extends JPanelCustom {
                         .addComponent(jButtonVerReparaciones)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButtonVerPlanillas)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButtonAdPagos)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -200,6 +213,12 @@ public class PanelPrincipal extends JPanelCustom {
         this.panelVerPlanillas = new PanelVerPlanillas();
         controlador.cambiarDePanel(this.panelVerPlanillas, "Ver Planillas");
     }//GEN-LAST:event_jButtonVerPlanillasActionPerformed
+
+    private void jButtonAdPagosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdPagosActionPerformed
+        // Action Performed de botón "Administrar Pagos"
+        this.panelAdPagos = new PanelAdPagos();
+        this.controlador.cambiarDePanel(this.panelAdPagos, "Administrar Pagos");
+    }//GEN-LAST:event_jButtonAdPagosActionPerformed
 
     public PanelAdPersonas getPanelPersonas() {
         return panelPersonas;
@@ -243,6 +262,7 @@ public class PanelPrincipal extends JPanelCustom {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAdCamiones;
+    private javax.swing.JButton jButtonAdPagos;
     private javax.swing.JButton jButtonAdPersonas;
     private javax.swing.JButton jButtonNuevaPlanilla;
     private javax.swing.JButton jButtonVerPlanillas;

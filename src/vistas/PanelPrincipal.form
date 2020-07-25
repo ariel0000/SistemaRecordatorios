@@ -29,9 +29,10 @@
                   <Component id="jButtonNuevaPlanilla" alignment="0" pref="220" max="32767" attributes="0"/>
                   <Component id="jButtonVerReparaciones" alignment="0" pref="220" max="32767" attributes="0"/>
                   <Component id="jButtonVerPlanillas" alignment="0" pref="220" max="32767" attributes="0"/>
+                  <Component id="jButtonAdPagos" max="32767" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
-              <Component id="jScrollPane1" pref="666" max="32767" attributes="0"/>
+              <Component id="jScrollPane1" pref="735" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -52,6 +53,8 @@
                       <Component id="jButtonVerReparaciones" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jButtonVerPlanillas" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="jButtonAdPagos" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -147,5 +150,18 @@
         </Component>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JButton" name="jButtonAdPagos">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="SansSerif" size="24" style="0"/>
+        </Property>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="&quot;&lt;html&gt;&lt;p&gt;Administar&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;Pagos&lt;/p&gt;&lt;/html&gt;&quot;" type="code"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonAdPagosActionPerformed"/>
+      </Events>
+    </Component>
   </SubComponents>
 </Form>
