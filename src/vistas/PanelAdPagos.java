@@ -51,12 +51,12 @@ public class PanelAdPagos extends JPanelCustom {
         //Diseñar para aplicar filtro de nombre de cliente
         String consulta;
         if(filtroNombre.equals("")){
-            consulta = "SELECT per.nombre, per.apellido, p.idplanilla, p.pagado FROM persona AS per "
-                    + "INNER JOIN cliente AS c ON per.idpersona = c.idpersona INNER JOIN planilla AS p ON p.idcliente = c.idcliente";
+            consulta = "SELECT per.nombre, per.apellido, p.idplanilla, p.pagado FROM persona AS per INNER JOIN cliente AS c "
+                    + "ON per.idpersona = c.idpersona INNER JOIN planilla AS p ON p.idcliente = c.idcliente ORDER BY per.nombre";
         }else{
             consulta = "SELECT per.nombre, per.apellido, p.idplanilla, p.pagado FROM persona AS per "
                     + "INNER JOIN cliente AS c ON per.idpersona = c.idpersona INNER JOIN planilla AS p ON p.idcliente = c.idcliente "
-                    + "WHERE per.nombre LIKE '"+filtroNombre+"'";
+                    + "WHERE per.nombre LIKE '"+filtroNombre+"' ORDER BY per.nombre";
         }
         cargarDatosTablaClientes(consulta);
     }   
@@ -138,8 +138,8 @@ public class PanelAdPagos extends JPanelCustom {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(217, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(234, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 

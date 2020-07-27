@@ -55,13 +55,19 @@ public class PanelAdVehiculos extends JPanelCustom {
     }
     
     private String[] getColumnasReparaciones(){
-        String columnas[] = new String[] {"Numero Planilla", "Fecha Entrada", "Descripción"};
+        String columnas[] = new String[] {"N°Planilla", "tipo", "Fecha Salida", "Descripción"};
         return columnas;
     }
     private String[] getColumnas() {
         String columna[] = new String[]{"Patente", "Marca", "Modelo", "Dueño"};
         return columna;
     }
+    
+    private String[] getColumnasMantenimiento(){
+        String columna[] = new String[] {"N°Planilla", "tipo", "periodo (días)", "Fecha de Salida", "Descripción"};
+        return columna;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -90,6 +96,7 @@ public class PanelAdVehiculos extends JPanelCustom {
         jLabel2 = new javax.swing.JLabel();
         jButton6 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        jButtonVerMantenimiento = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(32767, 520));
         setMinimumSize(new java.awt.Dimension(875, 500));
@@ -150,7 +157,7 @@ public class PanelAdVehiculos extends JPanelCustom {
         });
 
         jButtonVerPlanillas.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jButtonVerPlanillas.setText("Ver Planillas asociadas");
+        jButtonVerPlanillas.setText("Ver Planillas del Vh.");
         jButtonVerPlanillas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonVerPlanillasActionPerformed(evt);
@@ -169,6 +176,14 @@ public class PanelAdVehiculos extends JPanelCustom {
 
         jButton1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jButton1.setText("Filtrar");
+
+        jButtonVerMantenimiento.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jButtonVerMantenimiento.setText("Ver Mantenimiento");
+        jButtonVerMantenimiento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonVerMantenimientoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -196,20 +211,24 @@ public class PanelAdVehiculos extends JPanelCustom {
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton6))
+                    .addComponent(jScrollPane2)
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton6, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(jLabel2)
+                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(jButtonNuevoVh)
-                                .addGap(18, 18, 18)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButtonBorrarVh)
-                                .addGap(12, 12, 12)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButtonModificarVh)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButtonVerRep)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButtonVerPlanillas))))
-                    .addComponent(jScrollPane2)
-                    .addComponent(jLabel2))
+                                .addComponent(jButtonVerMantenimiento)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButtonVerPlanillas)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -233,7 +252,8 @@ public class PanelAdVehiculos extends JPanelCustom {
                     .addComponent(jButtonBorrarVh)
                     .addComponent(jButtonModificarVh)
                     .addComponent(jButtonVerRep)
-                    .addComponent(jButtonVerPlanillas))
+                    .addComponent(jButtonVerPlanillas)
+                    .addComponent(jButtonVerMantenimiento))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -315,26 +335,80 @@ public class PanelAdVehiculos extends JPanelCustom {
         }
     }//GEN-LAST:event_jButtonModificarVhActionPerformed
 
+    private void jButtonVerMantenimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVerMantenimientoActionPerformed
+        // ActionPerformed de ver mantenimiento. Método para consultar las manteciones que tiene el vh. Aviso si no tiene ninguna.
+        int filaSelect = this.jTableVh.getSelectedRow();
+        if(filaSelect != -1){ //Hay fila seleccionada
+            //-- Borro el modelo actual de la tabla planilla (La segunda tabla en la vista)
+            DefaultTableModel dtm = (DefaultTableModel) this.jTablePlanilla.getModel();
+            dtm.setRowCount(0);  //Magicamente anduvo y sirve para eliminar las filas de la tabla
+            //---
+            this.modeloPlanilla.setColumnIdentifiers(this.getColumnasMantenimiento());
+            this.jTablePlanilla.getColumnModel().getColumn(4).setPreferredWidth(650);
+            this.cargarTablaMantenimientos(filaSelect);
+        }
+        else{ //No se seleccionó ninguna fila
+            JLabelAriel label = new JLabelAriel("Debe seleccionar una fila de la tabla");
+            JOptionPane.showMessageDialog(null, label, "¡ATENCIÓN!", JOptionPane.WARNING_MESSAGE);
+        }
+        
+    }//GEN-LAST:event_jButtonVerMantenimientoActionPerformed
+
+    private void cargarTablaMantenimientos(int filaSelect){
+        //Carga la tabla de las reparaciones tipo mantenimiento que puede tener un vehículo
+        //Columnas: "Numero Planilla", "tipo", "periodo", "Fecha de Salida", "Descripción"
+        String patente = (String) this.jTableVh.getValueAt(filaSelect, 0);
+        int contadorMant = 0; //Contador de mantenciones encontradas
+        String datos[] = new String[5];
+        String query = "SELECT p.idplanilla, r.tipo, r.periodo, p.fecha_de_salida, r.descripcion FROM"
+                    + " planilla AS p INNER JOIN reparacion AS r ON p.idplanilla = r.idplanilla INNER JOIN vehiculo AS v "
+                    + "ON v.idvehiculo = p.idvehiculo WHERE v.patente = '"+patente+"' AND r.tipo = 'mantenimiento' ";
+        try{
+            Statement st = this.controlador.obtenerConexion().createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while(rs.next()){
+                datos[0] = ""+rs.getInt(1);  //idplanilla
+                datos[1] = ""+rs.getString(2);  //tipo de reparación (Enum)
+                datos[2] = ""+rs.getInt(3); //tipo de periodo
+                datos[3] = ""+rs.getDate(4); //fecha de salida
+                datos[4] = rs.getString(5); //descripción
+                this.modeloPlanilla.addRow(datos);
+                contadorMant++;
+            }
+        }catch(SQLException ex){
+            JLabelAriel label = new JLabelAriel("Error al cargar las mantenciones en la tabla: "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
+        }
+        this.jTablePlanilla.updateUI();
+        if(contadorMant == 0){ //No encontró mantenciones para el vehículo
+            JLabelAriel label2 = new JLabelAriel("No se encontraron mantenciones para el vehículo seleccionado: ");
+            JOptionPane.showMessageDialog(null, label2, "INFO", JOptionPane.INFORMATION_MESSAGE);    
+        }
+    }
+    
     private void cargarTablaReparaciones(int filaSelect){
         //Método para cargar la tabla reparaciones según el vehículo seleccionado
         DefaultTableModel dtm = (DefaultTableModel) this.jTablePlanilla.getModel();
         dtm.setRowCount(0);  //Magicamente anduvo y sirve para eliminar las filas de la tabla
-        String Datos[] = new String[3];
+        int contadorRep = 0;
+        String Datos[] = new String[4];
         String patente = (String) this.jTableVh.getValueAt(filaSelect, 0);
         
         this.modeloPlanilla.setColumnIdentifiers(this.getColumnasReparaciones());
-        this.jTablePlanilla.getColumnModel().getColumn(2).setPreferredWidth(650);
+        this.jTablePlanilla.getColumnModel().getColumn(3).setPreferredWidth(650);
         try {
             //Carga la tabla "de abajo" con las reparaciones que le corresponden al vehículos seleccionado
             Statement st = this.controlador.obtenerConexion().createStatement();
-            ResultSet rs = st.executeQuery("SELECT p.idplanilla, p.fecha_de_entrada, r.descripcion  FROM"
+            ResultSet rs = st.executeQuery("SELECT p.idplanilla, p.fecha_de_salida, r.descripcion FROM"
                     + " planilla AS p INNER JOIN reparacion AS r ON p.idplanilla = r.idplanilla "
                     + " INNER JOIN vehiculo AS v ON v.idvehiculo = p.idvehiculo "
                     + "WHERE v.patente = '"+patente+"' ");
             while(rs.next()){
                 Datos[0] = ""+rs.getInt(1); //El idplanilla
-                Datos[1] = ""+rs.getDate(2);
-                Datos[2] = ""+rs.getString(3);
+                Datos[1] = "Reparación";
+                Datos[2] = ""+rs.getDate(2); //fecha de salida
+                Datos[3] = ""+rs.getString(3); //Descripción
+                contadorRep++;
                 this.modeloPlanilla.addRow(Datos);
             }
             this.jTablePlanilla.updateUI();
@@ -342,6 +416,10 @@ public class PanelAdVehiculos extends JPanelCustom {
             JLabelAriel label = new JLabelAriel("Error al cargar las reparaciones en la tabla: "+ex.getMessage());
             JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
         }   
+        if(contadorRep == 0){
+            JLabelAriel label2 = new JLabelAriel("No se encontraron Reparaciones para el vehículo seleccionado: ");
+            JOptionPane.showMessageDialog(null, label2, "INFO", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
     
     private void cargarTablaPlanillas(int filaSelect){
@@ -439,6 +517,7 @@ public class PanelAdVehiculos extends JPanelCustom {
     private javax.swing.JButton jButtonBorrarVh;
     private javax.swing.JButton jButtonModificarVh;
     private javax.swing.JButton jButtonNuevoVh;
+    private javax.swing.JButton jButtonVerMantenimiento;
     private javax.swing.JButton jButtonVerPlanillas;
     private javax.swing.JButton jButtonVerRep;
     private javax.swing.JCheckBox jCheckBox1;
