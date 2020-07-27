@@ -43,7 +43,7 @@ public class PanelAdPagos extends JPanelCustom {
     private String[] getColumnas(){
         String columna[] = new String[]{"Nombre Cliente", "Apellido", "N° Planilla", "¿Impaga?", "IMPORTE"};
         
-        return null;
+        return columna;
     }
     
     private void cargarTablaClientes(String filtroNombre){

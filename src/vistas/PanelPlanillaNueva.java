@@ -1254,13 +1254,13 @@ public class PanelPlanillaNueva extends JPanelCustom {
             } else {
                 ps.setDate(3, null);
             }
-            ps.setBoolean(4, this.jCheckBoxPagado.isEnabled()); //pagado
+            ps.setBoolean(4, this.jCheckBoxPagado.isSelected()); //pagado
             ps.setString(5, this.jTextFieldDescripcion.getText());
             ps.setInt(6, this.idCliente);
             ps.setInt(7, Integer.valueOf(chofer.getKey())); //idpersona - para chofer
             ps.setInt(8, Integer.valueOf(vh.getKey()));
-            ps.setBoolean(9, this.jCheckBoxFacturado.isEnabled()); //facturado
-            ps.setBoolean(10, this.jCheckBoxEntregado.isEnabled()); //Entregado
+            ps.setBoolean(9, this.jCheckBoxFacturado.isSelected()); //facturado
+            ps.setBoolean(10, this.jCheckBoxEntregado.isSelected()); //Entregado
             int executeUpdate = ps.executeUpdate();
             co.commit(); //Ahora si se acepta que anduvo bien
             JOptionPane.showMessageDialog(null, "Guardado con éxito");
@@ -1297,16 +1297,16 @@ public class PanelPlanillaNueva extends JPanelCustom {
           else
               ps.setDate(1, null);
               
-            ps.setBoolean(2, this.jCheckBoxPagado.isEnabled()); //pagado
+            ps.setBoolean(2, this.jCheckBoxPagado.isSelected()); //pagado
             ps.setString(3, this.jTextFieldDescripcion.getText());
           //  ps.setInt(4, this.idCliente); No se carga en la actualización
           //  ps.setInt(4, Integer.valueOf(chofer.getKey())); //idpersona (chofer) - Permite editar aunque si no gusta se podría quitar
            // ps.setInt(8, Integer.valueOf(vh.getKey())); // No se carga en la actualización
-            ps.setBoolean(4, this.jCheckBoxFacturado.isEnabled()); //facturado
-            ps.setBoolean(5, this.jCheckBoxEntregado.isEnabled()); //Entregado
+            ps.setBoolean(4, this.jCheckBoxFacturado.isSelected()); //facturado
+            ps.setBoolean(5, this.jCheckBoxEntregado.isSelected()); //Entregado
             int executeUpdate = ps.executeUpdate();
             co.commit(); //Ahora si se acepta que anduvo bien
-            JOptionPane.showMessageDialog(null, "Guardado con éxito");
+            JOptionPane.showMessageDialog(null, "Actualizado con éxito");
         } catch (SQLException ex) {
             try {
                 co.rollback();
@@ -1524,6 +1524,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         
     }//GEN-LAST:event_jButtonCancelActionPerformed
 
+    /**/
     private void borrarCheque(String idcheque){
         int idCh = Integer.valueOf(idcheque);
         try {
