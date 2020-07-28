@@ -22,10 +22,11 @@ import modelo.JLabelAriel;
 public class PanelAdPagos extends JPanelCustom {
 
     
-    private DefaultTableModel modelo;
+    private DefaultTableModel modelo, modeloCli;
     private ControladorPrincipal controlador;
     
     public PanelAdPagos() {
+        this.controlador = ControladorPrincipal.getInstancia();
         modelo = new DefaultTableModel(){       
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -36,32 +37,45 @@ public class PanelAdPagos extends JPanelCustom {
         initComponents();
         this.jTablePlanillas.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
         modelo.setColumnIdentifiers(getColumnas());
-        this.controlador = ControladorPrincipal.getInstancia();
-        cargarTablaClientes("");
+        
+        modeloCli = new DefaultTableModel(){
+           @Override
+           public boolean isCellEditable(int row, int column){
+               //all cells false. No se puede editar ninguna celda
+               return false;
+           }
+        };
+       modeloCli.setColumnIdentifiers(getColumnasCliente());
     }
 
     private String[] getColumnas(){
-        String columna[] = new String[]{"Nombre Cliente", "Apellido", "N° Planilla", "¿Impaga?", "IMPORTE"};
+        String columna[] = new String[]{"N° Planilla", "Fecha de Entrada", "Importe", "Pagado"};
         
         return columna;
     }
     
-    private void cargarTablaClientes(String filtroNombre){
-        //Método para cargar planillas en la tabla
+    private String[] getColumnasCliente(){
+        String columnas[] = new String[]{"Nombre", "Apellido", "¿Planillas Impagas?", "Estado de C.C"};
+        
+        return columnas;
+    }
+    
+    private void cargarTablaClientes(String nombreApellido){
+        //Método para cargar la tabla de clientes cuando se carga la vista o cuando se filtra por nombre
+        
+    }
+    
+    private void cargarTablaPlanillas(String filtroNombre){
+        //Método para cargar planillas en la tabla que tiene que llamarse dsps de un ActionPerformed de "Seleccionar Cliente"
         //Diseñar para aplicar filtro de nombre de cliente
         String consulta;
-        if(filtroNombre.equals("")){
-            consulta = "SELECT per.nombre, per.apellido, p.idplanilla, p.pagado FROM persona AS per INNER JOIN cliente AS c "
-                    + "ON per.idpersona = c.idpersona INNER JOIN planilla AS p ON p.idcliente = c.idcliente ORDER BY per.nombre";
-        }else{
-            consulta = "SELECT per.nombre, per.apellido, p.idplanilla, p.pagado FROM persona AS per "
-                    + "INNER JOIN cliente AS c ON per.idpersona = c.idpersona INNER JOIN planilla AS p ON p.idcliente = c.idcliente "
-                    + "WHERE per.nombre LIKE '"+filtroNombre+"' ORDER BY per.nombre";
-        }
-        cargarDatosTablaClientes(consulta);
+        consulta = "SELECT p.idplanilla, p.fecha_de_salida, p.importe, p.pagado FROM planilla AS p"
+                + " INNER JOIN cliente as c ON c.idcliente = p.idcliente INNER JOIN persona as pe ON pe.idpersona = c.idpersona"
+                + " WHERE per.nombre LIKE '"+filtroNombre+"' ORDER BY per.nombre";
+        cargarDatosTablaPlanillas(consulta);
     }   
     
-    private void cargarDatosTablaClientes(String consulta){
+    private void cargarDatosTablaPlanillas(String consulta){
         //Método para cargar datos en la tabla una vez que la consulta está lista
         String[] registro = new String[5];
         Connection co = this.controlador.obtenerConexion();
@@ -70,14 +84,14 @@ public class PanelAdPagos extends JPanelCustom {
             Statement st = co.createStatement();
             ResultSet rs = st.executeQuery(consulta);
             while(rs.next()){
-                registro[0] = rs.getString(1); //nombre cliente
-                registro[1] = rs.getString(2); //apellido
-                registro[2] = ""+rs.getInt(3); //Numero planilla
+                registro[0] = ""+rs.getInt(1); //idplanilla
+                registro[1] = ""+rs.getDate(2); //fecha de salida/entrega de Vh
+                registro[2] = ""+cargarImporteReparaciones(rs.getInt(2), co);
                 if(rs.getBoolean(4)) //Si es verdadero la planilla esta pagada
                     registro[3] = "NO";
                 else
                     registro[3] ="SI";
-                registro[4] = ""+cargarImporteReparaciones(rs.getInt(3), co); //Acá tendría que cargar el importe total de las reparaciones.
+                registro[4] = ""; //Acá tendría que calcular el monto de los pagos asignados a la planilla
                 co.commit();
                 this.modelo.addRow(registro);
                 this.jTablePlanillas.updateUI();
@@ -88,7 +102,7 @@ public class PanelAdPagos extends JPanelCustom {
             try {
                 co.rollback();
             } catch (SQLException ex1) {
-                //Esto no importaría porque es una consulta de solo lectura
+                System.out.println("Error en el rollback después del error");
             }
         } 
     }
@@ -112,12 +126,25 @@ public class PanelAdPagos extends JPanelCustom {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTablePlanillas = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTableClientes = new javax.swing.JTable();
+        jLabel2 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel1.setText("Clientes con Planillas en el sistema");
+        jLabel1.setText("Planillas del Cliente:");
 
-        jTablePlanillas.setModel(modelo);
+        jTablePlanillas.setModel(modeloCli);
         jScrollPane1.setViewportView(jTablePlanillas);
+
+        jTableClientes.setModel(modelo);
+        jScrollPane2.setViewportView(jTableClientes);
+
+        jLabel2.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel2.setText("Clientes con Planillas en el sistema:");
+
+        jButton1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButton1.setText("Seleccionar Cliente");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -126,20 +153,32 @@ public class PanelAdPagos extends JPanelCustom {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 949, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 949, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 949, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(11, 11, 11)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(234, Short.MAX_VALUE))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -156,8 +195,12 @@ public class PanelAdPagos extends JPanelCustom {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTableClientes;
     private javax.swing.JTable jTablePlanillas;
     // End of variables declaration//GEN-END:variables
 }
