@@ -907,10 +907,11 @@ public class PanelPlanillaNueva extends JPanelCustom {
         String consulta, nombreApellido, marcaModeloPat;
         Connection co = this.controlador.obtenerConexion();
         //Datos a consultar
-        consulta = "select per.nombre, per.apellido, v.marca, v.modelo, v.patente, p.fecha_de_entrada,"
-                + " p.fecha_de_salida, p.pagado, p.descripcion from planilla as p inner join persona as per on "
-                + " p.idpersona = per.idpersona inner join vehiculo as v on v.idvehiculo = p.idvehiculo "
-                + " where p.idplanilla = '" + numero + "'"; //Esta consulta se puede optimizar
+        consulta = "SELECT per.nombre, per.apellido, v.marca, v.modelo, v.patente, p.fecha_de_entrada,"
+                + " p.fecha_de_salida, p.pagado, p.descripcion FROM planilla AS p INNER JOIN cliente AS c ON "
+                + " p.idcliente = c.idcliente INNER JOIN persona AS per ON per.idpersona = c.idpersona "
+                + "INNER JOIN vehiculo AS v ON v.idvehiculo = p.idvehiculo "
+                + " WHERE p.idplanilla = '" + numero + "'"; //Esta consulta se puede optimizar
         try {
             Statement st = co.createStatement();
             ResultSet rs = st.executeQuery(consulta);
@@ -920,7 +921,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
                 this.jCheckBoxPagado.setSelected(rs.getBoolean(8));
                 //String fechaHoyArg = new SimpleDateFormat("dd/MM/YYYY", Locale.FRANCE).format(rs.getDate(6));
                 this.jDateChooserEntrada.setDate(rs.getDate(6));
-                this.jDateChooserSalida.setDate(rs.getDate(7)); //Fecha de salida - puede fallar por ser nula
+                this.jDateChooserSalida.setDate(rs.getDate(7)); //Fecha de salida - puede fallar por ser nula?
                 if(this.jDateChooserSalida.getDate() != null)
                     this.jCheckBoxEntregado.setSelected(true);
                 this.jTextFieldDescripcion.setText(rs.getString(9));
@@ -1198,25 +1199,21 @@ public class PanelPlanillaNueva extends JPanelCustom {
         ComboItem vh = (ComboItem) this.jComboBoxVh.getSelectedItem(); //El camión
         ComboItem ch = (ComboItem) this.jComboBoxPersona.getSelectedItem(); //El chofer
         String descripcion = this.jTextFieldDescripcion.getText();
-        {
-            Object fSalida = this.jDateChooserSalida.getDate();
-            if (estaGuardada()) // Retorna true si está guardada; Automáticamente obtiene el numero de Planilla
-            { //Quizás se pueda agregar al más acá
-                if(!descripcion.equals(""))
-                    actualizarPlanilla(fSalida == null); //Condicional: 'true' o 'false' - 'true' en caso de que la fecha de salida sea nula
-                else
-                    JOptionPane.showMessageDialog(null, label2, "ERROR", JOptionPane.WARNING_MESSAGE);
-                //Se podría agregar un JLabel que diga que ya se actualizo
-            } else if(!(vh.getKey().equals("0") || ch.getKey().equals("0") || descripcion.equals(""))){
-                guardarPlanilla();
-                //Se podría agregar un JLabel que diga que ya se guardo
+        if (estaGuardada()) // Retorna true si está guardada; Automáticamente obtiene el numero de Planilla
+        { //Quizás se pueda agregar al más acá
+            if (!descripcion.equals("")) {
+                actualizarPlanilla();
+            } else {
+                JOptionPane.showMessageDialog(null, label2, "ERROR", JOptionPane.WARNING_MESSAGE);
             }
-            else{
-                JLabel label = new JLabelAriel(" Datos incompletos - Vehículo, chofer y descripción obligatorios ");
-                JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);        
+            //Se podría agregar un JLabel que diga que ya se actualizo
+        } else if (!(vh.getKey().equals("0") || ch.getKey().equals("0") || descripcion.equals(""))) {
+            guardarPlanilla();
+            //Se podría agregar un JLabel que diga que ya se guardo
+        } else {
+            JLabel label = new JLabelAriel(" Datos incompletos - Vehículo, chofer y descripción obligatorios ");
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
         }
-    }
-
 
     }//GEN-LAST:event_jButtonGuardarActionPerformed
 
@@ -1230,11 +1227,27 @@ public class PanelPlanillaNueva extends JPanelCustom {
                 guardarEnBdD(true); //La fecha de salida esta seteada
             }
         } else {
-            //No se puede guardar porque los campos "tal y tal" están vacíos (ponele)
+            //No se puede guardar porque los campos "tal y tal" están vacíos (ponele). 
+            //La fecha de entrada no se puede poner como nula. El jDateChooser no lo permite.
         }
 
     }
 
+    private void actualizarPlanilla(){
+    //Método posterior a ActionPerformed de guardar planilla y anterior a método que actualiza la planilla directamente en la Base de datos.
+        Object fSalida = this.jDateChooserSalida.getDate();
+        //Si hay fecha de salida no puede estar el jCheckBoxEntregado en 'False'. Lo mismo viceversa.
+        if(fSalida != null){ //Hay fecha de Salida
+            this.jCheckBoxEntregado.setSelected(true);
+            actualizarPlanilla(fSalida == null); //Condicional: 'true' o 'false' - 'true' en caso de que la fecha de salida sea nula
+        }
+        else if(this.jCheckBoxEntregado.isSelected()){
+            JLabel label = new JLabelAriel(" Datos incompletos - La planilla figura entregada pero no hay fecha de entrega. "
+                    + "\n Elija una fecha de entrega e intente actualizar la planilla nuevamente");
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+    
     private void guardarEnBdD(Boolean fSalidaNula) {
         ComboItem chofer = (ComboItem) this.jComboBoxPersona.getSelectedItem(); //chofer.getKey() = id de la persona
         ComboItem vh = (ComboItem) this.jComboBoxVh.getSelectedItem(); // vh.getKey() = id del vehículo
@@ -1295,7 +1308,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
                 //No se setea la fecha como nula porque aparentemente genera error en la actualización
             }
           else
-              ps.setDate(1, null);
+            ps.setDate(1, null);
               
             ps.setBoolean(2, this.jCheckBoxPagado.isSelected()); //pagado
             ps.setString(3, this.jTextFieldDescripcion.getText());

@@ -12,8 +12,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.JLabelAriel;
@@ -39,6 +37,10 @@ public class PanelVerPlanillas extends JPanelCustom {
         this.jTablePlanillas.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
         modelo.setColumnIdentifiers(getColumnas());
         this.controlador = ControladorPrincipal.getInstancia();
+        this.jTablePlanillas.getColumnModel().getColumn(0).setPreferredWidth(2);
+        this.jTablePlanillas.getColumnModel().getColumn(1).setPreferredWidth(40);
+        this.jTablePlanillas.getColumnModel().getColumn(2).setPreferredWidth(20);
+        this.jTablePlanillas.getColumnModel().getColumn(6).setPreferredWidth(500); //La descrición
         obtenerPlanillas();
     }
     
@@ -262,7 +264,7 @@ public class PanelVerPlanillas extends JPanelCustom {
         int filaSeleccionada;
         filaSeleccionada = this.jTablePlanillas.getSelectedRow();
         if(filaSeleccionada != -1){
-            int nPlanilla = (int) this.modelo.getValueAt(filaSeleccionada, 0);
+            int nPlanilla = (int) this.modelo.getValueAt(filaSeleccionada, 0); //paso el número de planilla
             p1 = new PanelPlanillaNueva(nPlanilla); //Acá va el número de planilla
             this.controlador.cambiarDePanel(p1, "Ver/Modificar Planilla");
         }

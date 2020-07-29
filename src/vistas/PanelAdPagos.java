@@ -27,25 +27,27 @@ public class PanelAdPagos extends JPanelCustom {
     
     public PanelAdPagos() {
         this.controlador = ControladorPrincipal.getInstancia();
-        modelo = new DefaultTableModel(){       
+        modelo = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
                 //all cells false
                 return false;
             }
         };
+        modeloCli = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                //all cells false. No se puede editar ninguna celda
+                return false;
+            }
+        };
+
         initComponents();
+        this.jTableClientes.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
         this.jTablePlanillas.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
         modelo.setColumnIdentifiers(getColumnas());
-        
-        modeloCli = new DefaultTableModel(){
-           @Override
-           public boolean isCellEditable(int row, int column){
-               //all cells false. No se puede editar ninguna celda
-               return false;
-           }
-        };
-       modeloCli.setColumnIdentifiers(getColumnasCliente());
+        modeloCli.setColumnIdentifiers(getColumnasCliente()); 
+        this.cargarTablaClientes("");
     }
 
     private String[] getColumnas(){
@@ -62,7 +64,8 @@ public class PanelAdPagos extends JPanelCustom {
     
     private void cargarTablaClientes(String nombreApellido){
         //Método para cargar la tabla de clientes cuando se carga la vista o cuando se filtra por nombre
-        
+        String query = "SELECT per.nombre, per.apellido, p.fecha_de_salida FROM persona AS per NATURAL JOIN cliente AS c "
+                + "WHERE EXISTS (SELECT MIN(p.fecha_de_salida) FROM planillas AS p WHERE p.idcliente = c.idcliente )";
     }
     
     private void cargarTablaPlanillas(String filtroNombre){
@@ -91,7 +94,7 @@ public class PanelAdPagos extends JPanelCustom {
                     registro[3] = "NO";
                 else
                     registro[3] ="SI";
-                registro[4] = ""; //Acá tendría que calcular el monto de los pagos asignados a la planilla
+                registro[4] = ""+this.montoPagos(rs.getInt(1)); //Acá tendría que calcular el monto de los pagos asignados a la planilla
                 co.commit();
                 this.modelo.addRow(registro);
                 this.jTablePlanillas.updateUI();
@@ -193,7 +196,30 @@ public class PanelAdPagos extends JPanelCustom {
         //Cosas a cargar cuando esta vista toma el foco. Ver que conviene
     }
 
-
+    private Long montoPagos(int idPlanilla){
+        //Método que calcula cuanto dinero se recibió - Los cheques no cobrados se suman como pagos igualmente
+       // long montoRep = this.montoPorReparaciones();
+        long monto = 0; 
+        //Esta consulta Retorna dos valores para los montos de pago de cheques y contado 
+        String consulta = "Select sum(ch.monto) from cheque as ch inner join forma_de_pago as fdp on fdp.idforma_de_pago = ch.idforma_de_pago "
+                + "inner join planilla as p on p.idplanilla = fdp.idplanilla where p.idplanilla= '"+idPlanilla+"' "
+                + "UNION"
+                + " select sum(c.monto) from contado as c inner join forma_de_pago as fdp on fdp.idforma_de_pago = c.idforma_de_pago "
+                + "inner join planilla as p on p.idplanilla = fdp.idplanilla where p.idplanilla = '"+idPlanilla+"'";
+        try {
+            Statement st = this.controlador.obtenerConexion().createStatement();
+            ResultSet rs = st.executeQuery(consulta);
+            while(rs.next()){
+                monto += rs.getLong(1); //Hay que probar si anda - Entiendo que primero toma el monto de cheque y en el siguiente el de contado
+            }
+            
+        } catch (SQLException ex) {
+            JLabelAriel label = new JLabelAriel(" Error al cargar pagos: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
+        }
+        return monto;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
