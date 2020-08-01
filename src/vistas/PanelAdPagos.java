@@ -63,11 +63,54 @@ public class PanelAdPagos extends JPanelCustom {
     }
     
     private void cargarTablaClientes(String nombreApellido){
-        //Método para cargar la tabla de clientes cuando se carga la vista o cuando se filtra por nombre
-        String query = "SELECT per.nombre, per.apellido, p.fecha_de_salida FROM persona AS per NATURAL JOIN cliente AS c "
-                + "WHERE EXISTS (SELECT MIN(p.fecha_de_salida) FROM planillas AS p WHERE p.idcliente = c.idcliente )";
+        //Método para cargar la tabla de clientes cuando se carga la vista o cuando se filtra por nombre. Solo elije el query correspondiente
+        String query;
+        if(nombreApellido.equals("")){
+                query = "SELECT per.nombre, per.apellido, exists(select p.idplanilla from planilla as p WHERE p.idcliente = c.idcliente AND "
+                        + "p.entregado = true AND p.pagado = false) FROM persona AS per NATURAL JOIN cliente AS c";
+        }                       // Lo de arriba dice: "Si tiene alguna planilla con fecha de salida")
+        else{
+            query = "SELECT per.nombre, per.apellido, exists(select p.idplanilla from planilla as p WHERE p.idcliente = c.idcliente AND "
+                    + "p.entregado = true AND p.pagado = false) FROM persona AS per NATURAL JOIN cliente AS c "
+                    + "WHERE CONCAT(per.nombre, per.apellido) LIKE = '"+nombreApellido+"' "; 
+        }
+        this.cargarTablaCli(query);
     }
     
+    private void cargarTablaCli(String query){
+        // Método que carga en la tabla el/los Clientes desde la Base de datos.
+        boolean plImpagas = false;
+        String datos[] = new String[4];  //Nombre, Apellido, ¿Pl. Impagas?, Estado de C.C
+        try{
+            Statement st = this.controlador.obtenerConexion().createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while(rs.next()){
+                datos[0] = rs.getString(1);
+                datos[1] = rs.getString(2);
+                datos[2] = ""+rs.getBoolean(3); //Acá retorna TRUE si el cliente tiene alguna planilla con Vh entregado e impaga
+                datos[3] = ""; //Tendría que poner el estado de la C.C. en caso de que se cumpla en TRUE la línea de arriba
+            }
+        }catch(SQLException ex){
+        //
+        }
+    }
+  
+    private long montoPorPlanillasImpagas(int numPlanilla) throws SQLException {
+        //Método que devuelve la suma de los importes de las reparaciones que tenga la planilla pasada por parámentro
+        long monto = 0;
+        String consulta = "SELECT SUM(importe) FROM reparacion INNER JOIN planilla as pl ON pl.idplanilla = r.idplanilla "
+                + "WHERE pl.idplanilla '" + numPlanilla + "' ";
+        Connection co = this.controlador.obtenerConexion();
+
+        Statement st = co.createStatement();
+        ResultSet rs = st.executeQuery(consulta);
+        while (rs.next()) { //El importe es uno solo pero así evitamos intentar capturar un valor cuando el importe es null
+            monto += rs.getLong(1); //El monto suma el importe de todas las reparaciones enmarcadas por esta planilla
+        }
+
+        return monto;
+    }
+
     private void cargarTablaPlanillas(String filtroNombre){
         //Método para cargar planillas en la tabla que tiene que llamarse dsps de un ActionPerformed de "Seleccionar Cliente"
         //Diseñar para aplicar filtro de nombre de cliente
@@ -197,7 +240,7 @@ public class PanelAdPagos extends JPanelCustom {
     }
 
     private Long montoPagos(int idPlanilla){
-        //Método que calcula cuanto dinero se recibió - Los cheques no cobrados se suman como pagos igualmente
+        //Método que calcula cuanto dinero recibió una planilla - Los cheques no cobrados se suman como pagos igualmente
        // long montoRep = this.montoPorReparaciones();
         long monto = 0; 
         //Esta consulta Retorna dos valores para los montos de pago de cheques y contado 
@@ -214,7 +257,7 @@ public class PanelAdPagos extends JPanelCustom {
             }
             
         } catch (SQLException ex) {
-            JLabelAriel label = new JLabelAriel(" Error al cargar pagos: " + ex.getMessage());
+            JLabelAriel label = new JLabelAriel(" Error al calcular pagos: " + ex.getMessage());
             JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
         }
         return monto;
