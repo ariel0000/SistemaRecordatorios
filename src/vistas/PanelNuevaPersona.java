@@ -883,6 +883,7 @@ public class PanelNuevaPersona extends JPanelCustom {
     
     private void actualizarPersona(){
         //Actualizo la persona con el "idPer" guardado en la variable
+        //Algunos atributos como 'es chofer' no se actualizan sino que se trabaja esto desde su propio ActionPerformed
         String nombre = this.jTextFieldNombre.getText();
         String apellido = this.jTextFieldApellido.getText();
         String localidad = this.jTextFieldLocalidad.getText();
@@ -1015,7 +1016,6 @@ public class PanelNuevaPersona extends JPanelCustom {
 
         } else {  //Tengo que desactivar los campos referidos a Chofer
             activarDesactivarCasillasChofer(false); //Estoy desactivando una persona que era chofer pero ahora no lo sería
-            
             //Acá habría que borrar el chofer y los vehículos¿? ¿Y las planillas asociadas?
         }
     }//GEN-LAST:event_jCheckBoxChoferActionPerformed
@@ -1043,7 +1043,7 @@ public class PanelNuevaPersona extends JPanelCustom {
             }
 
         } else {  //Tengo que desactivar los campos referidos a  Cliente
-            activarDesactivarCasillasChofer(false); //Estoy desactivando una persona que era chofer pero ahora no lo sería
+            activarDesactivarCasillasDueño(false); //Estoy desactivando una persona que era chofer pero ahora no lo sería
             //Acá habría que borrar el Cliente y los vehículos¿? ¿y las Planillas asociadas?
         }
     }//GEN-LAST:event_jCheckBoxClienteActionPerformed
@@ -1235,10 +1235,10 @@ public class PanelNuevaPersona extends JPanelCustom {
     }
     
     private void activarDesactivarCasillasChofer(boolean valor) {
+        //Se encarga de activar desactivar las casillas que tienen que ver con chofer 
         this.jComboBoxVh.setEnabled(valor);
         this.jButtonAgregarVh.setEnabled(valor);
         this.jButtonBorrarVh.setEnabled(valor);
-        // --- ACÁ Preguntar por el Apogo de la persona como chofer -- ¿?
     }
     
     private void activarDesactivarCasillasDueño(boolean valor){

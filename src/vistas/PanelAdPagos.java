@@ -91,7 +91,7 @@ public class PanelAdPagos extends JPanelCustom {
                 datos[3] = ""; //Tendría que poner el estado de la C.C. en caso de que se cumpla en TRUE la línea de arriba
             }
         }catch(SQLException ex){
-        //
+        
         }
     }
   
