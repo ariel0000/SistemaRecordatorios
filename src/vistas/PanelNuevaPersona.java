@@ -63,7 +63,7 @@ public class PanelNuevaPersona extends JPanelCustom {
                 cmItem = new ComboItem(""+idtelefono, tipo_tel+" "+numTel);
                 this.jComboBoxTelefonos.addItem(cmItem); //Con el idtelefono como llave y tipo_tel + numTel como número
             }
-            
+        
         } catch (SQLException ex) {
             System.out.println("Error al cargar persona: "+ex.getMessage());
         }
@@ -711,6 +711,11 @@ public class PanelNuevaPersona extends JPanelCustom {
 
         jButtonAgregarCli.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jButtonAgregarCli.setText("Ver Camión");
+        jButtonAgregarCli.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAgregarCliActionPerformed(evt);
+            }
+        });
 
         jCheckBoxChofer.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jCheckBoxChofer.setText("Es Chofer");
@@ -804,21 +809,21 @@ public class PanelNuevaPersona extends JPanelCustom {
                                 .addComponent(jButtonVerVhCh)
                                 .addGap(18, 18, 18)
                                 .addComponent(jCheckBoxChofer)
-                                .addGap(18, 18, 18)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jButtonDatosChofer)
-                                .addGap(0, 347, Short.MAX_VALUE))))
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(jLabel12)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBoxCli, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(91, 91, 91)
-                        .addComponent(jButtonAgregarCli)
-                        .addGap(18, 18, 18)
-                        .addComponent(jCheckBoxCliente)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButtonDatosCliente)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButtonAgregarCli)
+                                .addGap(18, 18, 18)
+                                .addComponent(jCheckBoxCliente)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButtonDatosCliente)
+                                .addGap(0, 354, Short.MAX_VALUE))
+                            .addComponent(jComboBoxCli, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(5, 5, 5))
         );
         layout.setVerticalGroup(
@@ -848,21 +853,21 @@ public class PanelNuevaPersona extends JPanelCustom {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
                     .addComponent(jComboBoxVh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonVerVhCh)
                     .addComponent(jCheckBoxChofer)
                     .addComponent(jButtonDatosChofer))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel12)
                     .addComponent(jComboBoxCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonAgregarCli)
                     .addComponent(jCheckBoxCliente)
                     .addComponent(jButtonDatosCliente))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1276,7 +1281,7 @@ public class PanelNuevaPersona extends JPanelCustom {
         //ActionPerformed de Cancelar de la Vista Cliente. 
         //Si proviene de Ver Datos este cancelar cierra la vista y pone true en los métodos. En cambio, si viene del ActionPerformed
         // del jCheckBoxCliente --> tenemos que saldrá sin ser Cliente entonces se desactivarán los campos correspondientes
-        this.activarDesactivarCasillasChofer(this.esDueño());
+        this.activarDesactivarCasillasDueño(this.esDueño());
         this.jCheckBoxCliente.setSelected(this.esDueño()); //En el VER DATOS también pasa por acá pero sale siendo Cliente
         this.jFrameCliente.dispose();
     }//GEN-LAST:event_jButtonCancelarCliActionPerformed
@@ -1298,6 +1303,15 @@ public class PanelNuevaPersona extends JPanelCustom {
         // Abre el Frame de JFrameInfo para mostrar info de la vista (Para que sirve para que no sirve).
         this.jFrameInfo.setVisible(true);
     }//GEN-LAST:event_jButtonInfoActionPerformed
+
+    private void jButtonAgregarCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAgregarCliActionPerformed
+        // Este Action Performed tendría que abrir una nueva pestaña con el panel 'ver/modificar Camión'
+        String idVh = ((ComboItem) this.jComboBoxCli.getSelectedItem()).getKey();
+        
+        NuevoModificarVh mdVh = new NuevoModificarVh(Integer.valueOf(idVh));
+        
+        this.controlador.cambiarDePanel(mdVh, "Modificar Vehículo");   //Abre una nueva pestaña para edición del vehículo.
+    }//GEN-LAST:event_jButtonAgregarCliActionPerformed
 
     private void cargarDatosJFrameChofer(){
         //Carga los datos de la persona en la sub-vista de Chofer
@@ -1473,6 +1487,7 @@ public class PanelNuevaPersona extends JPanelCustom {
 
     @Override
     public void onFocus() {
-        //Cuando se enfoca en esta vista habiendo salido antes: sirve para actualizar datos (generalmente los visibles)       
+        //Cuando se enfoca en esta vista habiendo salido antes: sirve para actualizar datos (generalmente los visibles)   
+        
     }
 }
