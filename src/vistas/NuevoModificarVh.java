@@ -50,6 +50,9 @@ public class NuevoModificarVh extends JPanelCustom {
         inicializarCamposEnComun();
         cargarDatos();
         habilitarCasillas(false); //las que no se usan para un nuevo vehículo
+        //Las advertencias de clientes y choferes deben esconderse para no confundir.
+        this.jLabelAtencionCh.setVisible(false);
+        this.jLabelAtencionCli.setVisible(false);
     }
     
     public NuevoModificarVh(int idVh) {
@@ -323,8 +326,8 @@ public class NuevoModificarVh extends JPanelCustom {
         jComboBoxChofer = new javax.swing.JComboBox<>();
         jButtonFiltrarChofer = new javax.swing.JButton();
         jButtonQuitarCh = new javax.swing.JButton();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
+        jLabelAtencionCh = new javax.swing.JLabel();
+        jLabelAtencionCli = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jButtonSalir = new javax.swing.JButton();
@@ -413,13 +416,13 @@ public class NuevoModificarVh extends JPanelCustom {
             }
         });
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(255, 0, 51));
-        jLabel8.setText("<html>\nLa persona tiene que estar anotada como chofer<br> para que aparezca en este listado\n<html>");
+        jLabelAtencionCh.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        jLabelAtencionCh.setForeground(new java.awt.Color(255, 0, 51));
+        jLabelAtencionCh.setText("<html>\nLa persona tiene que estar anotada como chofer<br> para que aparezca en este listado\n<html>");
 
-        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(255, 0, 51));
-        jLabel9.setText("<html>\nLa persona tiene que estar anotada como cliente <br>\npara que aparezca en este listado\n<html>");
+        jLabelAtencionCli.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        jLabelAtencionCli.setForeground(new java.awt.Color(255, 0, 51));
+        jLabelAtencionCli.setText("<html>\nLa persona tiene que estar anotada como cliente <br>\npara que aparezca en este listado\n<html>");
 
         jLabel4.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabel4.setText("Filtrar por Nombre:");
@@ -484,7 +487,7 @@ public class NuevoModificarVh extends JPanelCustom {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabelAtencionCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(0, 0, Short.MAX_VALUE))
                                             .addComponent(jComboBoxCliente, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                                 .addGap(111, 111, 111)
@@ -511,7 +514,7 @@ public class NuevoModificarVh extends JPanelCustom {
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                 .addComponent(jComboBoxChofer, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(jLabelAtencionCh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addGap(18, 18, 18)
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                                 .addGroup(layout.createSequentialGroup()
@@ -560,7 +563,7 @@ public class NuevoModificarVh extends JPanelCustom {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonFiltrarCli)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabelAtencionCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -570,7 +573,7 @@ public class NuevoModificarVh extends JPanelCustom {
                     .addComponent(jButtonAgregarCh))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelAtencionCh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -851,8 +854,8 @@ public class NuevoModificarVh extends JPanelCustom {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelAtencionCh;
+    private javax.swing.JLabel jLabelAtencionCli;
     private javax.swing.JLabel jLabelCh;
     private javax.swing.JLabel jLabelChofer;
     private javax.swing.JScrollPane jScrollPane2;
