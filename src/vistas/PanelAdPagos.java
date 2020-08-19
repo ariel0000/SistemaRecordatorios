@@ -8,9 +8,12 @@ package vistas;
 import controladores.ControladorPrincipal;
 import java.awt.Font;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.JLabelAriel;
@@ -65,14 +68,15 @@ public class PanelAdPagos extends JPanelCustom {
     private void cargarTablaClientes(String nombreApellido){
         //Método para cargar la tabla de clientes cuando se carga la vista o cuando se filtra por nombre. Solo elije el query correspondiente
         String query;
-        if(nombreApellido.equals("")){
-                query = "SELECT per.nombre, per.apellido, exists(select p.idplanilla from planilla as p WHERE p.idcliente = c.idcliente AND "
-                        + "p.entregado = true AND p.pagado = false) FROM persona AS per NATURAL JOIN cliente AS c";
-        }                       // Lo de arriba dice: "Si tiene alguna planilla con fecha de salida")
-        else{
-            query = "SELECT per.nombre, per.apellido, exists(select p.idplanilla from planilla as p WHERE p.idcliente = c.idcliente AND "
+        if (nombreApellido.equals("")) {
+            query = "SELECT per.nombre, per.apellido, c.idcliente, exists(select p.idplanilla FROM planilla as p WHERE " +
+                "p.idcliente = c.idcliente AND p.entregado = true AND p.pagado = false) FROM persona AS per NATURAL JOIN cliente AS c";
+        }
+ // Lo de arriba consulta Nombre y Apellido de algún cliente y además si tiene alguna planilla impaga
+        else {
+            query = "SELECT per.nombre, per.apellido, c.idcliente, exists(select p.idplanilla from planilla as p WHERE p.idcliente = c.idcliente AND "
                     + "p.entregado = true AND p.pagado = false) FROM persona AS per NATURAL JOIN cliente AS c "
-                    + "WHERE CONCAT(per.nombre, per.apellido) LIKE = '"+nombreApellido+"' "; 
+                    + "WHERE CONCAT(per.nombre, per.apellido) LIKE '%"+nombreApellido+"%' "; 
         }
         this.cargarTablaCli(query);
     }
@@ -87,30 +91,49 @@ public class PanelAdPagos extends JPanelCustom {
             while(rs.next()){
                 datos[0] = rs.getString(1);
                 datos[1] = rs.getString(2);
-                datos[2] = ""+rs.getBoolean(3); //Acá retorna TRUE si el cliente tiene alguna planilla con Vh entregado e impaga
-                datos[3] = ""; //Tendría que poner el estado de la C.C. en caso de que se cumpla en TRUE la línea de arriba
+                datos[2] = ""+rs.getBoolean(4); //Acá retorna TRUE si el cliente tiene alguna planilla con Vh entregado e impaga
+                if(rs.getBoolean(4)) //Si es verdadero tiene una o más planillas impagas
+                    datos[3] = "impagas desde: "+this.diasPorPlanillasImpagas(rs.getInt(3)) + "días"; //Estado de C.C
+                else
+                    datos[3] = "no tiene planillas impagas";
+                this.modeloCli.addRow(datos);
             }
         }catch(SQLException ex){
-        
+            JLabelAriel label = new JLabelAriel("Error al cargar tabla de Clientes: "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
         }
+        this.jTableClientes.updateUI();
     }
   
-    private long montoPorPlanillasImpagas(int numPlanilla) throws SQLException {
-        //Método que devuelve la suma de los importes de las reparaciones que tenga la planilla pasada por parámentro
-        long monto = 0;
-        String consulta = "SELECT SUM(importe) FROM reparacion INNER JOIN planilla as pl ON pl.idplanilla = r.idplanilla "
-                + "WHERE pl.idplanilla '" + numPlanilla + "' ";
+    private int diasPorPlanillasImpagas(int idCliente) throws SQLException {
+        //Método que servirá para saber el estado de CC del Cliente pasado por parámetro
+        LocalDateTime fecha_hoy, fecha_salida_vh;
+        Date fecha_salida;
+        Date fechaHoy = new Date(System.currentTimeMillis());
+        fecha_hoy = this.convertToLocalDateTimeViaSqlTimestamp(fechaHoy);
+        int actual = 0;
+        int estadoCC = 0; //Podría usarse en base a días desde que una planilla está impaga. 
+        String consulta = "SELECT pl.fecha_de_salida FROM planilla as pl INNER JOIN cliente AS c ON c.idcliente = pl.idcliente "
+                + "WHERE pl.entregado = true AND pl.pagado = false ";
         Connection co = this.controlador.obtenerConexion();
 
         Statement st = co.createStatement();
         ResultSet rs = st.executeQuery(consulta);
         while (rs.next()) { //El importe es uno solo pero así evitamos intentar capturar un valor cuando el importe es null
-            monto += rs.getLong(1); //El monto suma el importe de todas las reparaciones enmarcadas por esta planilla
+            fecha_salida = rs.getDate(1);
+            fecha_salida_vh = this.convertToLocalDateTimeViaSqlTimestamp(fecha_salida);
+            actual = (int) ChronoUnit.DAYS.between(fecha_salida_vh, fecha_hoy);
+            if(actual > estadoCC)
+                estadoCC = actual;
         }
-
-        return monto;
+        return estadoCC;
     }
 
+    LocalDateTime convertToLocalDateTimeViaSqlTimestamp(Date dateToConvert) {
+        //Convierto una fecha Date en LocalDateTime
+        return new java.sql.Timestamp(dateToConvert.getTime()).toLocalDateTime();
+    }
+    
     private void cargarTablaPlanillas(String filtroNombre){
         //Método para cargar planillas en la tabla que tiene que llamarse dsps de un ActionPerformed de "Seleccionar Cliente"
         //Diseñar para aplicar filtro de nombre de cliente
