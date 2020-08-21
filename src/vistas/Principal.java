@@ -36,7 +36,7 @@ public class Principal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setExtendedState(MAXIMIZED_BOTH);
-        setMinimumSize(new java.awt.Dimension(1160, 0));
+        setMinimumSize(new java.awt.Dimension(1160, 700));
 
         JTabbedPaneP.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
 
@@ -65,7 +65,7 @@ public class Principal extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(JTabbedPaneP, javax.swing.GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE)
+                .addComponent(JTabbedPaneP, javax.swing.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonCerrar)
                 .addContainerGap())
