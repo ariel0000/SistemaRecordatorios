@@ -1297,24 +1297,22 @@ public class PanelPlanillaNueva extends JPanelCustom {
         try {
             co.setAutoCommit(false); //Para realizar la transacción
             PreparedStatement ps = co.prepareStatement("UPDATE planilla SET fecha_de_salida = ?, "
-                    + "pagado = ?, descripcion = ?, facturado = ?, entregado = ? WHERE idplanilla = '"+idPlanilla+"' ");
+                    + "pagado = ?, descripcion = ?, facturado = ?, entregado = ? WHERE idplanilla = '" + idPlanilla + "' ");
 
-          //  ps.setInt(1, Integer.valueOf(this.jLabelNumPlanilla.getText())); //Los comentados no se cargar en la actualización
-          //  ps.setDate(2, new java.sql.Date(this.jDateChooserEntrada.getDate().getTime()));
-          if(this.jCheckBoxEntregado.isSelected()){ //Si está facturado cargo la fecha  
-            if (!fSalidaNula) 
-                  ps.setDate(1, new java.sql.Date(this.jDateChooserSalida.getDate().getTime())); //Problemas cuando es null-resuelto
-            //else
-                //No se setea la fecha como nula porque aparentemente genera error en la actualización
+            //  ps.setInt(1, Integer.valueOf(this.jLabelNumPlanilla.getText())); //Los comentados no se cargar en la actualización
+            //  ps.setDate(2, new java.sql.Date(this.jDateChooserEntrada.getDate().getTime()));
+            if (this.jCheckBoxEntregado.isSelected()) { //Si está facturado cargo la fecha  
+                if (!fSalidaNula) {
+                    ps.setDate(1, new java.sql.Date(this.jDateChooserSalida.getDate().getTime())); //Problemas cuando es null-resuelto
+                } else {
+                    ps.setDate(1, null);
+                }
             }
-          else
-            ps.setDate(1, null);
-              
             ps.setBoolean(2, this.jCheckBoxPagado.isSelected()); //pagado
-            ps.setString(3, this.jTextFieldDescripcion.getText());
-          //  ps.setInt(4, this.idCliente); No se carga en la actualización
-          //  ps.setInt(4, Integer.valueOf(chofer.getKey())); //idpersona (chofer) - Permite editar aunque si no gusta se podría quitar
-           // ps.setInt(8, Integer.valueOf(vh.getKey())); // No se carga en la actualización
+            ps.setString(3, this.jTextFieldDescripcion.getText()); //Descripción
+            //  ps.setInt(4, this.idCliente); No se carga en la actualización
+            //  ps.setInt(4, Integer.valueOf(chofer.getKey())); //idpersona (chofer) - Permite editar aunque si no gusta se podría quitar
+            // ps.setInt(8, Integer.valueOf(vh.getKey())); // No se carga en la actualización
             ps.setBoolean(4, this.jCheckBoxFacturado.isSelected()); //facturado
             ps.setBoolean(5, this.jCheckBoxEntregado.isSelected()); //Entregado
             int executeUpdate = ps.executeUpdate();
@@ -1324,9 +1322,9 @@ public class PanelPlanillaNueva extends JPanelCustom {
             try {
                 co.rollback();
             } catch (SQLException ex1) {
-                JOptionPane.showMessageDialog(null, "Error: " + ex1.getMessage());
+                JOptionPane.showMessageDialog(null, "Error al deshacer guardado fallido: " + ex1.getMessage());
             }
-            JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al guardar/actualizar: " + ex.getMessage());
         }
     }
 
@@ -1337,8 +1335,8 @@ public class PanelPlanillaNueva extends JPanelCustom {
             filtroPersona = filtroPersona.toLowerCase(); //Para que puedan compararse en la consulta como minúsculas
         }
         String consulta = "SELECT p.nombre, p.apellido, c.apodo, p.idpersona FROM persona AS p INNER JOIN chofer AS c "
-                + "ON p.idpersona = c.idpersona WHERE lower(p.nombre) LIKE '%"+filtroPersona+"%' "
-                + "or lower(c.apodo) LIKE '%"+filtroPersona+"%' ";
+                + "ON p.idpersona = c.idpersona WHERE lower(p.nombre) LIKE '%" + filtroPersona + "%' "
+                + "or lower(c.apodo) LIKE '%" + filtroPersona + "%' ";
         if (!filtroPersona.equals("")) {//Si el filtro de Persona no está vacío
             this.cargarPersonasBdD(consulta);
         } else {
@@ -1353,7 +1351,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         //Quizás esta vista tendría que poner un jTextField con el total del importe y preguntar si ese total está bien
         JLabel label = new JLabelAriel("Debe guardar la planilla antes de agregar un Pago");
         JLabel label2;
-        
+
         long montoRestante = 0;
         if (!true/*this.jCheckBoxEntregado.isSelected()*/) { //si el vh no está entregado -- Modificado para que no joda
             label2 = new JLabelAriel("El Vehículo debe ser entregado antes de calcular Deudas");
@@ -1361,12 +1359,12 @@ public class PanelPlanillaNueva extends JPanelCustom {
         } else {
             if (estaGuardada()) {
                 this.jFrameEstadoPagos.setVisible(true);
-                this.jTextFieldImporteTotal.setText(montoPorReparaciones()+"");
-                this.jTextFieldMontoPagado.setText(montoPagos(Integer.valueOf(this.jLabelNumPlanilla.getText()))+"");
+                this.jTextFieldImporteTotal.setText(montoPorReparaciones() + "");
+                this.jTextFieldMontoPagado.setText(montoPagos(Integer.valueOf(this.jLabelNumPlanilla.getText())) + "");
                 int numPlanilla = Integer.valueOf(this.jLabelNumPlanilla.getText());
                 montoRestante = montoPorReparaciones() - montoPagos(numPlanilla);
-                this.jTextFieldCC.setText(montoRestante+"");
-                this.jTextFieldACobrar.setText(montoACobrarCheques(numPlanilla)+"");
+                this.jTextFieldCC.setText(montoRestante + "");
+                this.jTextFieldACobrar.setText(montoACobrarCheques(numPlanilla) + "");
             } else {
                 JOptionPane.showMessageDialog(null, label, "Error", JOptionPane.WARNING_MESSAGE);
             }
@@ -1375,7 +1373,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
 
     }//GEN-LAST:event_jFrameDeudaPlanillaActionPerformed
 
-    private long montoPorReparaciones(){
+    private long montoPorReparaciones() {
         //Método que devuelve la suma de los importes de las reparaciones que tenga la planilla actual
         long monto = 0;
         String consulta = "SELECT SUM(importe) FROM reparacion WHERE idplanilla = "

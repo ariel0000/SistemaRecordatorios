@@ -74,9 +74,11 @@ public class PanelVerPlanillas extends JPanelCustom {
                     Datos[2] = "Sí";
                 }
                 Object fechaNula = rs.getDate(4); //Puede ser nula
-                if (fechaNula != null) {
+                if (fechaNula != null)
                     Datos[3] = rs.getDate(4);
-                }
+                else
+                    Datos[3] = "Sin fecha"; 
+                //Si no seteara acá la fecha ocurre el error de que se toma la fecha equivocada de la iteración anterior para una pl. nula
                 nombre = rs.getString(5);
                 String nombreYapellido = nombre.concat(" " + rs.getString(6)); //Agrego el apellido
                 Datos[4] = nombreYapellido;

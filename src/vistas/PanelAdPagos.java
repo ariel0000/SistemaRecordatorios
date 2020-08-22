@@ -110,7 +110,7 @@ public class PanelAdPagos extends JPanelCustom {
     }
   
     private int diasPorPlanillasImpagas(int idCliente) throws SQLException {
-        //Método que servirá para saber el estado de CC del Cliente pasado por parámetro
+        //Método que servirá para avriguar la cantidad de días como máximo que tienen las planillas del cliente
         LocalDate fecha_hoy, fecha_salida_vh;
         Date fecha_salida;
         Date fechaHoy = new Date(System.currentTimeMillis());
@@ -118,17 +118,21 @@ public class PanelAdPagos extends JPanelCustom {
         int actual;
         int estadoCC = 0; //Podría usarse en base a días desde que una planilla está impaga. 
         String consulta = "SELECT MIN(pl.fecha_de_salida) FROM planilla as pl INNER JOIN cliente AS c ON c.idcliente = pl.idcliente "
-                + "WHERE pl.entregado = true AND pl.pagado = false ";
+                + "WHERE pl.entregado = true AND pl.pagado = false AND c.idcliente = '"+idCliente+"' ";
         Connection co = this.controlador.obtenerConexion();
 
         Statement st = co.createStatement();
         ResultSet rs = st.executeQuery(consulta);
-        while (rs.next()) { //El importe es uno solo pero así evitamos intentar capturar un valor cuando el importe es null
+        while (rs.next()) {
             fecha_salida = rs.getDate(1);
-            fecha_salida_vh = fecha_salida.toLocalDate();
-            actual = (int) ChronoUnit.DAYS.between(fecha_salida_vh, fecha_hoy);
-            if(actual > estadoCC)
-                estadoCC = actual;
+            if (fecha_salida != null) {
+                fecha_salida_vh = fecha_salida.toLocalDate();
+                actual = (int) ChronoUnit.DAYS.between(fecha_salida_vh, fecha_hoy);
+                if (actual > estadoCC) {
+                    estadoCC = actual;
+                }
+            }
+           // else{...}  //La fecha es nula, se retorna el valor por defecto 0  
         }
         return estadoCC;
     }
@@ -138,7 +142,26 @@ public class PanelAdPagos extends JPanelCustom {
         return new java.sql.Timestamp(dateToConvert.getTime()).toLocalDateTime();
     }
     
-    private Long montoPagos(int idPlanilla){
+    private long montoPagos(int idCliente){
+        //Método que retorna el importe total de pagos del cliente
+        String sql = "SELECT SUM(r.importe) FROM reparacion AS r INNER JOIN planilla as p ON p.idplanilla = r.idplanilla "
+                + "INNER JOIN cliente AS c ON p.idcliente = c.idcliente WHERE c.idcliente = '"+idCliente+"' ";
+        long monto = 0;
+        try{
+            Statement st = this.controlador.obtenerConexion().createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while(rs.next()){
+                monto += rs.getLong(1);  //En realidad la suma la hace el query, este while solo se ejecuta una vez
+            }
+            
+        }catch(SQLException ex){
+            JLabelAriel label = new JLabelAriel("Error al consultar montos de Pagos: "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
+        }
+        return monto;
+    }
+    
+    private Long montoPagosPlanilla(int idPlanilla){
         //Método que calcula cuanto dinero se recibió - Los cheques no cobrados se suman como pagos igualmente.
         //
        // long montoRep = this.montoPorReparaciones();
@@ -201,7 +224,7 @@ public class PanelAdPagos extends JPanelCustom {
                     registro[4] = "SI";
                 else
                     registro[4] ="NO";
-                registro[5] = ""+this.montoPagos(rs.getInt(1)); //Acá tendría que calcular el monto de los pagos asignados a la planilla
+                registro[5] = ""+this.montoPagosPlanilla(rs.getInt(1)); //Acá calcula el monto de los pagos asignados a la planilla
                 co.commit();
                 this.modelo.addRow(registro);
                 this.jTablePlanillas.updateUI();
@@ -276,7 +299,11 @@ public class PanelAdPagos extends JPanelCustom {
         jSeparator1 = new javax.swing.JSeparator();
         jButtonVerPlanilla = new javax.swing.JButton();
 
-        jFrameInfo.setSize(new java.awt.Dimension(600, 450));
+        jFrameInfo.setAlwaysOnTop(true);
+        jFrameInfo.setFocusable(false);
+        jFrameInfo.setLocationByPlatform(true);
+        jFrameInfo.setSize(new java.awt.Dimension(500, 300));
+        jFrameInfo.setType(java.awt.Window.Type.POPUP);
 
         jLabel18.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabel18.setText(". El detalle de cada planilla de un Cliente seleccionado.");
@@ -331,7 +358,7 @@ public class PanelAdPagos extends JPanelCustom {
                 .addComponent(jLabel18)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 135, Short.MAX_VALUE)
                 .addComponent(jButtonAceptar)
                 .addContainerGap())
         );
