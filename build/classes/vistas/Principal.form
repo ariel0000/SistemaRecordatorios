@@ -7,7 +7,7 @@
       <Connection code="MAXIMIZED_BOTH" type="code"/>
     </Property>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[1160, 700]"/>
+      <Dimension value="[1160, 760]"/>
     </Property>
   </Properties>
   <SyntheticProperties>
@@ -46,7 +46,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="JTabbedPaneP" pref="561" max="32767" attributes="0"/>
+              <Component id="JTabbedPaneP" pref="657" max="32767" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="jButtonCerrar" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
