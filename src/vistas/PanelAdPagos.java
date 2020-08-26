@@ -305,7 +305,7 @@ public class PanelAdPagos extends JPanelCustom {
         jFrameInfo.setFocusable(false);
         jFrameInfo.setLocationByPlatform(true);
         jFrameInfo.setPreferredSize(new java.awt.Dimension(635, 350));
-        jFrameInfo.setSize(new java.awt.Dimension(500, 350));
+        jFrameInfo.setSize(new java.awt.Dimension(620, 350));
         jFrameInfo.setType(java.awt.Window.Type.POPUP);
 
         jLabel18.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
@@ -350,7 +350,7 @@ public class PanelAdPagos extends JPanelCustom {
                             .addComponent(jLabel16)
                             .addComponent(jLabel18)
                             .addComponent(jLabel19))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 32, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jFrameInfoLayout.setVerticalGroup(

@@ -80,7 +80,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
     }
 
     private String[] getColumnas() {
-        String columna[] = new String[]{"Reparación", "tipo", "Importe", "Finalizada"};
+        String columna[] = new String[]{"ID", "Reparación", "tipo", "Importe", "Finalizada"};
         return columna;
     }
 
@@ -180,6 +180,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         jTextFieldDueñoCliente = new javax.swing.JTextField();
         jDateChooserEntrada = new com.toedter.calendar.JDateChooser();
         jButtonBorrarPago = new javax.swing.JButton();
+        jButtonModifRep = new javax.swing.JButton();
 
         jLabel3.setText("jLabel3");
 
@@ -566,7 +567,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         jLabelNumPlanilla.setText("000000");
 
         jButtonAdRep.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButtonAdRep.setText("Agregar Reparación");
+        jButtonAdRep.setText("Agregar Rep.");
         jButtonAdRep.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAdRepActionPerformed(evt);
@@ -574,7 +575,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         });
 
         jButtonQuitar.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jButtonQuitar.setText("Quitar Reparación");
+        jButtonQuitar.setText("Quitar Rep.");
         jButtonQuitar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonQuitarActionPerformed(evt);
@@ -715,6 +716,14 @@ public class PanelPlanillaNueva extends JPanelCustom {
             }
         });
 
+        jButtonModifRep.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButtonModifRep.setText("Modificar Rep.");
+        jButtonModifRep.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonModifRepActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -738,8 +747,10 @@ public class PanelPlanillaNueva extends JPanelCustom {
                 .addComponent(jLabel9)
                 .addGap(10, 10, 10)
                 .addComponent(jTextFieldDescripcion)
-                .addGap(10, 10, 10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonAdRep)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonModifRep)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonQuitar)
                 .addContainerGap())
@@ -774,7 +785,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
                         .addComponent(jButtonPagoCheque)
                         .addGap(10, 10, 10)
                         .addComponent(jFrameDeudaPlanilla)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 131, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 170, Short.MAX_VALUE)
                         .addComponent(jButtonCancel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButtonGuardar))
@@ -864,13 +875,12 @@ public class PanelPlanillaNueva extends JPanelCustom {
                         .addGap(10, 10, 10)
                         .addComponent(jLabel9))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(7, 7, 7)
-                        .addComponent(jTextFieldDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextFieldDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButtonAdRep)
-                            .addComponent(jButtonQuitar))))
+                            .addComponent(jButtonQuitar)
+                            .addComponent(jButtonModifRep))))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
@@ -1003,7 +1013,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         // - fecha de entrada por defecto)
         int numPlanilla = (Integer.valueOf(this.jLabelNumPlanilla.getText())); //Numero de esta planilla
         JLabel label = new JLabelAriel("Debe guardar la planilla antes de agregar una Reparación");
-
+        
 
         if (estaGuardada()) { //Consulto si la planilla ya se guardo, devuelve 'true' si es así
             PanelAdReparaciones p1 = new PanelAdReparaciones(numPlanilla); //El número se usa para poder guardar la reparación
@@ -1245,6 +1255,12 @@ public class PanelPlanillaNueva extends JPanelCustom {
             JLabel label = new JLabelAriel(" Datos incompletos - La planilla figura entregada pero no hay fecha de entrega. "
                     + "\n Elija una fecha de entrega e intente actualizar la planilla nuevamente");
             JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
+        }
+        else{
+            //La planilla no tiene fecha de salida y tampoco está marcado como entregada (esta bien logicamente)
+            //Debemos actualizar la planilla porque es posible que se hayan modificado otros datos
+            actualizarPlanilla(fSalida == null);
+            
         }
     }
     
@@ -1535,6 +1551,30 @@ public class PanelPlanillaNueva extends JPanelCustom {
         
     }//GEN-LAST:event_jButtonCancelActionPerformed
 
+    private void jButtonModifRepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModifRepActionPerformed
+        // Action Performed para editar una Reparación
+        int filaSelect = this.jTableReparaciones.getSelectedRow();
+        int idReparacion;
+        if(filaSelect != -1){
+            
+            if(!(this.jTableReparaciones.getSelectedRow() == 0)){  //Si no se seleccionó la primera fila ("Importe") -->
+                idReparacion =  Integer.valueOf(""+this.jTableReparaciones.getValueAt(filaSelect, 0));
+                int numPlanilla = (Integer.valueOf(this.jLabelNumPlanilla.getText())); //Numero de esta planilla
+
+                PanelAdReparaciones p1 = new PanelAdReparaciones(numPlanilla, idReparacion); //El número se usa para poder guardar la reparación
+                this.controlador.cambiarDePanel(p1, "Modificar Reparación");
+                
+            }
+            else{ //La reparación seleccionada es en realidad el IMPORTE
+                JLabel label3 = new JLabelAriel("La fila seleccionada es el IMPORTE");
+                JOptionPane.showMessageDialog(null, label3, "¡ERROR!", JOptionPane.WARNING_MESSAGE);  
+            }
+        }else{ //No hay fila seleccionada
+            JLabel label3 = new JLabelAriel("Debe seleccionar una fila de la tabla");
+            JOptionPane.showMessageDialog(null, label3, "¡Atención!", JOptionPane.WARNING_MESSAGE);        
+        }
+    }//GEN-LAST:event_jButtonModifRepActionPerformed
+
     /**/
     private void borrarCheque(String idcheque){
         int idCh = Integer.valueOf(idcheque);
@@ -1740,6 +1780,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
     private javax.swing.JButton jButtonFPer;
     private javax.swing.JButton jButtonFVh;
     private javax.swing.JButton jButtonGuardar;
+    private javax.swing.JButton jButtonModifRep;
     private javax.swing.JButton jButtonPagoCheque;
     private javax.swing.JButton jButtonPagoContado;
     private javax.swing.JButton jButtonQuitar;
@@ -2044,27 +2085,27 @@ public class PanelPlanillaNueva extends JPanelCustom {
     
     }*/
     
-    private void cargarTablaReparaciones(int numero) {
+    private void cargarTablaReparaciones(int numeroPlanilla) {
         //Método que se encarga de buscar y poner las reparaciones de una planilla en la tabla de Reparacioens
-        String consulta = "select r.descripcion, r.importe, r.completada, r.tipo from reparacion AS r "
-                + "where idplanilla = '" + numero + "'";
-        Object registros[] = new Object[4];
+        String consulta = "select r.idreparacion, r.descripcion, r.importe, r.completada, r.tipo from reparacion AS r "
+                + "where idplanilla = '" + numeroPlanilla + "'";
+        Object registros[] = new Object[5];
         Connection co = this.controlador.obtenerConexion();
         try {
             Statement st = co.createStatement();
             ResultSet rs = st.executeQuery(consulta);
             while (rs.next()) {
-                registros[0] = rs.getString(1);
-                registros[1] = rs.getString(4);
-                registros[2] = rs.getLong(2);
-                registros[3] = rs.getBoolean(3);
+                registros[0] = ""+rs.getInt(1);
+                registros[1] = rs.getString(2);
+                registros[2] = rs.getString(5);
+                registros[3] = rs.getLong(3);
+                registros[4] = rs.getBoolean(4);
                 this.tablaReparaciones.addRow(registros);
             }
         } catch (SQLException ex) {
             JLabel label = new JLabelAriel("Error en la carga de Reparaciones " + ex.getMessage());
             JOptionPane.showMessageDialog(null, label, " ERROR ", JOptionPane.WARNING_MESSAGE);
         }
-
     }
 
     /*  private void guardarPlanilla() {
@@ -2122,7 +2163,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
     }
 
     private void cosasParaPlanillaAModificar(int numero) {
-        //Carga los datos de la planilla a modificar.
+        //Carga los datos de la planilla a modificar. 'numero' es el número de planilla
         tablaReparaciones.setColumnIdentifiers(getColumnas());
         this.jButtonGuardar.setText("Actualizar");
         // Quito o modifico lo que es de acuerdo a Nueva Planilla
@@ -2163,10 +2204,12 @@ public class PanelPlanillaNueva extends JPanelCustom {
 
     private void cargarImporte(){
         //Cargar el importe total de las reparaciones en un JTextField
+        this.jTableReparaciones.getColumnModel().getColumn(0).setMinWidth(60);
+        this.jTableReparaciones.getColumnModel().getColumn(0).setMaxWidth(70);
         long montoPorReparaciones = this.montoPorReparaciones();
         //this.jTextFieldImporte.setText(""+montoPorReparaciones);
-        Object registro[] = new Object[4];
-        registro[0] = "IMPORTE";
+        Object registro[] = new Object[5];
+        registro[1] = "IMPORTE TOTAL:";
         registro[3] = montoPorReparaciones;
         this.tablaReparaciones.addRow(registro);
     }
@@ -2183,7 +2226,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         DefaultTableModel dtm2 = (DefaultTableModel) this.jTablePagos.getModel();
         dtm2.setRowCount(0);  //Magicamente anduvo y sirve para eliminar las filas de la tabla
         this.cargarTablaPagos(Integer.valueOf(this.jLabelNumPlanilla.getText()));
-
+        
         cargarImporte();
     }
 

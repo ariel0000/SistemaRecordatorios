@@ -27,6 +27,7 @@ public class PanelAdReparaciones extends JPanelCustom {
 
     private DefaultTableModel modelo;
     private int numPlanilla = 0;  //Permanece en 0 siempre y cuando no se venga desde la vista Nueva Planilla
+    int idReparacion = 0;
     private ControladorPrincipal controlador;
     
     public PanelAdReparaciones() {
@@ -43,6 +44,15 @@ public class PanelAdReparaciones extends JPanelCustom {
         inicializarLabelData(numPlanilla);
     }
 
+    PanelAdReparaciones(int numPlanilla, int idReparacion){
+    //Constructor para una Reparación a modificar
+        initComponents();
+        this.iniciarCosasEnComun();
+        this.numPlanilla = numPlanilla;
+        this.cargarDatosReparacion(idReparacion);
+        this.idReparacion = idReparacion;
+    }
+    
     private void iniciarCosasEnComun(){
         this.controlador = ControladorPrincipal.getInstancia();
         JTextFieldDateEditor editor = (JTextFieldDateEditor) this.jDateChooserFinalizado.getDateEditor();
@@ -466,6 +476,37 @@ public class PanelAdReparaciones extends JPanelCustom {
         this.jComboBoxPeriodo.addItem(""+365);
     }
 
+    private void cargarDatosReparacion(int idReparacion){
+        //Cargo los datos de la reparación a modificar
+        String query = "SELECT r.descripcion, r.importe, r.fecha_terminado, r.tipo, periodo, r.completada FROM reparacion AS r ";
+        String tipo_rep;
+        try{
+            Statement st = this.controlador.obtenerConexion().createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while(rs.next()){
+                this.jTextFieldDescripcion.setText(rs.getString(1)); //La descripción
+                this.jTextFieldImporte.setText(""+rs.getInt(2));
+                if(rs.getDate(3) != null)
+                    this.jDateChooserFinalizado.setDate(rs.getDate(3));
+                tipo_rep = rs.getString(4);
+                if(tipo_rep.equals("mantenimiento")){
+                    this.jRadioButtonMantenimiento.setSelected(true);
+                    this.jRadioButtonReparacion.setSelected(false);
+                }
+                else{
+                    this.jRadioButtonReparacion.setSelected(true);
+                    this.jRadioButtonMantenimiento.setSelected(false);
+                }
+                this.jComboBoxPeriodo.setSelectedItem(rs.getString(5));
+                this.jCheckBoxCompletada.setSelected(rs.getBoolean(6));
+            }
+            
+        }catch(SQLException ex){
+            JLabel label = new JLabelAriel(ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+    
     @Override
     public boolean sePuedeCerrar() {
         // falta completar los requerimientos para saber si se puede cerrar la vista y devolver true
@@ -475,7 +516,8 @@ public class PanelAdReparaciones extends JPanelCustom {
 
     @Override
     public void onFocus() {
-        //Todavía nose para que usar el onFocus acá
+        //Si tenemos una reparación para modificar no es necesario hacer nada porque el único dato (idPlanilla) nunca debe cambiar
+        // Si es una reparación nueva creo que tampoco se debería modificar los datos de la vista
     }
 
     private int obtenerUltimoId() {
