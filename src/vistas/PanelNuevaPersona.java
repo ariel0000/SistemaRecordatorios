@@ -77,6 +77,7 @@ public class PanelNuevaPersona extends JPanelCustom {
             //No activo las casillas si no encuentro ningún camión manejado por esta persona
             String marca, apodo, modelo, patente;
             int idVh;
+            this.jComboBoxVh.removeAllItems();
             ComboItem cmItem;
             Statement st = this.controlador.obtenerConexion().createStatement();
             String consulta = "SELECT v.idvehiculo, c.apodo, v.marca, v.modelo, v.patente FROM chofer AS c INNER JOIN persona AS p " 
@@ -107,6 +108,7 @@ public class PanelNuevaPersona extends JPanelCustom {
             String marca, apodo, modelo, patente;
             int idVh;
             ComboItem cmItem;
+            this.jComboBoxCli.removeAllItems();
             Statement st = this.controlador.obtenerConexion().createStatement();
             String consulta = "SELECT v.idvehiculo, v.marca, v.modelo, v.patente FROM cliente AS c INNER JOIN persona AS p " 
                     + "ON p.idpersona = c.idpersona INNER JOIN vehiculo AS v ON v.idduenio = c.idcliente "
@@ -1272,7 +1274,7 @@ public class PanelNuevaPersona extends JPanelCustom {
             cargarDatosJFrameCliente();
         }
         else{
-            JLabel label = new JLabelAriel("La persona tiene que ser Cliente, click en '█ Es Cliente'");
+            JLabel label = new JLabelAriel("La persona tiene que ser Cliente, click en 'Es Cliente'");
             JOptionPane.showMessageDialog(null, label, "ATENCIÓN", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButtonDatosClienteActionPerformed
@@ -1488,6 +1490,9 @@ public class PanelNuevaPersona extends JPanelCustom {
     @Override
     public void onFocus() {
         //Cuando se enfoca en esta vista habiendo salido antes: sirve para actualizar datos (generalmente los visibles)   
-        
+        this.cargarDatosPersonaModificar();
+        this.cargarCamionesChofer();
+        this.cargarCamionesDueño();
+        this.cargarTelefonos();
     }
 }

@@ -211,7 +211,7 @@ public class PanelAdPagos extends JPanelCustom {
         //Reinició los datos de la tabla.
         DefaultTableModel dtm = (DefaultTableModel) this.jTablePlanillas.getModel();
         dtm.setRowCount(0);  //Magicamente anduvo y sirve para eliminar las filas de la tabla 
-        String[] registro = new String[6];
+        String[] registro = new String[7];
         Connection co = this.controlador.obtenerConexion();
         try {
             co.setAutoCommit(false);

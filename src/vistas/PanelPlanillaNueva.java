@@ -2222,12 +2222,11 @@ public class PanelPlanillaNueva extends JPanelCustom {
                --NO ANDUVO LO DE ARRIBA  */
         DefaultTableModel dtm = (DefaultTableModel) this.jTableReparaciones.getModel();
         dtm.setRowCount(0);  //Magicamente anduvo y sirve para eliminar las filas de la tabla
+        cargarImporte();
         this.cargarTablaReparaciones(Integer.valueOf(this.jLabelNumPlanilla.getText()));
         DefaultTableModel dtm2 = (DefaultTableModel) this.jTablePagos.getModel();
         dtm2.setRowCount(0);  //Magicamente anduvo y sirve para eliminar las filas de la tabla
         this.cargarTablaPagos(Integer.valueOf(this.jLabelNumPlanilla.getText()));
-        
-        cargarImporte();
     }
 
     private void modificarCheque(int idCheque) {
