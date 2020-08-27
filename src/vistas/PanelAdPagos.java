@@ -55,7 +55,8 @@ public class PanelAdPagos extends JPanelCustom {
     }
 
     private String[] getColumnas(){
-        String columna[] = new String[]{"N° Planilla", "Fecha de Entrada", "Fecha de Salida", "Importe", "Pagado"};
+        String columna[] = new String[]{"N° Planilla", "Fecha de Entrada", "Fecha de Salida", "Importe", "Pagado", "Monto Pagos", 
+            "Cheques por Cobrar"};
         
         return columna;
     }
@@ -189,10 +190,13 @@ public class PanelAdPagos extends JPanelCustom {
     private void cargarTablaPlanillas(int idCliente){
         //Método para cargar planillas en la tabla que tiene que llamarse dsps de un ActionPerformed de "Seleccionar Cliente"
         //Diseñar para aplicar filtro de nombre de cliente
+        this.jTablePlanillas.getColumnModel().getColumn(0).setMinWidth(90);
+        this.jTablePlanillas.getColumnModel().getColumn(0).setMaxWidth(120);
         String consulta;
-        consulta = "SELECT p.idplanilla, p.fecha_de_entrada, p.fecha_de_salida, p.pagado FROM planilla AS p"
-                + " INNER JOIN cliente as c ON c.idcliente = p.idcliente INNER JOIN persona as pe ON pe.idpersona = c.idpersona"
-                + " WHERE c.idcliente = '"+idCliente+"' ";
+        consulta = "SELECT p.idplanilla, p.fecha_de_entrada, p.fecha_de_salida, p.pagado, exists (SELECT c.idcheque FROM cheque AS c "
+                + "NATURAL JOIN forma_de_pago AS f WHERE p.idplanilla = f.idplanilla AND p.idcliente = '"+idCliente+"' "
+                + "AND c.cobrado = false) FROM planilla AS p INNER JOIN cliente as c ON c.idcliente = p.idcliente "
+                + "INNER JOIN persona as pe ON pe.idpersona = c.idpersona WHERE c.idcliente = '"+idCliente+"' ";
         cargarDatosTablaPlanillas(consulta);
     }   
     
@@ -225,6 +229,10 @@ public class PanelAdPagos extends JPanelCustom {
                 else
                     registro[4] ="NO";
                 registro[5] = ""+this.montoPagosPlanilla(rs.getInt(1)); //Acá calcula el monto de los pagos asignados a la planilla
+                if(rs.getBoolean(5)) //Verdadero si tiene al menos un cheque asignado sin cobrar
+                    registro[6] = "SI";
+                else
+                    registro[6] = "NO";
                 co.commit();
                 this.modelo.addRow(registro);
                 this.jTablePlanillas.updateUI();
@@ -284,6 +292,7 @@ public class PanelAdPagos extends JPanelCustom {
         jButtonAceptar = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel19 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTablePlanillas = new javax.swing.JTable();
@@ -332,26 +341,30 @@ public class PanelAdPagos extends JPanelCustom {
         jLabel19.setForeground(new java.awt.Color(204, 0, 0));
         jLabel19.setText(". Los pagos (contado y cheques), solo pueden editarse desde la Planilla");
 
+        jLabel20.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel20.setText(". Que una planilla figure como paga depende de que el usuario lo elija así.");
+
         javax.swing.GroupLayout jFrameInfoLayout = new javax.swing.GroupLayout(jFrameInfo.getContentPane());
         jFrameInfo.getContentPane().setLayout(jFrameInfoLayout);
         jFrameInfoLayout.setHorizontalGroup(
             jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator2)
             .addGroup(jFrameInfoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrameInfoLayout.createSequentialGroup()
+                    .addGroup(jFrameInfoLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButtonAceptar))
+                        .addComponent(jButtonAceptar)
+                        .addContainerGap())
+                    .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 623, Short.MAX_VALUE)
                     .addGroup(jFrameInfoLayout.createSequentialGroup()
                         .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel14)
                             .addComponent(jLabel15)
                             .addComponent(jLabel16)
                             .addComponent(jLabel18)
-                            .addComponent(jLabel19))
-                        .addGap(0, 32, Short.MAX_VALUE)))
-                .addContainerGap())
+                            .addComponent(jLabel19)
+                            .addComponent(jLabel20))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jFrameInfoLayout.setVerticalGroup(
             jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -360,15 +373,17 @@ public class PanelAdPagos extends JPanelCustom {
                 .addComponent(jLabel14)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel15)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel16)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel18)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel20)
+                .addGap(14, 14, 14)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel19)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
                 .addComponent(jButtonAceptar)
                 .addContainerGap())
         );
@@ -579,6 +594,7 @@ public class PanelAdPagos extends JPanelCustom {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

@@ -8,12 +8,11 @@ package vistas;
 import com.toedter.calendar.JTextFieldDateEditor;
 import controladores.ControladorPrincipal;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -51,6 +50,7 @@ public class PanelAdReparaciones extends JPanelCustom {
         this.numPlanilla = numPlanilla;
         this.cargarDatosReparacion(idReparacion);
         this.idReparacion = idReparacion;
+        this.jButtonAgregarRep.setText("Actualizar Reparación");
     }
     
     private void iniciarCosasEnComun(){
@@ -325,7 +325,7 @@ public class PanelAdReparaciones extends JPanelCustom {
         //Se debe consultar si proviene esta vista desde una planilla o desde "modificar reparación" --> 
         JLabel label = new JLabelAriel("Con la reparación completada debe ingresar una fecha de finalizada");
         if(!this.jCheckBoxCompletada.isSelected()) //No está seleccionado--> Rep. no complet. --> no hay problema con la fecha de finalizada
-            if(this.numPlanilla == 0) //Estamos modificando una reparación
+            if(this.idReparacion != 0) //Estamos modificando una reparación
                 actualizarReparacion();
             else //Estamos agregando una reparación a una planilla
                 agregarReparacion(this.numPlanilla);
@@ -333,7 +333,7 @@ public class PanelAdReparaciones extends JPanelCustom {
             if(this.jDateChooserFinalizado.getDate() == null)
                 JOptionPane.showMessageDialog(null, label, "¡ATENCIÓN!", JOptionPane.WARNING_MESSAGE);
             else{ //
-                if(this.numPlanilla == 0)
+                if(this.idReparacion != 0) // True si estamos modificando una reparación
                     actualizarReparacion();
                 else
                     agregarReparacion(this.numPlanilla);
@@ -392,7 +392,41 @@ public class PanelAdReparaciones extends JPanelCustom {
     // End of variables declaration//GEN-END:variables
 
     private void actualizarReparacion() {
-        
+        //Actualiza la reparación, los datos ya están corroborados antes de llamar a este método
+        String descripcion = this.jTextFieldDescripcion.getText();
+        long importe = Long.valueOf(this.jTextFieldImporte.getText());
+        if(!(this.jTextFieldImporte.getText().equals("")) && descripcion != null){ //Datos válidos, se puede guardar
+            String sql = "UPDATE reparacion SET descripcion = ?, importe = ?, completada = ?, tipo = ?, fecha_terminado = ?, "
+                    + "periodo = ? WHERE idreparacion = '"+this.idReparacion+"' ";
+            try{
+                PreparedStatement ps = this.controlador.obtenerConexion().prepareStatement(sql);
+                ps.setString(1, descripcion);
+                ps.setLong(2, importe);
+                ps.setBoolean(3, this.jCheckBoxCompletada.isEnabled());
+                if(this.jRadioButtonMantenimiento.isSelected())
+                    ps.setObject(4, "mantenimiento", java.sql.Types.OTHER);
+                else
+                    ps.setObject(4, "reparacion", java.sql.Types.OTHER);
+                if(this.jCheckBoxCompletada.isSelected())  // Entonces tengo fecha de terminada
+                    ps.setDate(5, (Date) this.jDateChooserFinalizado.getDate());
+                else
+                    ps.setNull(5, java.sql.Types.DATE);
+                if(this.jRadioButtonMantenimiento.isSelected()) //Entonces tengo periodo
+                    ps.setInt(6, (int) this.jComboBoxPeriodo.getSelectedItem());
+                else
+                    ps.setInt(6, 15); //Por defecto el periodo tiene ese tiempo
+                ps.executeUpdate();
+                JLabel label = new JLabelAriel("Reparación actualizada");
+                JOptionPane.showMessageDialog(null, label, "¡ATENCIÓN!", JOptionPane.WARNING_MESSAGE);
+            }catch(SQLException ex){
+                JLabel label = new JLabelAriel("No se pudo actualizar la reparación: "+ex.getMessage());
+                JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+        else{
+            JLabel label = new JLabelAriel("No se puede actualizar la reparación porque la descripción o el importe son nulos");
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     private void agregarReparacion(int numPlanilla) {
@@ -531,7 +565,7 @@ public class PanelAdReparaciones extends JPanelCustom {
                 idRep = rs.getInt(1);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(PanelAdReparaciones.class.getName()).log(Level.SEVERE, null, ex);
+            //
         }
         
         return idRep;
