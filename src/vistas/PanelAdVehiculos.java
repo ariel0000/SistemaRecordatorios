@@ -299,11 +299,32 @@ public class PanelAdVehiculos extends JPanelCustom {
 
     private void jButtonBorrarVhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarVhActionPerformed
         //Action Performed del botón de borrar Vehículo 
+        //debe llamar al método "borrarVh" después de comprobar algunas reestricciones. Ver Cuaderno
+        JLabelAriel label1 = new JLabelAriel("¿Está seguro que quiere borrar el Vehículo seleccionado?");
+        JLabelAriel label2 = new JLabelAriel("No se puede borrar porque el vehículo tiene planillas impagas o reparaciones incompletas");
+        int filaSelect = this.jTableVh.getSelectedRow();
+        if(filaSelect != -1){ //Hay fila seleccionada
+            String patente = ""+this.jTableVh.getValueAt(filaSelect, 0);
+            if(!repConPlanillasImpagas(patente) && !(repAsignadas(patente))){ //Si no tiene planillas impagas y reparaciones incompletas
+                int opcion = JOptionPane.showConfirmDialog(null, label1, "¡ATENCIÓN!", JOptionPane.WARNING_MESSAGE);
+                if(JOptionPane.OK_OPTION == opcion)
+                    borrarVh(patente);
+            }
+            else
+                JOptionPane.showMessageDialog(null, label2, "¡ATENCIÓN!", JOptionPane.WARNING_MESSAGE);
+        }
+        else{
+            JLabelAriel label = new JLabelAriel("Debe seleccionar una fila de la tabla");
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_jButtonBorrarVhActionPerformed
+
+    private void borrarVh(String patente){
+        //Método para borrar el Vh de la Base de datos, las comprobaciones deben hacerse en otro método anterior.
         int filaSelect = this.jTableVh.getSelectedRow();
         if(filaSelect != -1){ try {
             //Se seleccionó una fila
             //No se debería poder borrar si el vehículo pertenece a una planilla
-            String patente = (String) this.jTableVh.getValueAt(filaSelect, 0); //Selecciono la patente
             PreparedStatement pst = this.controlador.obtenerConexion().prepareStatement("DELETE FROM vehiculo where patente = '"+patente+"'");
             int executeUpdate = pst.executeUpdate();
             JLabelAriel label = new JLabelAriel("Vehículo borrado correctamente");
@@ -317,8 +338,44 @@ public class PanelAdVehiculos extends JPanelCustom {
             JOptionPane.showMessageDialog(null, label, "¡ATENCIÓN!", JOptionPane.WARNING_MESSAGE);
         }
         this.cargarTablas();
-    }//GEN-LAST:event_jButtonBorrarVhActionPerformed
-
+    }
+    
+    private boolean repConPlanillasImpagas(String patente){
+        //Método que devuelve true si el Vh tiene al menos una planilla asignada impaga
+        boolean valor = false;
+        String query = "SELECT EXISTS(SELECT p.idplanilla FROM planilla AS p INNER JOIN vehiculo AS v ON v.idvehiculo = p.idvehiculo"
+                + " WHERE p.pagado = false AND v.patente = '"+patente+"') ";
+        try{
+            Statement st = this.controlador.obtenerConexion().createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while(rs.next()){
+                valor = rs.getBoolean(1);
+            }
+        }catch(SQLException ex){
+            JLabelAriel label = new JLabelAriel("Error al consultar si la Reparación tiene planillas impagas: "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "¡ERROR!", JOptionPane.WARNING_MESSAGE);
+        }
+        return valor;
+    }
+    
+    private boolean repAsignadas(String patente){
+        //Metodo que retorna true si el vehículo tiene reparaciones asignadas sin terminar
+        boolean valor = false;
+        String query = "SELECT EXISTS(SELECT p.idplanilla FROM planilla AS p INNER JOIN vehiculo AS v ON v.idvehiculo = p.idvehiculo"
+                + " INNER JOIN reparacion AS r ON r.idplanilla = p.idplanilla WHERE r.completada = false AND v.patente = '"+patente+"') ";
+        try{
+            Statement st = this.controlador.obtenerConexion().createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while(rs.next()){
+                valor = rs.getBoolean(1);
+            }
+        }catch(SQLException ex){
+            JLabelAriel label = new JLabelAriel("Error al consultar si la Reparación tiene reparaciones incompletas: "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "¡ERROR!", JOptionPane.WARNING_MESSAGE);
+        }
+        return valor;
+    }
+    
     private void jButtonModificarVhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModificarVhActionPerformed
         //Toma el vehículo seleccionado y lo pasa en el constructor de "NuevoModificarVh"
         int filaSelect = this.jTableVh.getSelectedRow();

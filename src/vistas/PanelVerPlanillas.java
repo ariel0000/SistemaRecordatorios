@@ -297,7 +297,7 @@ public class PanelVerPlanillas extends JPanelCustom {
                 borrarPlanilla(nPlanilla);
             else{
                 if(repAsig)  //Si tiene reparaciones asignadas
-                    labelRep = new JLabelAriel("La planilla tiene reparaciones asignadas");
+                    labelRep = new JLabelAriel("La planilla tiene reparaciones asignadas.");
                 if(pagAsig)  //Si tiene pagos asignados
                     labelPagos = new JLabelAriel("La planilla tiene pagos asginados");
                 JLabelAriel label2 = new JLabelAriel(labelRep.getMensaje()+" "+labelPagos.getMensaje());

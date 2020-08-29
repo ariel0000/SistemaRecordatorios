@@ -782,7 +782,7 @@ public class NuevoModificarVh extends JPanelCustom {
                     + "VALUES(default, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS); //modelo, marca, patente, modeloanio, duenio
             ps.setString(1, model);
             ps.setString(2, marca);
-            ps.setString(3, patente);
+            ps.setString(3, patente.toUpperCase());
             ps.setInt(4, modeloAnio);
             ps.setInt(5, idCli);
             ps.executeUpdate();

@@ -1545,10 +1545,8 @@ public class PanelPlanillaNueva extends JPanelCustom {
     }//GEN-LAST:event_jButtonBorrarPagoActionPerformed
 
     private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
-        // Tendría que cerrar la planilla borrando si estoy agregando una persona. Si estoy modificando simplemente 
+        this.controlador.cerrarPanelSeleccionado();
         //llamar al controlador con "cerrarPanelSeleccionado()"
-        
-        
     }//GEN-LAST:event_jButtonCancelActionPerformed
 
     private void jButtonModifRepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModifRepActionPerformed
