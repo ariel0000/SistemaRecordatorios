@@ -328,7 +328,7 @@ public class PanelAdReparaciones extends JPanelCustom {
             if(this.idReparacion != 0) //Estamos modificando una reparación
                 actualizarReparacion();
             else //Estamos agregando una reparación a una planilla
-                agregarReparacion(this.numPlanilla);
+                guardarReparacion(this.numPlanilla);
         else{ //La reparación está marcada como completada --> se deberá corroborar si está seteada la fecha de finalizada
             if(this.jDateChooserFinalizado.getDate() == null)
                 JOptionPane.showMessageDialog(null, label, "¡ATENCIÓN!", JOptionPane.WARNING_MESSAGE);
@@ -336,7 +336,7 @@ public class PanelAdReparaciones extends JPanelCustom {
                 if(this.idReparacion != 0) // True si estamos modificando una reparación
                     actualizarReparacion();
                 else
-                    agregarReparacion(this.numPlanilla);
+                    guardarReparacion(this.numPlanilla);
             }
         }
     }//GEN-LAST:event_jButtonAgregarRepActionPerformed
@@ -402,13 +402,13 @@ public class PanelAdReparaciones extends JPanelCustom {
                 PreparedStatement ps = this.controlador.obtenerConexion().prepareStatement(sql);
                 ps.setString(1, descripcion);
                 ps.setLong(2, importe);
-                ps.setBoolean(3, this.jCheckBoxCompletada.isEnabled());
+                ps.setBoolean(3, this.jCheckBoxCompletada.isSelected());
                 if(this.jRadioButtonMantenimiento.isSelected())
                     ps.setObject(4, "mantenimiento", java.sql.Types.OTHER);
                 else
                     ps.setObject(4, "reparacion", java.sql.Types.OTHER);
                 if(this.jCheckBoxCompletada.isSelected())  // Entonces tengo fecha de terminada
-                    ps.setDate(5, (Date) this.jDateChooserFinalizado.getDate());
+                    ps.setDate(5, new java.sql.Date(this.jDateChooserFinalizado.getDate().getTime()));
                 else
                     ps.setNull(5, java.sql.Types.DATE);
                 if(this.jRadioButtonMantenimiento.isSelected()) //Entonces tengo periodo
@@ -429,7 +429,7 @@ public class PanelAdReparaciones extends JPanelCustom {
         }
     }
 
-    private void agregarReparacion(int numPlanilla) {
+    private void guardarReparacion(int numPlanilla) {
         int siguienteIdRep = obtenerUltimoId()+1;
         String query = "INSERT INTO reparacion VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         String tipo_rep;

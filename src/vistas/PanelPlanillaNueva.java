@@ -1037,7 +1037,8 @@ public class PanelPlanillaNueva extends JPanelCustom {
             }
             
         } catch (SQLException ex) {
-            //
+            JLabelAriel label = new JLabelAriel("Problema al tratar de consultar si la planilla esta guardada: "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
         }
         //Si la planilla existe en la Base de datos, entonces, se retorna 'true'
         return existe;
@@ -1312,25 +1313,24 @@ public class PanelPlanillaNueva extends JPanelCustom {
         idPlanilla = Integer.valueOf(this.jLabelNumPlanilla.getText());
         try {
             co.setAutoCommit(false); //Para realizar la transacción
-            PreparedStatement ps = co.prepareStatement("UPDATE planilla SET fecha_de_salida = ?, "
+            PreparedStatement ps = co.prepareStatement("UPDATE planilla SET fecha_de_entrada = ?, fecha_de_salida = ?, "
                     + "pagado = ?, descripcion = ?, facturado = ?, entregado = ? WHERE idplanilla = '" + idPlanilla + "' ");
-
-            //  ps.setInt(1, Integer.valueOf(this.jLabelNumPlanilla.getText())); //Los comentados no se cargar en la actualización
-            //  ps.setDate(2, new java.sql.Date(this.jDateChooserEntrada.getDate().getTime()));
-            if (this.jCheckBoxEntregado.isSelected()) { //Si está facturado cargo la fecha  
+            
+            ps.setDate(1, new java.sql.Date(this.jDateChooserEntrada.getDate().getTime()));
+            if (this.jCheckBoxEntregado.isSelected()) { //Si está entregado el Vh cargo la fecha  
                 if (!fSalidaNula) {
-                    ps.setDate(1, new java.sql.Date(this.jDateChooserSalida.getDate().getTime())); //Problemas cuando es null-resuelto
+                    ps.setDate(2, new java.sql.Date(this.jDateChooserSalida.getDate().getTime())); //Problemas cuando es null-resuelto
                 } else {
-                    ps.setDate(1, null);
+                    ps.setDate(2, null);
                 }
             }
-            ps.setBoolean(2, this.jCheckBoxPagado.isSelected()); //pagado
-            ps.setString(3, this.jTextFieldDescripcion.getText()); //Descripción
-            //  ps.setInt(4, this.idCliente); No se carga en la actualización
-            //  ps.setInt(4, Integer.valueOf(chofer.getKey())); //idpersona (chofer) - Permite editar aunque si no gusta se podría quitar
-            // ps.setInt(8, Integer.valueOf(vh.getKey())); // No se carga en la actualización
-            ps.setBoolean(4, this.jCheckBoxFacturado.isSelected()); //facturado
-            ps.setBoolean(5, this.jCheckBoxEntregado.isSelected()); //Entregado
+            else{                       // Este "else" va sí o sí porque sino el parámetro 2 puede quedar vacío. (Fecha de salida)
+                ps.setDate(2, null);
+            }
+            ps.setBoolean(3, this.jCheckBoxPagado.isSelected()); //pagado
+            ps.setString(4, this.jTextFieldDescripcion.getText()); //Descripción
+            ps.setBoolean(5, this.jCheckBoxFacturado.isSelected()); //facturado
+            ps.setBoolean(6, this.jCheckBoxEntregado.isSelected()); //Entregado
             int executeUpdate = ps.executeUpdate();
             co.commit(); //Ahora si se acepta que anduvo bien
             JOptionPane.showMessageDialog(null, "Actualizado con éxito");
@@ -1479,7 +1479,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         int filaSeleccionada = this.jTableReparaciones.getSelectedRow();
         JLabel label = new JLabelAriel(" No hay fila seleccionada ");
         if (filaSeleccionada != -1) {
-            borrarRepDeTabla(filaSeleccionada);
+            this.borrarReparacion(Integer.valueOf(""+this.jTableReparaciones.getValueAt(filaSeleccionada, 0)));
         } else {
             JOptionPane.showMessageDialog(null, label, "ATENCIÓN", JOptionPane.WARNING_MESSAGE);
         }
@@ -1676,7 +1676,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
             }
         }       
     }
-
+/*
     private void borrarRepDeTabla(int filaSeleccionada){
         //El numero de fila seleccionada haría coincidir la reparación que se busca teniendo en cuenta el orden en que salen
         String consulta = "SELECT idreparacion FROM reparacion";
@@ -1696,7 +1696,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         } catch (SQLException ex) {
             //
         }
-    }
+    } */
     
     private void borrarReparacion(int idRep){
         if(idRep != 0){
