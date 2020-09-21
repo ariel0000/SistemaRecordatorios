@@ -8,7 +8,6 @@ package vistas;
 import com.toedter.calendar.JTextFieldDateEditor;
 import controladores.ControladorPrincipal;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -38,7 +38,8 @@ public class PanelPlanillaNueva extends JPanelCustom {
     RestrictedTextField montoCheque, montoContado;
     ItemListener itemListennerCli, itemListennerVh, itemListennerPersona;
     private String nombre, apellido, apodo;
-    ;
+    private int itemVh = 0;  //contador para que el ActionPerformed perzonalido de Vh no se ejecute dos veces
+    private int itemPer = 0;  //contador para que el ActionPerformed perzonalido de persona no se ejecute dos veces
     private int idCliente = 0; //El id de cliente que se va a guardar
 
     public PanelPlanillaNueva() {
@@ -141,7 +142,6 @@ public class PanelPlanillaNueva extends JPanelCustom {
         jTextFieldACobrar = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         buttonGroupNPago = new javax.swing.ButtonGroup();
-        buttonGroupAModif = new javax.swing.ButtonGroup();
         jLabelFechaPl = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableReparaciones = new javax.swing.JTable();
@@ -1715,57 +1715,92 @@ public class PanelPlanillaNueva extends JPanelCustom {
     
     private void jComboBoxPersonaItemStateChanged(ItemEvent evt) {
         //---
-        this.quitarActionListenersJComboBox();
-        ComboItem perSeleccionada = (ComboItem) this.jComboBoxPersona.getSelectedItem();
-        if ("0".equals(perSeleccionada.getKey())) //Seleccione --Ver Todos--
-        {
-            this.cargarPersonas("0");
-            this.jComboBoxPersona.setSelectedIndex(1); //Para solucionar una búsqueda que el ComboBox hace de más
-        } else if("-1".equals(perSeleccionada.getKey()))
-            this.cargarPersonas("-1");//el -1 servirá para cargar sólo los choferes
-        else
+        if (this.itemPer == 0) {  //Primera vez que entro al método
+            itemPer++;
+            this.quitarActionListenersJComboBox();
+            ComboItem perSeleccionada = (ComboItem) this.jComboBoxPersona.getSelectedItem();
+            if ("0".equals(perSeleccionada.getKey())) //Seleccione --Ver Todos--
+            {
+                this.cargarPersonas("0");
+                this.jComboBoxPersona.setSelectedIndex(1); //Para solucionar una búsqueda que el ComboBox hace de más
+            } else if ("-1".equals(perSeleccionada.getKey())) {
+                this.cargarPersonas("-1");//el -1 servirá para cargar sólo los choferes
+            } else
             ; //Nada para hacer - Se seleccionó un Chofer o una persona
-        this.agregarListenersJComboBox();
+            this.agregarListenersJComboBox();
+        }else
+            itemPer = 0;  //Reinicio la variable global para la próxima vez que se llame al ActionListeners
     }
 
     private void jComboBoxVhItemStateChanged(java.awt.event.ItemEvent evt) {
         //Método que se ejecuta cuando hago selecciono un item en el ComboBox de Vehículos
-        quitarActionListenersJComboBox();
-        this.jTextFieldDueñoCliente.setText(" ");
-        Object item = this.jComboBoxVh.getSelectedItem();
-        String patente = ((ComboItem) item).getKey(); //En realidad no trae la patente sino el idVh
-        if (!patente.equals("0")) {
-            this.cargarCliente(patente); //Hay idVh --> cargo el Cliente de esa patente
-        } else {
-            this.cargarCamiones(0); //Porque aprete "Ver Todos"
-        }
-        this.agregarListenersJComboBox();
-    }
-    /* ITEM LISTENNER DE ComboBox de Cliente
-    private void jComboBoxCliItemStateChanged(java.awt.event.ItemEvent evt){
-        quitarActionListenersJComboBox();
-        //Método que se ejecuta cuando hago selecciono un item en el ComboBox de Clientes
-        Object item = this.jComboBoxCli.getSelectedItem();
-        String idCli = ((ComboItem) item).getKey();
-        if(!idCli.equals("0"))
-            this.cargarCamiones(Integer.valueOf(idCli));
-        else 
-            this.cargarCamiones(0);
-        this.agregarListenersJComboBox();
-    }
-     */
- /* //Ver si seleccione un cliente --> Cargar los camiones de tal cliente
-        Object item = comboBox.getSelectedItem();
-        String value = ((ComboItem)item).getValue(); ó .getKey() según se prefiera 
-        Object item = this.jComboBoxCli.getSelectedItem(); 
-        String idCli = ((ComboItem)item).getKey();
-        if(!idCli.equals("0"))
-            this.cargarCamiones(Integer.valueOf(idCli));  //Cargo los camiones según el idCLiente
-        else //Hay que restaurar la casilla de los camiones
-            this.cargarCamiones(0); //El 0 indica que hay que cargar todos los camiones */
+        if (itemVh == 0) {  //Primera vez que se ejecuta
+            itemVh++;
+            quitarActionListenersJComboBox();
+            this.jTextFieldDueñoCliente.setText(" ");
+            int idcli = 0;
+            Object item = this.jComboBoxVh.getSelectedItem();
+            String patente = ((ComboItem) item).getKey(); //En realidad no trae la patente sino el idVh
+            if (!patente.equals("0")) {
+                idcli = this.cargarCliente(patente); //Hay idVh --> cargo el Cliente de esa patente
+            } else {
+                this.cargarCamiones(0); //Porque aprete "Ver Todos"
+            }
+            this.agregarListenersJComboBox();
 
+            if (idcli != 0) { //Me fijo si el idcliente es distinto de 0 para consultar si tiene deuda
+                if (clienteTieneDeuda(idcli)) {
+                    int opcion = OptionPanePerzonalizado();
+                    if (opcion == 1) //0: Continuar;   1: Ver Planillas;   -1|3: Salir
+                    {
+                        abrirVerPlanillasConCliente(idcli);  //Abro la vista de VerPlanillas para el cliente especificado
+                    } else if (opcion == -1 || opcion == 2) {
+                        this.controlador.cerrarPanelSeleccionado(); //Cierro el panel
+                    }
+                }
+            }
+        }
+        else
+            itemVh = 0;  //Reinicio la variable global
+    }
+    
+    private boolean clienteTieneDeuda(int idcli){
+        //Método que se fija si el cliente seleccionado tiene deuda para avisarle al usuario
+        boolean valor = false;
+        
+        String consulta = "SELECT count(*) FROM cliente AS c INNER JOIN planilla AS p ON c.idcliente = p.idplanilla "
+                + "WHERE c.idcliente = '"+idcli+"' AND p.entregado = true AND p.pagado = false";
+        try{
+            Statement st = this.controlador.obtenerConexion().createStatement();
+            ResultSet rs = st.executeQuery(consulta);
+            while(rs.next()){
+                if(rs.getInt(1) > 0)  //El cliente tiene planillas con vehículos entregados e impagas
+                  valor = true;  
+            }
+        }catch(SQLException ex){
+            JLabel label1 = new JLabelAriel("Error: "+ex.getMessage());
+            JOptionPane.showMessageDialog(jFrameCheque, label1, "ERROR", JOptionPane.WARNING_MESSAGE);
+        }
+        return valor;
+    };
+    
+    private int OptionPanePerzonalizado(){
+        //Retorna un JOptionPane perzonalizado
+        String[] options = new String[] {"CONTINUAR", "VER PLANILLAS DEL CLIENTE", "SALIR"};
+        JLabel label = new JLabelAriel("El cliente tiene planillas impagas, ¿Qué desea hacer?");
+        return JOptionPane.showOptionDialog(null, label, "AVISO", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+        null, options, options[0]);
+        
+    }
+    
+    
+    private void abrirVerPlanillasConCliente(int idcliente){
+        // Método que abre Ver Planillas, también podría ser la planilla Administrar Pagos
+        PanelVerPlanillas pVp = new PanelVerPlanillas(idcliente);
+        this.controlador.cambiarDePanel(pVp, "Planillas(Cliente: "+this.jTextFieldDueñoCliente.getText()+")");
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.ButtonGroup buttonGroupAModif;
     private javax.swing.ButtonGroup buttonGroupNPago;
     private javax.swing.JButton jButtonAceptarDeudas;
     private javax.swing.JButton jButtonAdRep;
@@ -1989,7 +2024,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         }
     }
 
-    private void cargarCliente(String idvh) {
+    private int cargarCliente(String idvh) {
         String consulta = "";
         if (idvh.equals("")) //No hay idVh, se cargan todos los clientes
         {  //Cambiado el "0" por ""
@@ -2000,12 +2035,12 @@ public class PanelPlanillaNueva extends JPanelCustom {
                     + " INNER JOIN vehiculo AS v ON v.idduenio = c.idcliente WHERE v.idvehiculo = '" + idvh + "'";
         }
 
-        cargarClienteBdB(consulta);
+        return cargarClienteBdB(consulta);  //Retorna un entero que representa el id del cliente. O el número 0 sino se seleccionó camión
     }
 
-    private void cargarClienteBdB(String consulta) {
+    private int cargarClienteBdB(String consulta) {
      
-        int idcli;
+        int idcli = 0;
         //Borro el Action Listeners para que no moleste en el agregado de Datos
 
         Connection co = this.controlador.obtenerConexion();
@@ -2025,7 +2060,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         } catch (SQLException ex) {
             //Acá iría la escritura de un log con fecha si es posible
         }
-
+        return idcli;
     }
 
     private void agregarListenersJComboBox() {
@@ -2118,10 +2153,10 @@ public class PanelPlanillaNueva extends JPanelCustom {
         if (idpersona.equals("-1")) //No hay persona seleccionada, se cargan todos las personas
         {
             consulta = "SELECT p.nombre, p.apellido, c.apodo, p.idpersona FROM persona AS p LEFT JOIN chofer AS c "
-                    + "ON p.idpersona = c.idpersona";
+                    + "ON p.idpersona = c.idpersona ORDER BY p.nombre";
         }else if(idpersona.equals("0")){ //Se selecciona para cargar los choferes unicamente
             consulta = "SELECT p.nombre, p.apellido, c.apodo, p.idpersona FROM persona AS p inner JOIN chofer AS c "
-                    + "ON p.idpersona = c.idpersona";
+                    + "ON p.idpersona = c.idpersona ORDER BY p.nombre";
         }
 /*       
         consulta = "SELECT p.nombre, p.apellido, c.apodo, p.idpersona FROM persona AS p inner join planilla as pl on "

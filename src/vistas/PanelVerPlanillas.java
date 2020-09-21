@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import modelo.ComboItem;
 import modelo.JLabelAriel;
 
 /**
@@ -26,24 +27,32 @@ public class PanelVerPlanillas extends JPanelCustom {
     private ControladorPrincipal controlador;
     
     public PanelVerPlanillas() {
-        modelo = new DefaultTableModel(){       
+        primerosComponentes();
+        initComponents();
+        cosasParaIniciarEnComun();
+        obtenerPlanillas(); //Obtengo todas las planillas sin filtrar ninguna
+    }
+    
+    public PanelVerPlanillas(int idcliente){
+        //Constructor para ver las planillas de un cliente específico: Hasta ahora solo se llama desde NuevaPlanilla cuando se quiere
+        //crear una nueva planilla pero el cliente tiene deuda --> Quizás se pueda agregar el filtro "impaga"
+        primerosComponentes();
+        initComponents();
+        cosasParaIniciarEnComun();
+        seleccionarCliente(idcliente); //Selecciono el cliente para filtrar en el JComboBoxCliente  -- falta implementar
+        this.jCheckBoxCliente.setSelected(true);
+        filtrar();
+    }
+    
+    private void primerosComponentes(){
+        modelo = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
                 //all cells false
-            return false;
-            } 
+                return false;
+            }
         };
-        initComponents();
-        this.jTablePlanillas.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
-        modelo.setColumnIdentifiers(getColumnas());
-        this.controlador = ControladorPrincipal.getInstancia();
-        this.jTablePlanillas.getColumnModel().getColumn(0).setPreferredWidth(2);
-        this.jTablePlanillas.getColumnModel().getColumn(1).setPreferredWidth(40);
-        this.jTablePlanillas.getColumnModel().getColumn(2).setPreferredWidth(20);
-        this.jTablePlanillas.getColumnModel().getColumn(6).setPreferredWidth(500); //La descrición
-        obtenerPlanillas();
     }
-    
     
     private String[] getColumnas() { 
         String columna[] = new String[]{"N°", "Fecha Entrada", "Impaga", "Fecha Salida", "   Cliente   ", "   Vehículo   ", "    Descripcion    "};
@@ -101,12 +110,10 @@ public class PanelVerPlanillas extends JPanelCustom {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jComboBox3 = new javax.swing.JComboBox<>();
-        jCheckBox3 = new javax.swing.JCheckBox();
+        jComboBoxCliente = new javax.swing.JComboBox<>();
+        jCheckBoxCliente = new javax.swing.JCheckBox();
+        jComboBoxVh = new javax.swing.JComboBox<>();
+        jCheckBoxVh = new javax.swing.JCheckBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTablePlanillas = new javax.swing.JTable();
         jButtonAdPlanilla = new javax.swing.JButton();
@@ -114,30 +121,22 @@ public class PanelVerPlanillas extends JPanelCustom {
         jButton3 = new javax.swing.JButton();
         jCheckBox4 = new javax.swing.JCheckBox();
         jCheckBoxDesde = new javax.swing.JCheckBox();
-        jTextField1 = new javax.swing.JTextField();
         jButtonNuevaPlanilla = new javax.swing.JButton();
         jButtonBorrarPlanilla = new javax.swing.JButton();
+        jDateChooserSalida = new com.toedter.calendar.JDateChooser();
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabel1.setText("Filtros:");
 
-        jComboBox1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxCliente.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
 
-        jCheckBox1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jCheckBox1.setText("Cliente:");
+        jCheckBoxCliente.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jCheckBoxCliente.setText("Cliente:");
 
-        jCheckBox2.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jCheckBox2.setText("Camión:");
+        jComboBoxVh.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
 
-        jComboBox2.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jComboBox3.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jCheckBox3.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jCheckBox3.setText("Patente:");
+        jCheckBoxVh.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jCheckBoxVh.setText("Camión:");
 
         jTablePlanillas.setModel(modelo);
         jScrollPane1.setViewportView(jTablePlanillas);
@@ -167,9 +166,6 @@ public class PanelVerPlanillas extends JPanelCustom {
         jCheckBoxDesde.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jCheckBoxDesde.setText("Desde:");
 
-        jTextField1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jTextField1.setText("jCalendar");
-
         jButtonNuevaPlanilla.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jButtonNuevaPlanilla.setText("Nueva Planilla");
         jButtonNuevaPlanilla.addActionListener(new java.awt.event.ActionListener() {
@@ -186,6 +182,9 @@ public class PanelVerPlanillas extends JPanelCustom {
             }
         });
 
+        jDateChooserSalida.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
+        jDateChooserSalida.setMinimumSize(new java.awt.Dimension(155, 27));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -198,27 +197,24 @@ public class PanelVerPlanillas extends JPanelCustom {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jCheckBox1)
+                                .addComponent(jCheckBoxCliente)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jComboBox1, 0, 133, Short.MAX_VALUE))
+                                .addComponent(jComboBoxCliente, 0, 196, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jCheckBox2)
+                                .addComponent(jCheckBoxVh)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(jComboBoxVh, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jCheckBox4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton3))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jCheckBoxDesde)
-                                .addGap(18, 18, 18)
-                                .addComponent(jTextField1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jCheckBox3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
-                        .addComponent(jCheckBox4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
-                        .addComponent(jButton3))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jDateChooserSalida, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButtonAdPlanilla)
@@ -226,7 +222,7 @@ public class PanelVerPlanillas extends JPanelCustom {
                         .addComponent(jButtonNuevaPlanilla)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButtonBorrarPlanilla)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 212, Short.MAX_VALUE)
                         .addComponent(jButtonCancelar)))
                 .addContainerGap())
         );
@@ -236,20 +232,19 @@ public class PanelVerPlanillas extends JPanelCustom {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBox1)
-                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBox3)
+                    .addComponent(jCheckBoxCliente)
                     .addComponent(jButton3)
+                    .addComponent(jComboBoxCliente)
                     .addComponent(jCheckBox4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox2)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBoxDesde)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jCheckBoxVh)
+                        .addComponent(jComboBoxVh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jCheckBoxDesde))
+                    .addComponent(jDateChooserSalida, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 369, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonAdPlanilla)
@@ -380,24 +375,78 @@ public class PanelVerPlanillas extends JPanelCustom {
         this.obtenerPlanillas();
     }
     
+    private void filtrar(){
+        //Método que filtra y completa la tabla según los filtros aplicados.
+        //Consulta general, hay que modificarla para cada fitro
+        String consulta = "SELECT p.idplanilla, p.fecha_de_entrada, p.pagado, p.fecha_de_salida, per.nombre, per.apellido, v.marca, "
+                + "v.modelo, v.patente, p.descripcion from planilla as p inner join cliente as c on p.idcliente = c.idcliente "
+                + "inner join persona as per ON per.idpersona = c.idpersona inner join vehiculo as v on v.idvehiculo = p.idvehiculo";
+    }
+    
+    private void cosasParaIniciarEnComun(){
+        this.jTablePlanillas.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
+        modelo.setColumnIdentifiers(getColumnas());
+        this.controlador = ControladorPrincipal.getInstancia();
+        this.jTablePlanillas.getColumnModel().getColumn(0).setPreferredWidth(2);
+        this.jTablePlanillas.getColumnModel().getColumn(1).setPreferredWidth(40);
+        this.jTablePlanillas.getColumnModel().getColumn(2).setPreferredWidth(20);
+        this.jTablePlanillas.getColumnModel().getColumn(6).setPreferredWidth(500); //La descrición
+        cargarClientes(); //Cargo los clientes en el ComboBox
+    }
+    
+    private void cargarClientes(){
+        // Cargo todos clientes en el JComboBox
+        String query = "SELECT c.idcliente, p.nombre, p.apellido FROM cliente AS c INNER JOIN persona AS p ON p.idpersona = c.idpersona "
+                + "ORDER BY p.nombre";
+        int idCliente;
+        String nombre, apellido;
+        ComboItem cm;
+        try{
+            Statement st = this.controlador.obtenerConexion().createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while(rs.next()){
+                idCliente = rs.getInt(1);
+                nombre = rs.getString(2);
+                apellido = rs.getString(3);
+                cm = new ComboItem(""+idCliente, nombre+" "+apellido);
+                this.jComboBoxCliente.addItem(cm);
+            }
+            
+        }catch(SQLException ex){
+            JLabelAriel label = new JLabelAriel("Error al cargar Clientes: "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE); 
+        }
+        
+    }
+    
+    private void seleccionarCliente(int idcliente){
+        // Método que selecciona el cliente especificado como parámetro (Hay que buscar en el 'key' del ComboItem).
+        ComboItem cItem;
+        for(int i = 0; i < this.jComboBoxCliente.getItemCount(); i++){
+            cItem = (ComboItem) this.jComboBoxCliente.getItemAt(i);
+            if(cItem.getKey().equals(""+idcliente)){ // Tengo que seleccionar este cliente
+                this.jComboBoxCliente.setSelectedIndex(i);
+                break;  //Salgo del bucle for
+            }
+        }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButtonAdPlanilla;
     private javax.swing.JButton jButtonBorrarPlanilla;
     private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButtonNuevaPlanilla;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JCheckBox jCheckBox4;
+    private javax.swing.JCheckBox jCheckBoxCliente;
     private javax.swing.JCheckBox jCheckBoxDesde;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
+    private javax.swing.JCheckBox jCheckBoxVh;
+    private javax.swing.JComboBox<ComboItem> jComboBoxCliente;
+    private javax.swing.JComboBox<ComboItem> jComboBoxVh;
+    private com.toedter.calendar.JDateChooser jDateChooserSalida;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTablePlanillas;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
     
     @Override
