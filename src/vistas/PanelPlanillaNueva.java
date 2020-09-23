@@ -77,7 +77,6 @@ public class PanelPlanillaNueva extends JPanelCustom {
         editor.setEditable(false);
         editor = (JTextFieldDateEditor) this.jDateChooserSalida.getDateEditor();
         editor.setEditable(false);
-        //Faltan
     }
 
     private String[] getColumnas() {

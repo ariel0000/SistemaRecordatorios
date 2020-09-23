@@ -5,6 +5,7 @@
  */
 package vistas;
 
+import com.toedter.calendar.JTextFieldDateEditor;
 import controladores.ControladorPrincipal;
 import java.awt.Font;
 import java.sql.Connection;
@@ -12,6 +13,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.ComboItem;
@@ -30,7 +34,7 @@ public class PanelVerPlanillas extends JPanelCustom {
         primerosComponentes();
         initComponents();
         cosasParaIniciarEnComun();
-        obtenerPlanillas(); //Obtengo todas las planillas sin filtrar ninguna
+        filtrar(); //Si no hay filtros aplicados se obtienen todas las planillas
     }
     
     public PanelVerPlanillas(int idcliente){
@@ -45,6 +49,7 @@ public class PanelVerPlanillas extends JPanelCustom {
     }
     
     private void primerosComponentes(){
+        //Componentes que deben definirse antes del initComponents
         modelo = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -55,20 +60,20 @@ public class PanelVerPlanillas extends JPanelCustom {
     }
     
     private String[] getColumnas() { 
-        String columna[] = new String[]{"N°", "Fecha Entrada", "Impaga", "Fecha Salida", "   Cliente   ", "   Vehículo   ", "    Descripcion    "};
+        String columna[] = new String[]{"N°", "F. Entrada", "Impaga", "F. Salida", " Cliente ", "  Vehículo  ", "    Descripcion    "};
         return columna;
     }
 
-    private void obtenerPlanillas() {
+    private void obtenerPlanillas(String consulta) {
         //Método que carga la tabla de planillas.
 
         Object Datos[] = new Object[7];
         String nombre, marca;
         Boolean pagado;
         Connection co = this.controlador.obtenerConexion();
-        String consulta = "SELECT p.idplanilla, p.fecha_de_entrada, p.pagado, p.fecha_de_salida, per.nombre, per.apellido, v.marca, "
+  /*      String consulta = "SELECT p.idplanilla, p.fecha_de_entrada, p.pagado, p.fecha_de_salida, per.nombre, per.apellido, v.marca, "
                 + "v.modelo, v.patente, p.descripcion from planilla as p inner join cliente as c on p.idcliente = c.idcliente inner join persona as per "
-                + "ON per.idpersona = c.idpersona inner join vehiculo as v on v.idvehiculo = p.idvehiculo";
+                + "ON per.idpersona = c.idpersona inner join vehiculo as v on v.idvehiculo = p.idvehiculo ORDER BY p.fecha_de_entrada DESC";*/
         try {
             Statement st = co.createStatement();
             ResultSet rs = st.executeQuery(consulta);
@@ -118,12 +123,12 @@ public class PanelVerPlanillas extends JPanelCustom {
         jTablePlanillas = new javax.swing.JTable();
         jButtonAdPlanilla = new javax.swing.JButton();
         jButtonCancelar = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jCheckBox4 = new javax.swing.JCheckBox();
+        jButtonFiltrar = new javax.swing.JButton();
+        jCheckBoxImpaga = new javax.swing.JCheckBox();
         jCheckBoxDesde = new javax.swing.JCheckBox();
         jButtonNuevaPlanilla = new javax.swing.JButton();
         jButtonBorrarPlanilla = new javax.swing.JButton();
-        jDateChooserSalida = new com.toedter.calendar.JDateChooser();
+        jDateChooserEntradaVh = new com.toedter.calendar.JDateChooser();
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabel1.setText("Filtros:");
@@ -138,6 +143,7 @@ public class PanelVerPlanillas extends JPanelCustom {
         jCheckBoxVh.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jCheckBoxVh.setText("Camión:");
 
+        jTablePlanillas.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         jTablePlanillas.setModel(modelo);
         jScrollPane1.setViewportView(jTablePlanillas);
 
@@ -157,11 +163,16 @@ public class PanelVerPlanillas extends JPanelCustom {
             }
         });
 
-        jButton3.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jButton3.setText("Filtrar");
+        jButtonFiltrar.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jButtonFiltrar.setText("Filtrar");
+        jButtonFiltrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonFiltrarActionPerformed(evt);
+            }
+        });
 
-        jCheckBox4.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jCheckBox4.setText("Impagas");
+        jCheckBoxImpaga.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jCheckBoxImpaga.setText("Impagas");
 
         jCheckBoxDesde.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jCheckBoxDesde.setText("Desde:");
@@ -182,8 +193,8 @@ public class PanelVerPlanillas extends JPanelCustom {
             }
         });
 
-        jDateChooserSalida.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
-        jDateChooserSalida.setMinimumSize(new java.awt.Dimension(155, 27));
+        jDateChooserEntradaVh.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
+        jDateChooserEntradaVh.setMinimumSize(new java.awt.Dimension(155, 27));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -207,13 +218,13 @@ public class PanelVerPlanillas extends JPanelCustom {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jCheckBox4)
+                                .addComponent(jCheckBoxImpaga)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton3))
+                                .addComponent(jButtonFiltrar))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jCheckBoxDesde)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jDateChooserSalida, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jDateChooserEntradaVh, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))))
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
@@ -230,21 +241,22 @@ public class PanelVerPlanillas extends JPanelCustom {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jCheckBoxCliente)
-                    .addComponent(jButton3)
-                    .addComponent(jComboBoxCliente)
-                    .addComponent(jCheckBox4))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jComboBoxCliente, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(jCheckBoxCliente)
+                        .addComponent(jButtonFiltrar)
+                        .addComponent(jCheckBoxImpaga)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jCheckBoxVh)
                         .addComponent(jComboBoxVh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jCheckBoxDesde))
-                    .addComponent(jDateChooserSalida, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jDateChooserEntradaVh, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonAdPlanilla)
@@ -309,6 +321,13 @@ public class PanelVerPlanillas extends JPanelCustom {
         }
     }//GEN-LAST:event_jButtonBorrarPlanillaActionPerformed
 
+    private void jButtonFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFiltrarActionPerformed
+        //Action Performed de Boton Filtrar
+        DefaultTableModel dtm = (DefaultTableModel) this.jTablePlanillas.getModel();
+        dtm.setRowCount(0);  //Borro las filas que pueda haber
+        filtrar();
+    }//GEN-LAST:event_jButtonFiltrarActionPerformed
+
     private boolean tieneReparacionesAsignadas(int nPlanilla){
         //Compueba si una planilla tiene reparaciones asignadas
         boolean valor = false;
@@ -372,15 +391,52 @@ public class PanelVerPlanillas extends JPanelCustom {
         dtm.setRowCount(0);
         //-----
         //Cargo las filas de las planillas existentes
-        this.obtenerPlanillas();
+        filtrar();   //Obtengo las planillas con los filtros aplicados
     }
     
+    @SuppressWarnings("UnusedAssignment")
     private void filtrar(){
         //Método que filtra y completa la tabla según los filtros aplicados.
-        //Consulta general, hay que modificarla para cada fitro
+        int idcliente = Integer.valueOf(((ComboItem) this.jComboBoxCliente.getSelectedItem()).getKey());
+        int idVh = Integer.valueOf(((ComboItem) this.jComboBoxVh.getSelectedItem()).getKey());
+        DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+        int contador = 0;               //Consulta general, hay que modificarla para cada fitro ↓
         String consulta = "SELECT p.idplanilla, p.fecha_de_entrada, p.pagado, p.fecha_de_salida, per.nombre, per.apellido, v.marca, "
                 + "v.modelo, v.patente, p.descripcion from planilla as p inner join cliente as c on p.idcliente = c.idcliente "
-                + "inner join persona as per ON per.idpersona = c.idpersona inner join vehiculo as v on v.idvehiculo = p.idvehiculo";
+                + "inner join persona as per ON per.idpersona = c.idpersona inner join vehiculo as v on v.idvehiculo = p.idvehiculo ";
+        if (this.jCheckBoxCliente.isSelected() || this.jCheckBoxDesde.isSelected() || this.jCheckBoxImpaga.isSelected()
+                || this.jCheckBoxVh.isSelected()) {
+            consulta = consulta.concat(" WHERE ");
+            if (this.jCheckBoxCliente.isSelected()) {
+                consulta = consulta.concat("c.idcliente = " + idcliente);
+                contador++;
+            }
+            if (this.jCheckBoxVh.isSelected()) {
+                if (contador == 0) //Primera sentencia despues del WHERE no lleva AND
+                {
+                    consulta = consulta.concat(" v.idvehiculo = " + idVh);
+                } else {
+                    consulta = consulta.concat(" AND v.idvehiculo = " + idVh);
+                }
+                contador++;
+            }
+            if (this.jCheckBoxDesde.isSelected()) {
+                if (contador == 0) {
+                    consulta = consulta.concat(" p.fecha_de_entrada >= '" +df.format(this.jDateChooserEntradaVh.getDate())+"'");
+                } else {
+                    consulta = consulta.concat(" AND p.fecha_de_entrada >= '" +df.format(this.jDateChooserEntradaVh.getDate())+"'");
+                }
+                contador++;
+            }
+            if (this.jCheckBoxImpaga.isSelected()) {
+                if (contador == 0) {
+                    consulta = consulta.concat(" p.pagado = FALSE");
+                } else {
+                    consulta = consulta.concat(" AND p.pagado = FALSE");
+                }
+            }
+        }
+        obtenerPlanillas(consulta + " ORDER BY per.nombre, per.apellido");
     }
     
     private void cosasParaIniciarEnComun(){
@@ -390,8 +446,13 @@ public class PanelVerPlanillas extends JPanelCustom {
         this.jTablePlanillas.getColumnModel().getColumn(0).setPreferredWidth(2);
         this.jTablePlanillas.getColumnModel().getColumn(1).setPreferredWidth(40);
         this.jTablePlanillas.getColumnModel().getColumn(2).setPreferredWidth(20);
-        this.jTablePlanillas.getColumnModel().getColumn(6).setPreferredWidth(500); //La descrición
+        this.jTablePlanillas.getColumnModel().getColumn(6).setPreferredWidth(600); //La descrición
         cargarClientes(); //Cargo los clientes en el ComboBox
+        cargarCamiones();
+        //La fecha no se puede modificar a mano - configuración en la línea de abajo
+        JTextFieldDateEditor editor = (JTextFieldDateEditor) this.jDateChooserEntradaVh.getDateEditor();
+        this.jDateChooserEntradaVh.setDate(new Date());  //Espero que se setee este día
+        editor.setEditable(false);
     }
     
     private void cargarClientes(){
@@ -415,8 +476,24 @@ public class PanelVerPlanillas extends JPanelCustom {
         }catch(SQLException ex){
             JLabelAriel label = new JLabelAriel("Error al cargar Clientes: "+ex.getMessage());
             JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE); 
+        }    
+    }
+    
+    private void cargarCamiones(){
+        //Cargo los Vh en el comoBox correspondiente de la forma comboItem(idVh, marca+modelo)
+        ComboItem cm;
+        String query = "SELECT v.idvehiculo, v.marca, v.modelo, v.patente FROM vehiculo AS v ORDER BY v.marca, v.modelo";
+        try{
+            Statement st =this.controlador.obtenerConexion().createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while(rs.next()){
+                cm = new ComboItem(""+rs.getInt(1), rs.getString(2)+" "+rs.getString(3)+" "+rs.getString(4)); //idVh, marca-modelo-patente
+                this.jComboBoxVh.addItem(cm);
+            }
+        }catch(SQLException ex){
+            JLabelAriel label = new JLabelAriel("Error al cargar Camiones: "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);  
         }
-        
     }
     
     private void seleccionarCliente(int idcliente){
@@ -432,18 +509,18 @@ public class PanelVerPlanillas extends JPanelCustom {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButtonAdPlanilla;
     private javax.swing.JButton jButtonBorrarPlanilla;
     private javax.swing.JButton jButtonCancelar;
+    private javax.swing.JButton jButtonFiltrar;
     private javax.swing.JButton jButtonNuevaPlanilla;
-    private javax.swing.JCheckBox jCheckBox4;
     private javax.swing.JCheckBox jCheckBoxCliente;
     private javax.swing.JCheckBox jCheckBoxDesde;
+    private javax.swing.JCheckBox jCheckBoxImpaga;
     private javax.swing.JCheckBox jCheckBoxVh;
     private javax.swing.JComboBox<ComboItem> jComboBoxCliente;
     private javax.swing.JComboBox<ComboItem> jComboBoxVh;
-    private com.toedter.calendar.JDateChooser jDateChooserSalida;
+    private com.toedter.calendar.JDateChooser jDateChooserEntradaVh;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTablePlanillas;
