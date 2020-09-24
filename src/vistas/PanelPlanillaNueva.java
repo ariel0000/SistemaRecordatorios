@@ -98,7 +98,6 @@ public class PanelPlanillaNueva extends JPanelCustom {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel3 = new javax.swing.JLabel();
         jFrameContado = new javax.swing.JFrame();
         jButtonAgregarContado = new javax.swing.JButton();
         jButtonCancelar = new javax.swing.JButton();
@@ -125,6 +124,9 @@ public class PanelPlanillaNueva extends JPanelCustom {
         jLabel14 = new javax.swing.JLabel();
         jCheckBoxChequeNuevo = new javax.swing.JCheckBox();
         jLabelIdCheque = new javax.swing.JLabel();
+
+        jCheckBoxNotificarCh = new javax.swing.JCheckBox();
+        jLabel18 = new javax.swing.JLabel();
         jFrameEstadoPagos = new javax.swing.JFrame();
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
@@ -141,6 +143,14 @@ public class PanelPlanillaNueva extends JPanelCustom {
         jTextFieldACobrar = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         buttonGroupNPago = new javax.swing.ButtonGroup();
+        jFrameInfo = new javax.swing.JFrame();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
+        jLabel28 = new javax.swing.JLabel();
+        jLabel29 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         jLabelFechaPl = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableReparaciones = new javax.swing.JTable();
@@ -180,8 +190,8 @@ public class PanelPlanillaNueva extends JPanelCustom {
         jDateChooserEntrada = new com.toedter.calendar.JDateChooser();
         jButtonBorrarPago = new javax.swing.JButton();
         jButtonModifRep = new javax.swing.JButton();
-
-        jLabel3.setText("jLabel3");
+        jCheckBoxNotificar = new javax.swing.JCheckBox();
+        jButtonInfo = new javax.swing.JButton();
 
         jFrameContado.setAlwaysOnTop(true);
         jFrameContado.setLocationByPlatform(true);
@@ -284,7 +294,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         );
 
         jFrameCheque.setResizable(false);
-        jFrameCheque.setSize(new java.awt.Dimension(555, 385));
+        jFrameCheque.setSize(new java.awt.Dimension(555, 480));
         jFrameCheque.setType(java.awt.Window.Type.POPUP);
 
         jLabel8.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
@@ -327,7 +337,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         jCheckBoxChCobrado.setText("Cobrado");
 
         jLabel14.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel14.setText("Para indicar si el cheque fue acreditado");
+        jLabel14.setText("Para indicar si el cheque fue acreditado:");
 
         jCheckBoxChequeNuevo.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jCheckBoxChequeNuevo.setText("Cheque Nuevo");
@@ -335,27 +345,29 @@ public class PanelPlanillaNueva extends JPanelCustom {
         jLabelIdCheque.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabelIdCheque.setText("idCheque");
 
+        jCheckBoxNotificarCh.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jCheckBoxNotificarCh.setText("Notificar");
+        this.jCheckBoxNotificarCh.setSelected(true);
+
+        jLabel18.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel18.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel18.setText("<html><p>¡Atención! - Si desmarca esta casilla <br> no recibirá avisos para cobrar el cheque</p></html>");
+
         javax.swing.GroupLayout jFrameChequeLayout = new javax.swing.GroupLayout(jFrameCheque.getContentPane());
         jFrameCheque.getContentPane().setLayout(jFrameChequeLayout);
         jFrameChequeLayout.setHorizontalGroup(
             jFrameChequeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jFrameChequeLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrameChequeLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jFrameChequeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrameChequeLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jFrameChequeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jFrameChequeLayout.createSequentialGroup()
-                                .addComponent(jLabel14)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jCheckBoxChCobrado))
-                            .addGroup(jFrameChequeLayout.createSequentialGroup()
-                                .addComponent(jButtonCancelarCheque)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButtonAgregarCheque))))
+                .addGroup(jFrameChequeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jFrameChequeLayout.createSequentialGroup()
-                        .addGroup(jFrameChequeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jFrameChequeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButtonCancelarCheque)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonAgregarCheque))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jFrameChequeLayout.createSequentialGroup()
+                        .addGroup(jFrameChequeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jFrameChequeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jFrameChequeLayout.createSequentialGroup()
                                     .addComponent(jLabel12)
                                     .addGap(123, 123, 123)
@@ -374,17 +386,25 @@ public class PanelPlanillaNueva extends JPanelCustom {
                                         .addComponent(jDateChooserChEmision, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jDateChooserChCobro, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jCheckBoxChequeNuevo))))
-                            .addGroup(jFrameChequeLayout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jFrameChequeLayout.createSequentialGroup()
                                 .addComponent(jLabel13)
                                 .addGap(18, 18, 18)
-                                .addComponent(jTextFieldNCheque, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addComponent(jTextFieldNCheque, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jFrameChequeLayout.createSequentialGroup()
+                                .addComponent(jLabel14)
+                                .addGap(18, 18, 18)
+                                .addComponent(jCheckBoxChCobrado))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jFrameChequeLayout.createSequentialGroup()
+                                .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 384, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jCheckBoxNotificarCh)))
+                        .addGap(0, 19, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jFrameChequeLayout.setVerticalGroup(
             jFrameChequeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jFrameChequeLayout.createSequentialGroup()
-                .addContainerGap(26, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(jFrameChequeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCheckBoxChequeNuevo)
                     .addComponent(jLabelIdCheque))
@@ -409,6 +429,10 @@ public class PanelPlanillaNueva extends JPanelCustom {
                     .addComponent(jCheckBoxChCobrado)
                     .addComponent(jLabel14))
                 .addGap(18, 18, 18)
+                .addGroup(jFrameChequeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jCheckBoxNotificarCh)
+                    .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(jFrameChequeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonAgregarCheque)
                     .addComponent(jButtonCancelarCheque))
@@ -544,6 +568,79 @@ public class PanelPlanillaNueva extends JPanelCustom {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButtonAceptarDeudas)
                 .addContainerGap())
+        );
+
+        jFrameInfo.setAlwaysOnTop(true);
+        jFrameInfo.setLocationByPlatform(true);
+        jFrameInfo.setPreferredSize(new java.awt.Dimension(768, 369));
+        jFrameInfo.setResizable(false);
+        jFrameInfo.setSize(new java.awt.Dimension(770, 365));
+        jFrameInfo.setType(java.awt.Window.Type.POPUP);
+
+        jLabel24.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel24.setText("Esta vista es la principal del sistema. Desde la misma se administra la siguiente información:");
+
+        jLabel25.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel25.setText("* Importe total de las reparaciones");
+
+        jLabel26.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel26.setText("* Fechas de llegada y salida de un vehículo del taller ");
+
+        jLabel27.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel27.setText("* Reparaciones realizadas a un vehículo ");
+
+        jLabel28.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel28.setText("* Administración de pagos. (Cheques y pagos al contado).");
+
+        jLabel29.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel29.setForeground(new java.awt.Color(255, 0, 51));
+        jLabel29.setText("* Es la vista que le da sentido a todo el sistema. Desde acá surge toda la información.");
+
+        jButton1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jButton1.setText("Aceptar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jFrameInfoLayout = new javax.swing.GroupLayout(jFrameInfo.getContentPane());
+        jFrameInfo.getContentPane().setLayout(jFrameInfoLayout);
+        jFrameInfoLayout.setHorizontalGroup(
+            jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFrameInfoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel24)
+                    .addComponent(jLabel26)
+                    .addComponent(jLabel27)
+                    .addComponent(jLabel25)
+                    .addComponent(jLabel29)
+                    .addComponent(jLabel28))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrameInfoLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addContainerGap())
+        );
+        jFrameInfoLayout.setVerticalGroup(
+            jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFrameInfoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel24)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel26)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel27)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel25)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel28)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel29)
+                .addGap(26, 26, 26)
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jLabelFechaPl.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
@@ -723,6 +820,19 @@ public class PanelPlanillaNueva extends JPanelCustom {
             }
         });
 
+        jCheckBoxNotificar.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jCheckBoxNotificar.setText("Notificar");
+        jCheckBoxNotificar.setToolTipText("Notifica cuando la Planilla esta impaga.");
+        this.jCheckBoxNotificar.setSelected(true);
+
+        jButtonInfo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/info-icon2.png"))); // NOI18N
+        jButtonInfo.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/info-icon2.png"))); // NOI18N
+        jButtonInfo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonInfoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -784,7 +894,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
                         .addComponent(jButtonPagoCheque)
                         .addGap(10, 10, 10)
                         .addComponent(jFrameDeudaPlanilla)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 170, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
                         .addComponent(jButtonCancel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButtonGuardar))
@@ -802,24 +912,27 @@ public class PanelPlanillaNueva extends JPanelCustom {
                         .addGap(26, 26, 26)
                         .addComponent(jLabelCliente)
                         .addGap(6, 6, 6)
-                        .addComponent(jTextFieldDueñoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel4)
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabelNumPlanilla)
-                        .addGap(18, 18, 18)
-                        .addComponent(jCheckBoxEntregado)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jDateChooserSalida, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabelFechaPl)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jDateChooserEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(jTextFieldDueñoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jLabel4)
+                .addGap(10, 10, 10)
+                .addComponent(jLabelNumPlanilla)
+                .addGap(18, 18, 18)
+                .addComponent(jCheckBoxEntregado)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jDateChooserSalida, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabelFechaPl)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jDateChooserEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jCheckBoxNotificar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButtonInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -839,12 +952,15 @@ public class PanelPlanillaNueva extends JPanelCustom {
                                 .addComponent(jDateChooserSalida, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(1, 1, 1)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(3, 3, 3)
-                                        .addComponent(jLabelFechaPl))
-                                    .addComponent(jDateChooserEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addGap(8, 8, 8)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jCheckBoxNotificar)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGap(3, 3, 3)
+                                            .addComponent(jLabelFechaPl))
+                                        .addComponent(jDateChooserEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                    .addComponent(jButtonInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelVh)
                     .addComponent(jComboBoxVh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -868,7 +984,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
                             .addComponent(jTextFieldFPersona, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButtonFPer))))
                 .addGap(6, 6, 6)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
@@ -882,7 +998,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
                             .addComponent(jButtonModifRep))))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -894,7 +1010,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
                                 .addComponent(jCheckBoxFacturado)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jCheckBoxPagado)))
-                        .addGap(0, 27, Short.MAX_VALUE)))
+                        .addGap(0, 23, Short.MAX_VALUE)))
                 .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButtonVerPago)
@@ -1572,6 +1688,15 @@ public class PanelPlanillaNueva extends JPanelCustom {
         }
     }//GEN-LAST:event_jButtonModifRepActionPerformed
 
+    private void jButtonInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInfoActionPerformed
+        // Abre el Frame de JFrameInfo para mostrar info de la vista (Para que sirve para que no sirve).
+        this.jFrameInfo.setVisible(true);
+    }//GEN-LAST:event_jButtonInfoActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        this.jFrameInfo.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**/
     private void borrarCheque(String idcheque){
         int idCh = Integer.valueOf(idcheque);
@@ -1801,6 +1926,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroupNPago;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonAceptarDeudas;
     private javax.swing.JButton jButtonAdRep;
     private javax.swing.JButton jButtonAgregarCheque;
@@ -1812,6 +1938,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
     private javax.swing.JButton jButtonFPer;
     private javax.swing.JButton jButtonFVh;
     private javax.swing.JButton jButtonGuardar;
+    private javax.swing.JButton jButtonInfo;
     private javax.swing.JButton jButtonModifRep;
     private javax.swing.JButton jButtonPagoCheque;
     private javax.swing.JButton jButtonPagoContado;
@@ -1821,6 +1948,8 @@ public class PanelPlanillaNueva extends JPanelCustom {
     private javax.swing.JCheckBox jCheckBoxChequeNuevo;
     private javax.swing.JCheckBox jCheckBoxEntregado;
     private javax.swing.JCheckBox jCheckBoxFacturado;
+    private javax.swing.JCheckBox jCheckBoxNotificar;
+    private javax.swing.JCheckBox jCheckBoxNotificarCh;
     private javax.swing.JCheckBox jCheckBoxPagado;
     private javax.swing.JComboBox<ComboItem> jComboBoxPersona;
     private javax.swing.JComboBox<ComboItem> jComboBoxVh;
@@ -1834,6 +1963,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
     private javax.swing.JFrame jFrameContado;
     private javax.swing.JButton jFrameDeudaPlanilla;
     private javax.swing.JFrame jFrameEstadoPagos;
+    private javax.swing.JFrame jFrameInfo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1843,13 +1973,19 @@ public class PanelPlanillaNueva extends JPanelCustom {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -2169,9 +2305,9 @@ public class PanelPlanillaNueva extends JPanelCustom {
         //Quite la visibilidad del jComboBox de Persona (chofer) solamente pongo el nombre y apodo en un jLabelNombreApodo
         Connection co = this.controlador.obtenerConexion();
         this.jComboBoxPersona.removeAllItems();
-        ComboItem cItem = new ComboItem("-1", "--Todos las Personas--");
+        ComboItem cItem = new ComboItem("-1", "--Todas las Personas--");
         this.jComboBoxPersona.addItem(cItem);
-        ComboItem cItem2 = new ComboItem("0", "--Todas las Choferes--");
+        ComboItem cItem2 = new ComboItem("0", "--Todos los Choferes--");
         this.jComboBoxPersona.addItem(cItem2);
         try {
             Statement st = co.createStatement();

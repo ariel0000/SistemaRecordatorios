@@ -43,7 +43,7 @@ public class PanelPrincipal extends JPanelCustom {
         this.jTableNotificaciones.getColumnModel().getColumn(2).setMaxWidth(220);
         this.jTableNotificaciones.getColumnModel().getColumn(2).setMinWidth(180);
         controlador = ControladorPrincipal.getInstancia(); //De esta manera uso solo un controlador
-        
+        this.jRadioButtonTodos.setSelected(true);
         //Creando todos los paneles - al momento de pasarlos al controlador siempre es la misma instancia
         // --> Podemos controlar que no aparezcan más de una vez la misma instancia
         this.panelPersonas = new PanelAdPersonas();
@@ -84,6 +84,7 @@ public class PanelPrincipal extends JPanelCustom {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroupFiltros = new javax.swing.ButtonGroup();
         jButtonAdCamiones = new javax.swing.JButton();
         jButtonAdPersonas = new javax.swing.JButton();
         jButtonNuevaPlanilla = new javax.swing.JButton();
@@ -92,6 +93,10 @@ public class PanelPrincipal extends JPanelCustom {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableNotificaciones = new javax.swing.JTable();
         jButtonAdPagos = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jRadioButtonPyC = new javax.swing.JRadioButton();
+        jRadioButtonRyM = new javax.swing.JRadioButton();
+        jRadioButtonTodos = new javax.swing.JRadioButton();
 
         setPreferredSize(new java.awt.Dimension(1000, 533));
 
@@ -149,6 +154,21 @@ public class PanelPrincipal extends JPanelCustom {
             }
         });
 
+        jButton1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jButton1.setText("Filtrar");
+
+        buttonGroupFiltros.add(jRadioButtonPyC);
+        jRadioButtonPyC.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jRadioButtonPyC.setText("Pagos y Cobros");
+
+        buttonGroupFiltros.add(jRadioButtonRyM);
+        jRadioButtonRyM.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jRadioButtonRyM.setText("Reparaciones y Mantenimientos");
+
+        buttonGroupFiltros.add(jRadioButtonTodos);
+        jRadioButtonTodos.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jRadioButtonTodos.setText("Todos");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -162,19 +182,34 @@ public class PanelPrincipal extends JPanelCustom {
                     .addComponent(jButtonVerReparaciones, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
                     .addComponent(jButtonVerPlanillas, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
                     .addComponent(jButtonAdPagos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(21, 21, 21)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 735, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 735, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jRadioButtonPyC)
+                        .addGap(18, 18, 18)
+                        .addComponent(jRadioButtonRyM)
+                        .addGap(18, 18, 18)
+                        .addComponent(jRadioButtonTodos)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonAdCamiones)
+                    .addComponent(jButton1)
+                    .addComponent(jRadioButtonPyC)
+                    .addComponent(jRadioButtonRyM)
+                    .addComponent(jRadioButtonTodos))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButtonAdCamiones)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButtonAdPersonas)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButtonNuevaPlanilla)
@@ -184,8 +219,8 @@ public class PanelPrincipal extends JPanelCustom {
                         .addComponent(jButtonVerPlanillas)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButtonAdPagos)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addContainerGap(209, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1)))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -261,12 +296,17 @@ public class PanelPrincipal extends JPanelCustom {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroupFiltros;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonAdCamiones;
     private javax.swing.JButton jButtonAdPagos;
     private javax.swing.JButton jButtonAdPersonas;
     private javax.swing.JButton jButtonNuevaPlanilla;
     private javax.swing.JButton jButtonVerPlanillas;
     private javax.swing.JButton jButtonVerReparaciones;
+    private javax.swing.JRadioButton jRadioButtonPyC;
+    private javax.swing.JRadioButton jRadioButtonRyM;
+    private javax.swing.JRadioButton jRadioButtonTodos;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableNotificaciones;
     // End of variables declaration//GEN-END:variables
@@ -280,6 +320,6 @@ public class PanelPrincipal extends JPanelCustom {
 
     @Override
     public void onFocus() {
-        //Tendrían que cargarse las notificaciones de la Tabla - Someday
+        //¿Tendrían que cargarse las notificaciones de la Tabla? - Someday
     }
 }

@@ -396,7 +396,7 @@ public class PanelAdReparaciones extends JPanelCustom {
         long importe = Long.valueOf(this.jTextFieldImporte.getText());
         if(!(this.jTextFieldImporte.getText().equals("")) && descripcion != null){ //Datos válidos, se puede guardar
             String sql = "UPDATE reparacion SET descripcion = ?, importe = ?, completada = ?, tipo = ?, fecha_terminado = ?, "
-                    + "periodo = ? WHERE idreparacion = '"+this.idReparacion+"' ";
+                    + "periodo = ?, notificar = ? WHERE idreparacion = '"+this.idReparacion+"' ";
             try{
                 PreparedStatement ps = this.controlador.obtenerConexion().prepareStatement(sql);
                 ps.setString(1, descripcion);
@@ -414,6 +414,7 @@ public class PanelAdReparaciones extends JPanelCustom {
                     ps.setInt(6, (int) this.jComboBoxPeriodo.getSelectedItem());
                 else
                     ps.setInt(6, 15); //Por defecto el periodo tiene ese tiempo
+                ps.setBoolean(7, this.jCheckBoxNotificar.isSelected()); //Atributo Notificar
                 ps.executeUpdate();
                 JLabel label = new JLabelAriel("Reparación actualizada");
                 JOptionPane.showMessageDialog(null, label, "¡ATENCIÓN!", JOptionPane.WARNING_MESSAGE);
