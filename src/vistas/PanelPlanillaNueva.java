@@ -151,6 +151,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         jLabel28 = new javax.swing.JLabel();
         jLabel29 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jLabel30 = new javax.swing.JLabel();
         jLabelFechaPl = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableReparaciones = new javax.swing.JTable();
@@ -572,9 +573,9 @@ public class PanelPlanillaNueva extends JPanelCustom {
 
         jFrameInfo.setAlwaysOnTop(true);
         jFrameInfo.setLocationByPlatform(true);
-        jFrameInfo.setPreferredSize(new java.awt.Dimension(768, 369));
+        jFrameInfo.setPreferredSize(new java.awt.Dimension(768, 389));
         jFrameInfo.setResizable(false);
-        jFrameInfo.setSize(new java.awt.Dimension(770, 365));
+        jFrameInfo.setSize(new java.awt.Dimension(770, 385));
         jFrameInfo.setType(java.awt.Window.Type.POPUP);
 
         jLabel24.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
@@ -604,6 +605,9 @@ public class PanelPlanillaNueva extends JPanelCustom {
             }
         });
 
+        jLabel30.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel30.setText("* Atributo \"Notificar\": Permite elegir si se quieren notificaciones de la planilla.");
+
         javax.swing.GroupLayout jFrameInfoLayout = new javax.swing.GroupLayout(jFrameInfo.getContentPane());
         jFrameInfo.getContentPane().setLayout(jFrameInfoLayout);
         jFrameInfoLayout.setHorizontalGroup(
@@ -611,16 +615,19 @@ public class PanelPlanillaNueva extends JPanelCustom {
             .addGroup(jFrameInfoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel24)
-                    .addComponent(jLabel26)
-                    .addComponent(jLabel27)
-                    .addComponent(jLabel25)
-                    .addComponent(jLabel29)
-                    .addComponent(jLabel28))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrameInfoLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrameInfoLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton1))
+                    .addGroup(jFrameInfoLayout.createSequentialGroup()
+                        .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel24)
+                            .addComponent(jLabel26)
+                            .addComponent(jLabel27)
+                            .addComponent(jLabel25)
+                            .addComponent(jLabel29)
+                            .addComponent(jLabel28)
+                            .addComponent(jLabel30))
+                        .addGap(0, 10, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jFrameInfoLayout.setVerticalGroup(
@@ -637,10 +644,12 @@ public class PanelPlanillaNueva extends JPanelCustom {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel28)
                 .addGap(18, 18, 18)
+                .addComponent(jLabel30)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel29)
-                .addGap(26, 26, 26)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                 .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(27, 27, 27))
         );
 
         jLabelFechaPl.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
@@ -1386,7 +1395,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         Connection co = this.controlador.obtenerConexion();
         try {
             co.setAutoCommit(false); //Para realizar la transacción
-            PreparedStatement ps = co.prepareStatement("INSERT INTO planilla VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            PreparedStatement ps = co.prepareStatement("INSERT INTO planilla VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
             ps.setInt(1, Integer.valueOf(this.jLabelNumPlanilla.getText()));
             ps.setDate(2, new java.sql.Date(this.jDateChooserEntrada.getDate().getTime()));
@@ -1406,6 +1415,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
             ps.setInt(8, Integer.valueOf(vh.getKey()));
             ps.setBoolean(9, this.jCheckBoxFacturado.isSelected()); //facturado
             ps.setBoolean(10, this.jCheckBoxEntregado.isSelected()); //Entregado
+            ps.setBoolean(11, this.jCheckBoxNotificar.isSelected());  //Notificar
             int executeUpdate = ps.executeUpdate();
             co.commit(); //Ahora si se acepta que anduvo bien
             JOptionPane.showMessageDialog(null, "Guardado con éxito");
@@ -1429,7 +1439,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         try {
             co.setAutoCommit(false); //Para realizar la transacción
             PreparedStatement ps = co.prepareStatement("UPDATE planilla SET fecha_de_entrada = ?, fecha_de_salida = ?, "
-                    + "pagado = ?, descripcion = ?, facturado = ?, entregado = ? WHERE idplanilla = '" + idPlanilla + "' ");
+                    + "pagado = ?, descripcion = ?, facturado = ?, entregado = ?, notificar = ? WHERE idplanilla = '" + idPlanilla + "' ");
             
             ps.setDate(1, new java.sql.Date(this.jDateChooserEntrada.getDate().getTime()));
             if (this.jCheckBoxEntregado.isSelected()) { //Si está entregado el Vh cargo la fecha  
@@ -1446,6 +1456,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
             ps.setString(4, this.jTextFieldDescripcion.getText()); //Descripción
             ps.setBoolean(5, this.jCheckBoxFacturado.isSelected()); //facturado
             ps.setBoolean(6, this.jCheckBoxEntregado.isSelected()); //Entregado
+            ps.setBoolean(7, this.jCheckBoxNotificarCh.isSelected()); //Notificar
             int executeUpdate = ps.executeUpdate();
             co.commit(); //Ahora si se acepta que anduvo bien
             JOptionPane.showMessageDialog(null, "Actualizado con éxito");
@@ -1986,6 +1997,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
+    private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -2035,7 +2047,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
                 if (generatedKeys.next()) {
                     idFdP = generatedKeys.getInt(1);
                 }           // cheque en BdD: idcheque, fecha_emision, fecha_cobro, idforma_de_pago, monto, N°cheque
-                PreparedStatement st2 = co.prepareStatement("INSERT INTO cheque values(default, ?, ?, ?, ?, ?, ?)");
+                PreparedStatement st2 = co.prepareStatement("INSERT INTO cheque values(default, ?, ?, ?, ?, ?, ?, ?)");
 
                 if (chequeEmisión != null) {
                     st2.setDate(1, new java.sql.Date(chequeEmisión.getTime())); //Igual que en Contable2
@@ -2049,6 +2061,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
                 st2.setLong(4, monto);
                 st2.setString(5, nCheque);
                 st2.setBoolean(6, cobrado);
+                st2.setBoolean(7, this.jCheckBoxNotificarCh.isSelected());
                 st2.executeUpdate();
                 // ----------
                 co.commit(); //Confirma que las dos operaciones (st y st2) se efectuaron correctamente
@@ -2464,7 +2477,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         try {
             Connection co = this.controlador.obtenerConexion();
             PreparedStatement ps = co.prepareStatement("UPDATE cheque SET fecha_emison = ?, fecha_cobro = ?, monto = ?, "
-                    + "numerocheque = ?, cobrado = ? WHERE idcheque = ?");
+                    + "numerocheque = ?, cobrado = ?, notificar = ? WHERE idcheque = ?");
             if (chequeEmision != null) {
                 ps.setDate(1, new java.sql.Date(chequeEmision.getTime())); //Igual que en Contable2
             } else
@@ -2476,6 +2489,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
             ps.setString(4, numeroCheque);
             ps.setBoolean(5, cobrado);
             ps.setInt(6, idCheque);
+            ps.setBoolean(7, this.jCheckBoxNotificarCh.isSelected());  //Atributo notificar
             ps.executeUpdate();
         } catch (SQLException ex) {
             JLabel label = new JLabelAriel("Error al actualizar el cheque: "+ex.getMessage());

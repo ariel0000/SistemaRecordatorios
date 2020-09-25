@@ -431,7 +431,7 @@ public class PanelAdReparaciones extends JPanelCustom {
 
     private void guardarReparacion(int numPlanilla) {
         int siguienteIdRep = obtenerUltimoId()+1;
-        String query = "INSERT INTO reparacion VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO reparacion VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         String tipo_rep;
         if (this.jTextFieldImporte.getText().equals("")) {
             JLabel label = new JLabelAriel("Debe ingresar un importe ");
@@ -458,6 +458,7 @@ public class PanelAdReparaciones extends JPanelCustom {
                     ps.setDate(7, null);
                 }
                 ps.setInt(8, Integer.parseInt((String) this.jComboBoxPeriodo.getSelectedItem()));
+                ps.setBoolean(9, this.jCheckBoxNotificar.isSelected());
                 int resultado = ps.executeUpdate();
                 this.controlador.obtenerConexion().commit(); //Todo bien si pasa esta línea - falta hacerle el catch al commit()
                 JLabel labelOk = new JLabelAriel(" Reparacion agregada con exito ");
