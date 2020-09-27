@@ -68,14 +68,26 @@ public class PanelAdReparaciones extends JPanelCustom {
     private void initComponents() {
 
         buttonGroupTipo = new javax.swing.ButtonGroup();
+        jFrameInfo = new javax.swing.JFrame();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
+        jLabel28 = new javax.swing.JLabel();
+        jLabel29 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jLabel30 = new javax.swing.JLabel();
+        jLabel31 = new javax.swing.JLabel();
+        jLabel32 = new javax.swing.JLabel();
+        jLabel33 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        jButtonInfo = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jTextFieldImporte = new javax.swing.JTextField();
-        jTextFieldDescripcion = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jRadioButtonReparacion = new javax.swing.JRadioButton();
         jRadioButtonMantenimiento = new javax.swing.JRadioButton();
@@ -95,9 +107,128 @@ public class PanelAdReparaciones extends JPanelCustom {
         jDateChooserFinalizado = new com.toedter.calendar.JDateChooser();
         jButtonBorrar = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextAreaDescripcion = new javax.swing.JTextArea();
+
+        jFrameInfo.setAlwaysOnTop(true);
+        jFrameInfo.setLocationByPlatform(true);
+        jFrameInfo.setPreferredSize(new java.awt.Dimension(815, 405));
+        jFrameInfo.setResizable(false);
+        jFrameInfo.setSize(new java.awt.Dimension(825, 415));
+        jFrameInfo.setType(java.awt.Window.Type.POPUP);
+
+        jLabel24.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel24.setText("Información para el uso de la vista que sirve para Administrar Reparaciones");
+
+        jLabel25.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel25.setText("* Se recomienda hacer descripciones completas y simples: ");
+
+        jLabel26.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel26.setText("* Esta vista permite administrar Reparaciones de dos tipos (Mantenimientos o Reparaciones)");
+
+        jLabel27.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel27.setText("* La longitud de la descripción es infinita");
+
+        jLabel28.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel28.setText("* Cuando se selecciona hacer una reparación de tipo mantención se activa el periodo de días");
+
+        jLabel29.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel29.setForeground(new java.awt.Color(255, 0, 51));
+        jLabel29.setText("* Las notificaciones son por reparaciones incompletas y mantenciones incompletas o por realizar");
+
+        jButton1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jButton1.setText("Aceptar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel30.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel30.setText("* Cuando pasan los días indicados el sistema notifica al usuario para hacer una nueva mantención");
+
+        jLabel31.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel31.setText("Ej: \"Cambio de aceite y filtro. Costo de repuestos: Acceite $3500 - $Correa $5000\"");
+
+        jLabel32.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel32.setForeground(new java.awt.Color(255, 0, 51));
+        jLabel32.setText("* El atributo \"notificar\" se puede destildar:");
+
+        jLabel33.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel33.setForeground(new java.awt.Color(255, 0, 51));
+        jLabel33.setText("Al destildar no se notifica de mantenciones por realizar ni reparaciones incompletas");
+
+        javax.swing.GroupLayout jFrameInfoLayout = new javax.swing.GroupLayout(jFrameInfo.getContentPane());
+        jFrameInfo.getContentPane().setLayout(jFrameInfoLayout);
+        jFrameInfoLayout.setHorizontalGroup(
+            jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFrameInfoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jFrameInfoLayout.createSequentialGroup()
+                        .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel32)
+                            .addGroup(jFrameInfoLayout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel33)
+                                    .addComponent(jLabel31))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1))
+                    .addGroup(jFrameInfoLayout.createSequentialGroup()
+                        .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel28)
+                            .addComponent(jLabel30)
+                            .addComponent(jLabel24)
+                            .addComponent(jLabel26)
+                            .addComponent(jLabel27)
+                            .addComponent(jLabel29)
+                            .addComponent(jLabel25))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jFrameInfoLayout.setVerticalGroup(
+            jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFrameInfoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel24)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel26)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel27)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel25)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel31)
+                .addGap(23, 23, 23)
+                .addComponent(jLabel28)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel30)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel29)
+                .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jFrameInfoLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                        .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton1)
+                            .addComponent(jLabel33))
+                        .addContainerGap())
+                    .addGroup(jFrameInfoLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel32)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+        );
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabel1.setText("Planilla:");
+
+        jButtonInfo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/info-icon2.png"))); // NOI18N
+        jButtonInfo.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/info-icon2.png"))); // NOI18N
+        jButtonInfo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonInfoActionPerformed(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabel2.setText("Vehículo:");
@@ -112,8 +243,6 @@ public class PanelAdReparaciones extends JPanelCustom {
         jLabel5.setText("Importe:");
 
         jTextFieldImporte.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-
-        jTextFieldDescripcion.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
 
         jLabel6.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabel6.setText("Tipo Reparación:");
@@ -132,7 +261,7 @@ public class PanelAdReparaciones extends JPanelCustom {
         });
 
         jLabel7.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel7.setText("*Fecha finalizado:");
+        jLabel7.setText("Fecha finalizado:");
 
         jCheckBoxNotificar.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jCheckBoxNotificar.setText("Notificar");
@@ -141,7 +270,7 @@ public class PanelAdReparaciones extends JPanelCustom {
         jCheckBoxCompletada.setText("Completada");
 
         jLabel8.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel8.setText("*Aviso de Mantención o de Reparación incompleta:");
+        jLabel8.setText("Aviso de Mantención o de Reparación incompleta:");
 
         jButtonCancelarRep.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jButtonCancelarRep.setText("Descartar");
@@ -191,115 +320,117 @@ public class PanelAdReparaciones extends JPanelCustom {
         jLabel10.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel10.setText("Periodo");
 
+        jTextAreaDescripcion.setColumns(20);
+        jTextAreaDescripcion.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jTextAreaDescripcion.setRows(5);
+        jTextAreaDescripcion.setMaximumSize(new java.awt.Dimension(300, 200));
+        jScrollPane1.setViewportView(jTextAreaDescripcion);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jSeparator2))
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabelNumPlanilla)
+                        .addGap(107, 107, 107)
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabelMarcaModelo)
+                        .addGap(71, 71, 71)
+                        .addComponent(jLabel11)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabelPatente)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
+                        .addComponent(jButtonInfo))
+                    .addComponent(jSeparator1)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButtonCancelarRep)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonAgregarRep))
+                    .addComponent(jSeparator2)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
+                        .addComponent(jLabel4)
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel1)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabelNumPlanilla)
-                                .addGap(107, 107, 107)
-                                .addComponent(jLabel2)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabelMarcaModelo)
-                                .addGap(71, 71, 71)
-                                .addComponent(jLabel11)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabelPatente)
-                                .addGap(0, 181, Short.MAX_VALUE))
-                            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(45, 45, 45)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addGap(18, 18, 18)
-                                .addComponent(jTextFieldDescripcion))
+                            .addComponent(jScrollPane1)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel5)
-                                        .addGap(53, 53, 53)
-                                        .addComponent(jTextFieldImporte, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(jLabel8)
-                                            .addGap(18, 18, 18)
-                                            .addComponent(jCheckBoxNotificar)
-                                            .addGap(18, 18, 18)
-                                            .addComponent(jCheckBoxCompletada))
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(jLabel6)
-                                            .addGap(240, 240, 240)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGroup(layout.createSequentialGroup()
-                                                    .addComponent(jLabel10)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                    .addComponent(jComboBoxPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addGap(18, 18, 18)
-                                                    .addComponent(jLabel9))
-                                                .addGroup(layout.createSequentialGroup()
-                                                    .addComponent(jRadioButtonReparacion)
-                                                    .addGap(18, 18, 18)
-                                                    .addComponent(jRadioButtonMantenimiento)))))
+                                        .addComponent(jLabel8)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jCheckBoxNotificar)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jCheckBoxCompletada))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel7)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jDateChooserFinalizado, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButtonBorrar)))
-                                .addGap(0, 0, Short.MAX_VALUE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButtonCancelarRep)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButtonAgregarRep)))
+                                        .addComponent(jButtonBorrar))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel5)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jTextFieldImporte, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(417, 417, 417)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jLabel10)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(jComboBoxPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jLabel9))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jRadioButtonReparacion)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jRadioButtonMantenimiento)))))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabelNumPlanilla)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabelMarcaModelo)
-                    .addComponent(jLabel11)
-                    .addComponent(jLabelPatente))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel3)
+                        .addComponent(jLabel1)
+                        .addComponent(jLabelNumPlanilla)
+                        .addComponent(jLabel2)
+                        .addComponent(jLabelMarcaModelo)
+                        .addComponent(jLabel11)
+                        .addComponent(jLabelPatente))
+                    .addComponent(jButtonInfo))
                 .addGap(35, 35, 35)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jTextFieldDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(0, 86, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldImporte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(jCheckBoxNotificar)
                     .addComponent(jCheckBoxCompletada))
-                .addGap(19, 19, 19)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(15, 15, 15)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jRadioButtonMantenimiento)
-                        .addComponent(jRadioButtonReparacion)))
+                    .addComponent(jRadioButtonMantenimiento)
+                    .addComponent(jRadioButtonReparacion))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBoxPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -310,13 +441,13 @@ public class PanelAdReparaciones extends JPanelCustom {
                     .addComponent(jLabel7)
                     .addComponent(jDateChooserFinalizado, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonBorrar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonCancelarRep)
                     .addComponent(jButtonAgregarRep))
-                .addGap(18, 18, 18))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -358,21 +489,43 @@ public class PanelAdReparaciones extends JPanelCustom {
         this.controlador.cerrarPanelSeleccionado();
     }//GEN-LAST:event_jButtonCancelarRepActionPerformed
 
+    private void jButtonInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInfoActionPerformed
+        // Abre el Frame de JFrameInfo para mostrar info de la vista (Para que sirve para que no sirve).
+        this.jFrameInfo.setVisible(true);
+    }//GEN-LAST:event_jButtonInfoActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        this.jFrameInfo.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroupTipo;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonAgregarRep;
     private javax.swing.JButton jButtonBorrar;
     private javax.swing.JButton jButtonCancelarRep;
+    private javax.swing.JButton jButtonInfo;
     private javax.swing.JCheckBox jCheckBoxCompletada;
     private javax.swing.JCheckBox jCheckBoxNotificar;
     private javax.swing.JComboBox<String> jComboBoxPeriodo;
     private com.toedter.calendar.JDateChooser jDateChooserFinalizado;
+    private javax.swing.JFrame jFrameInfo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -384,15 +537,16 @@ public class PanelAdReparaciones extends JPanelCustom {
     private javax.swing.JLabel jLabelPatente;
     private javax.swing.JRadioButton jRadioButtonMantenimiento;
     private javax.swing.JRadioButton jRadioButtonReparacion;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JTextField jTextFieldDescripcion;
+    private javax.swing.JTextArea jTextAreaDescripcion;
     private javax.swing.JTextField jTextFieldImporte;
     // End of variables declaration//GEN-END:variables
 
     private void actualizarReparacion() {
         //Actualiza la reparación, los datos ya están corroborados antes de llamar a este método
-        String descripcion = this.jTextFieldDescripcion.getText();
+        String descripcion = this.jTextAreaDescripcion.getText();
         long importe = Long.valueOf(this.jTextFieldImporte.getText());
         if(!(this.jTextFieldImporte.getText().equals("")) && descripcion != null){ //Datos válidos, se puede guardar
             String sql = "UPDATE reparacion SET descripcion = ?, importe = ?, completada = ?, tipo = ?, fecha_terminado = ?, "
@@ -442,7 +596,7 @@ public class PanelAdReparaciones extends JPanelCustom {
                 PreparedStatement ps = this.controlador.obtenerConexion().prepareStatement(query);
                 this.controlador.obtenerConexion().setAutoCommit(false);
                 ps.setInt(1, siguienteIdRep);
-                ps.setString(2, this.jTextFieldDescripcion.getText()); //Si es nulo nose que pasa 
+                ps.setString(2, this.jTextAreaDescripcion.getText()); //Si es nulo nose que pasa 
                 ps.setInt(3, Integer.valueOf(this.jTextFieldImporte.getText())); //El importe
                 ps.setBoolean(4, this.jCheckBoxCompletada.isSelected()); //Si está completada --> true
                 if (this.jRadioButtonMantenimiento.isSelected()) {
@@ -519,7 +673,7 @@ public class PanelAdReparaciones extends JPanelCustom {
             Statement st = this.controlador.obtenerConexion().createStatement();
             ResultSet rs = st.executeQuery(query);
             while(rs.next()){
-                this.jTextFieldDescripcion.setText(rs.getString(1)); //La descripción
+                this.jTextAreaDescripcion.setText(rs.getString(1)); //La descripción
                 this.jTextFieldImporte.setText(""+rs.getInt(2));
                 if(rs.getDate(3) != null)
                     this.jDateChooserFinalizado.setDate(rs.getDate(3));
