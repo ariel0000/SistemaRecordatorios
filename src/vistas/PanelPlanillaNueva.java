@@ -1240,7 +1240,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         long monto = Integer.valueOf(this.jTextFieldMontoCheque.getText());
         boolean cobrado = this.jCheckBoxChCobrado.isSelected();
         String numeroCheque = this.jTextFieldNCheque.getText();
-        if (chequeCobro != null && monto != 0 && numeroCheque != null) {
+        if (chequeEmision != null && monto != 0 && numeroCheque != null) {
             actualizarChequeBdB(idCheque, chequeCobro, numeroCheque, monto, chequeEmision, cobrado);
             this.jFrameCheque.dispose();
             DefaultTableModel dtm = (DefaultTableModel) this.jTablePagos.getModel();
@@ -1257,13 +1257,13 @@ public class PanelPlanillaNueva extends JPanelCustom {
         int idFdP = 0; //id forma de pago -- AHORA SE USA EL ID DEL CHEQUE
         int numPlanilla = Integer.valueOf(this.jLabelNumPlanilla.getText());
         Date chequeCobro = this.jDateChooserChCobro.getDate();
-        Date chequeEmisión = this.jDateChooserChEmision.getDate();
+        Date chequeEmision = this.jDateChooserChEmision.getDate();
         long monto = Integer.valueOf(this.jTextFieldMontoCheque.getText());
         boolean cobrado = this.jCheckBoxChCobrado.isSelected();
         
         String numeroCheque = this.jTextFieldNCheque.getText();
-        if (chequeCobro != null && monto != 0 && numeroCheque != null) {
-            idFdP = grabarCheque(chequeEmisión, monto, chequeCobro, numeroCheque, cobrado); //true si grabó bien
+        if (chequeEmision != null && monto != 0 && numeroCheque != null) {
+            idFdP = grabarCheque(chequeEmision, monto, chequeCobro, numeroCheque, cobrado); //true si grabó bien
             
             if (idFdP != 0) {
                // agregarPagoATabla(idFdP, "cheque", monto, cobrado); No se usa más
@@ -1275,7 +1275,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
                 this.jFrameCheque.dispose();
             }
         }else{
-            JLabel label = new JLabelAriel("Faltan Datos, la fecha de cobro del cheque es obligatoria");
+            JLabel label = new JLabelAriel("Monto, fecha de emisión y número de cheque son datos obligatorios");
             JOptionPane.showMessageDialog(null, label, "ATENCIÓN!!", JOptionPane.WARNING_MESSAGE); 
         }
     }
@@ -2032,7 +2032,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
     private javax.swing.JTextField jTextFieldNCheque;
     // End of variables declaration//GEN-END:variables
 
-    private int grabarCheque(Date chequeEmisión, long monto, Date chequeCobro, String nCheque, boolean cobrado) {
+    private int grabarCheque(Date chequeEmision, long monto, Date chequeCobro, String nCheque, boolean cobrado) {
         int idFdP = 0; // idforma_de_pago - La inicializo porque el IDE jode
         Connection co = this.controlador.obtenerConexion();
         try {  //  ... tipo_pago = {cheque, contado, CC}
@@ -2048,15 +2048,15 @@ public class PanelPlanillaNueva extends JPanelCustom {
                     idFdP = generatedKeys.getInt(1);
                 }           // cheque en BdD: idcheque, fecha_emision, fecha_cobro, idforma_de_pago, monto, N°cheque
                 PreparedStatement st2 = co.prepareStatement("INSERT INTO cheque values(default, ?, ?, ?, ?, ?, ?, ?)");
-
-                if (chequeEmisión != null) {
-                    st2.setDate(1, new java.sql.Date(chequeEmisión.getTime())); //Igual que en Contable2
+                
+                st2.setDate(1, new java.sql.Date(chequeEmision.getTime())); //Igual que en Contable2
+                if (chequeCobro != null) {
+                    st2.setDate(2, new java.sql.Date(chequeCobro.getTime())); //Igual que en Contable2
                 } else //Lo de abajo posiblemente tire exepción
                 {
-                    st2.setNull(1, java.sql.Types.DATE);
+                    st2.setNull(2, java.sql.Types.DATE);
                 }
-
-                st2.setDate(2, new java.sql.Date(chequeCobro.getTime())); //Igual que en Contable2
+                
                 st2.setInt(3, idFdP); //El Id de forma de pago
                 st2.setLong(4, monto);
                 st2.setString(5, nCheque);
@@ -2478,13 +2478,14 @@ public class PanelPlanillaNueva extends JPanelCustom {
             Connection co = this.controlador.obtenerConexion();
             PreparedStatement ps = co.prepareStatement("UPDATE cheque SET fecha_emison = ?, fecha_cobro = ?, monto = ?, "
                     + "numerocheque = ?, cobrado = ?, notificar = ? WHERE idcheque = ?");
-            if (chequeEmision != null) {
-                ps.setDate(1, new java.sql.Date(chequeEmision.getTime())); //Igual que en Contable2
+            
+            ps.setDate(1, new java.sql.Date(chequeEmision.getTime()));
+            if (chequeCobro != null) {
+                ps.setDate(2, new java.sql.Date(chequeCobro.getTime())); //Igual que en Contable2
             } else
             {
-                ps.setNull(1, java.sql.Types.DATE); //Anda bien
+                ps.setNull(2, java.sql.Types.DATE); //Anda bien
             }
-            ps.setDate(2, new java.sql.Date(chequeCobro.getTime()));
             ps.setLong(3, monto);
             ps.setString(4, numeroCheque);
             ps.setBoolean(5, cobrado);

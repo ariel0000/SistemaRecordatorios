@@ -134,7 +134,7 @@ public class PanelAdReparaciones extends JPanelCustom {
 
         jLabel29.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabel29.setForeground(new java.awt.Color(255, 0, 51));
-        jLabel29.setText("* Las notificaciones son por reparaciones incompletas y mantenciones incompletas o por realizar");
+        jLabel29.setText("* Las notificaciones son por reparaciones incompletas o mantenciones incompletas y por realizar");
 
         jButton1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jButton1.setText("Aceptar");
@@ -171,8 +171,8 @@ public class PanelAdReparaciones extends JPanelCustom {
                             .addGroup(jFrameInfoLayout.createSequentialGroup()
                                 .addGap(10, 10, 10)
                                 .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel33)
-                                    .addComponent(jLabel31))))
+                                    .addComponent(jLabel31)
+                                    .addComponent(jLabel33))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton1))
                     .addGroup(jFrameInfoLayout.createSequentialGroup()
@@ -184,8 +184,8 @@ public class PanelAdReparaciones extends JPanelCustom {
                             .addComponent(jLabel27)
                             .addComponent(jLabel29)
                             .addComponent(jLabel25))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 3, Short.MAX_VALUE)))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
         jFrameInfoLayout.setVerticalGroup(
             jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -208,14 +208,14 @@ public class PanelAdReparaciones extends JPanelCustom {
                 .addComponent(jLabel29)
                 .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jFrameInfoLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
-                        .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
-                            .addComponent(jLabel33))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)
                         .addContainerGap())
                     .addGroup(jFrameInfoLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel32)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel33)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
