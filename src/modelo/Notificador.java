@@ -5,23 +5,26 @@
  */
 package modelo;
 
-import java.util.Date;
-
 /**
  *
  * @author Ariel
  */
 public abstract class Notificador {
     private int id;
-    private Date fecha;
+    private int prioridad;
     
-    public Notificador(int id){
+    public Notificador(int id, int prioridad){
         this.id = id;
+        this.prioridad = prioridad;
     }
     
     public abstract void Notificar(boolean valor);
-    //Valor Booleano que determina si la
+    //Valor Booleano que determina si el Notificador sigue o no enviando avisos
     
     public abstract void verNotificacion();
-    
+
+    public int getPrioridad() {
+        return prioridad;
+    }
+ 
 }

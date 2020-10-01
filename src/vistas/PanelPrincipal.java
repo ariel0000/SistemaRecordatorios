@@ -11,10 +11,13 @@ import java.awt.Font;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import static java.time.temporal.ChronoUnit.DAYS;
 import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import modelo.Cheque;
 import modelo.JLabelAriel;
 import modelo.Notificador;
 /**
@@ -260,25 +263,37 @@ public class PanelPrincipal extends JPanelCustom {
     private ArrayList cargarCheques(){
         // Carga los cheques que están listos para cobrar, los que tienen menos días para cobrar tienen más prioridad
         ArrayList<Notificador> cheques1;
+        cheques1 = obtenerChequeComun();
+        //Faltaría obtener los cheques con pago diferido
+        return cheques;
+    }
+    
+    private ArrayList<Notificador> obtenerChequeComun(){
+        //Cargo los cheques sin fecha de cobro (Cheques comunes)
         LocalDate fechaHoy = LocalDate.now();
+        ArrayList<Notificador> chequesComunes = new ArrayList<>();
         LocalDate fechaEmision, fechaCobro;
+        int prioridad;
         //Query para cargar los cheques sin fecha de cobro. Estos se pueden cobrar 30 días después de emitidos
-        String query = "SELECT idcheque, fecha_emision, numerocheque FROM cheque WHERE cobrado = false AND fecha_cobro is null";
+            String query = "SELECT idcheque, fecha_emision, numerocheque, p.nombre, p.apellido FROM cheque NATURAL JOIN forma_de_pago AS f"
+                    + "INNER JOIN planilla AS pl ON pl.idplanilla = f.idplanilla INNER JOIN cliente AS c ON pl.idcliente = c.idcliente "
+                    + "INNER JOIN persona as p ON c.idpersona = p.idpersona WHERE cobrado = false AND fecha_cobro is null "
+                    + "ORDER BY fecha_emision";
         try{
             Statement st = this.controlador.obtenerConexion().createStatement();
             ResultSet rs = st.executeQuery(query);
-            while(rs.next()){
-                //Hay que completar la herencia de Notificador con las clases correspondientes (Incluyendo cheques)
-                //Hay que hacer una consulta más por los cheques que tienen fecha de cobro
-            }
-        
-        
+            while(rs.next()){ //Cargo todos los cheques
+                //Además de esta consulta hay que hacer una consulta más por los cheques que tienen fecha de cobro
+                fechaEmision = rs.getDate(2).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                prioridad = (int) DAYS.between(fechaEmision, fechaHoy);
+                Cheque cheque = new Cheque(rs.getInt(1), prioridad, rs.getLong(3)); //idcheque, prioridad, numeroDeCheque
+                chequesComunes.add(cheque);  //Se cargan primero los que tienen más prioridad
+            } 
         }catch(Exception ex){
             JLabel label = new JLabelAriel("Error al cargar notificaciones de cheques");
             JOptionPane.showMessageDialog(null, label, "ATENCIÓN!!", JOptionPane.WARNING_MESSAGE);  
         }
-            
-        return cheques;
+        return chequesComunes;
     }
     
     private void jButtonNuevaPlanillaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNuevaPlanillaActionPerformed

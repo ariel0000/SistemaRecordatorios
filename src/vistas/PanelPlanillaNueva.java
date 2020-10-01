@@ -2476,7 +2476,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         //
         try {
             Connection co = this.controlador.obtenerConexion();
-            PreparedStatement ps = co.prepareStatement("UPDATE cheque SET fecha_emison = ?, fecha_cobro = ?, monto = ?, "
+            PreparedStatement ps = co.prepareStatement("UPDATE cheque SET fecha_emision = ?, fecha_cobro = ?, monto = ?, "
                     + "numerocheque = ?, cobrado = ?, notificar = ? WHERE idcheque = ?");
             
             ps.setDate(1, new java.sql.Date(chequeEmision.getTime()));
