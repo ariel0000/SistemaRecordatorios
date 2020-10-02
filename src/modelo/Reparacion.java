@@ -11,8 +11,8 @@ package modelo;
  */
 public class Reparacion extends Notificador{
 
-    public Reparacion(int id, int prioridad) {
-        super(id, prioridad);
+    public Reparacion(int id, int prioridad, String tipo) {
+        super(id, prioridad, tipo);
     }
 
     @Override

@@ -9,11 +9,15 @@ import com.toedter.calendar.JTextFieldDateEditor;
 import controladores.ControladorPrincipal;
 import java.awt.Font;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import static java.time.temporal.ChronoUnit.DAYS;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -256,16 +260,23 @@ public class PanelPrincipal extends JPanelCustom {
 
     private void cargarNotificadores(){
         //Este método carga los ArrayList de Notificadores.
-        this.cheques = cargarCheques();
-        
+        this.cheques = cargarCheques(); //Tanto los comunes como los diferidos
+        Arrays.sort(this.cheques.toArray());
+        Collections.sort(cheques);
+        for (Notificador cheque : this.cheques) {
+            System.out.println(cheque.getTipo());  //Funciona - hay que quitarlo o modificarlo
+        }
     }
     
     private ArrayList cargarCheques(){
         // Carga los cheques que están listos para cobrar, los que tienen menos días para cobrar tienen más prioridad
-        ArrayList<Notificador> cheques1;
-        cheques1 = obtenerChequeComun();
+        ArrayList<Notificador> chequesComunes, chequesDiferidos, todosLosCheques = new ArrayList<>();
+        chequesComunes = obtenerChequeComun();
+        chequesDiferidos = obtenerChequesDiferidos();
+        chequesDiferidos.addAll(chequesComunes);
+        todosLosCheques = chequesDiferidos;
         //Faltaría obtener los cheques con pago diferido
-        return cheques;
+        return todosLosCheques;
     }
     
     private ArrayList<Notificador> obtenerChequeComun(){
@@ -275,22 +286,52 @@ public class PanelPrincipal extends JPanelCustom {
         LocalDate fechaEmision, fechaCobro;
         int prioridad;
         //Query para cargar los cheques sin fecha de cobro. Estos se pueden cobrar 30 días después de emitidos
-            String query = "SELECT idcheque, fecha_emision, numerocheque, p.nombre, p.apellido FROM cheque NATURAL JOIN forma_de_pago AS f"
-                    + "INNER JOIN planilla AS pl ON pl.idplanilla = f.idplanilla INNER JOIN cliente AS c ON pl.idcliente = c.idcliente "
-                    + "INNER JOIN persona as p ON c.idpersona = p.idpersona WHERE cobrado = false AND fecha_cobro is null "
-                    + "ORDER BY fecha_emision";
+            String query = "SELECT k.idcheque, k.fecha_emision, k.numerocheque, p.nombre, p.apellido FROM cheque AS k "
+                    + "NATURAL JOIN forma_de_pago AS f INNER JOIN planilla AS pl ON pl.idplanilla = f.idplanilla INNER JOIN cliente AS c "
+                    + "ON pl.idcliente = c.idcliente INNER JOIN persona as p ON c.idpersona = p.idpersona WHERE cobrado = false AND "
+                    + "fecha_cobro is null ORDER BY k.fecha_emision";
         try{
             Statement st = this.controlador.obtenerConexion().createStatement();
             ResultSet rs = st.executeQuery(query);
             while(rs.next()){ //Cargo todos los cheques
                 //Además de esta consulta hay que hacer una consulta más por los cheques que tienen fecha de cobro
-                fechaEmision = rs.getDate(2).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                Date fecha = new Date(rs.getDate(2).getTime());
+                fechaEmision = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); //Si lo pasaba directamente explota
                 prioridad = (int) DAYS.between(fechaEmision, fechaHoy);
-                Cheque cheque = new Cheque(rs.getInt(1), prioridad, rs.getLong(3)); //idcheque, prioridad, numeroDeCheque
+                Cheque cheque = new Cheque(rs.getInt(1), prioridad, rs.getLong(3), "cheque común"); //idcheque, prioridad, numeroDeCheque
                 chequesComunes.add(cheque);  //Se cargan primero los que tienen más prioridad
             } 
-        }catch(Exception ex){
-            JLabel label = new JLabelAriel("Error al cargar notificaciones de cheques");
+        }catch(SQLException ex){
+            JLabel label = new JLabelAriel("Error al obtener cheques comunes: "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ATENCIÓN!!", JOptionPane.WARNING_MESSAGE);  
+        }
+        return chequesComunes;
+    }
+    
+        private ArrayList<Notificador> obtenerChequesDiferidos(){
+        //Cargo los cheques sin fecha de cobro (Cheques comunes)
+        LocalDate fechaHoy = LocalDate.now();
+        ArrayList<Notificador> chequesComunes = new ArrayList<>();
+        LocalDate fechaEmision, fechaCobro;
+        int prioridad;
+        //Query para cargar los cheques sin fecha de cobro. Estos se pueden cobrar 30 días después de emitidos
+            String query = "SELECT k.idcheque, k.fecha_cobro, k.numerocheque, p.nombre, p.apellido FROM cheque AS k NATURAL JOIN "
+                    + "forma_de_pago AS f INNER JOIN planilla AS pl ON pl.idplanilla = f.idplanilla INNER JOIN cliente AS c ON "
+                    + "pl.idcliente = c.idcliente INNER JOIN persona as p ON c.idpersona = p.idpersona WHERE cobrado = false AND "
+                    + "fecha_cobro is not null ORDER BY k.fecha_cobro";
+        try{
+            Statement st = this.controlador.obtenerConexion().createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while(rs.next()){ //Cargo todos los cheques
+                //Además de esta consulta hay que hacer una consulta más por los cheques que tienen fecha de cobro
+                Date fecha = new Date(rs.getDate(2).getTime());
+                fechaEmision = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                prioridad = (int) DAYS.between(fechaEmision, fechaHoy);
+                Cheque cheque = new Cheque(rs.getInt(1), prioridad, rs.getLong(3), "cheque pago diferido"); //idcheque, prioridad, numeroDeCheque
+                chequesComunes.add(cheque);  //Se cargan primero los que tienen más prioridad
+            } 
+        }catch(SQLException ex){
+            JLabel label = new JLabelAriel("Error al obtener cheques diferidos: "+ex.getMessage());
             JOptionPane.showMessageDialog(null, label, "ATENCIÓN!!", JOptionPane.WARNING_MESSAGE);  
         }
         return chequesComunes;

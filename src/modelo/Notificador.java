@@ -9,13 +9,15 @@ package modelo;
  *
  * @author Ariel
  */
-public abstract class Notificador {
+public abstract class Notificador implements Comparable<Notificador>{
     private int id;
     private int prioridad;
+    private String tipo;
     
-    public Notificador(int id, int prioridad){
+    public Notificador(int id, int prioridad, String tipo){
         this.id = id;
         this.prioridad = prioridad;
+        this.tipo = tipo;
     }
     
     public abstract void Notificar(boolean valor);
@@ -26,5 +28,17 @@ public abstract class Notificador {
     public int getPrioridad() {
         return prioridad;
     }
+    
+    public String getTipo(){
+        return this.tipo;
+    }
  
+    @Override
+    public int compareTo(Notificador n){
+        if(this.getPrioridad() < n.getPrioridad())
+            return -1;
+        if(this.getPrioridad() > n.getPrioridad())
+            return 1;
+        return 0;
+    }
 }

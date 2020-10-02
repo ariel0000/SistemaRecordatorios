@@ -9,11 +9,11 @@ package modelo;
  *
  * @author Ariel
  */
-public class Cheque extends Notificador implements Comparable<Cheque>{
-
+public class Cheque extends Notificador {
+    
     private long numeroDeCheque;
-    public Cheque(int id, int prioridad, long numeroCheque) {
-        super(id, prioridad);
+    public Cheque(int id, int prioridad, long numeroCheque, String tipo) {
+        super(id, prioridad, tipo);
         this.numeroDeCheque = numeroCheque;
     }
 
@@ -27,17 +27,8 @@ public class Cheque extends Notificador implements Comparable<Cheque>{
         //Desde acá se abre la vista correspondiente para poder ver el cheque.
         
     }
-    
+   
     private long getNumeroCheque(){
         return this.numeroDeCheque;
-    }
-
-    @Override
-    public int compareTo(Cheque e){  //Este método servirá para ordenar el ArrayList con un simple "cheques.sort()" - ver Vista Principal
-        if(this.getPrioridad() < e.getPrioridad())
-            return -1;
-        if(this.getPrioridad() > e.getPrioridad())
-            return 1;
-        return 0;
     }
 }
