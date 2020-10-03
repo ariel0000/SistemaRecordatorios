@@ -12,12 +12,15 @@ package modelo;
 public abstract class Notificador implements Comparable<Notificador>{
     private int id;
     private int prioridad;
-    private String tipo;
+    private String tipo, nombre, apellido, descripcion;
     
-    public Notificador(int id, int prioridad, String tipo){
+    public Notificador(int id, int prioridad, String tipo, String descripcion, String nombre, String apellido){
         this.id = id;
         this.prioridad = prioridad;
         this.tipo = tipo;
+        this.nombre = nombre;
+        this.apellido = apellido; //Serían nombre y apellido del cliente
+        this.descripcion = descripcion;
     }
     
     public abstract void Notificar(boolean valor);
@@ -31,6 +34,22 @@ public abstract class Notificador implements Comparable<Notificador>{
     
     public String getTipo(){
         return this.tipo;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
     }
  
     @Override

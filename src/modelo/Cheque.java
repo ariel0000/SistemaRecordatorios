@@ -12,8 +12,8 @@ package modelo;
 public class Cheque extends Notificador {
     
     private long numeroDeCheque;
-    public Cheque(int id, int prioridad, long numeroCheque, String tipo) {
-        super(id, prioridad, tipo);
+    public Cheque(int id, int prioridad, long numeroCheque, String tipo, String descripcion, String nombre, String apellido) {
+        super(id, prioridad, tipo, descripcion, nombre, apellido);
         this.numeroDeCheque = numeroCheque;
     }
 

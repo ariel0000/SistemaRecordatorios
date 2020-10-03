@@ -5,7 +5,6 @@
  */
 package vistas;
 
-import com.toedter.calendar.JTextFieldDateEditor;
 import controladores.ControladorPrincipal;
 import java.awt.Font;
 import java.sql.ResultSet;
@@ -24,12 +23,13 @@ import javax.swing.table.DefaultTableModel;
 import modelo.Cheque;
 import modelo.JLabelAriel;
 import modelo.Notificador;
+
 /**
  *
  * @author ari_0
  */
 public class PanelPrincipal extends JPanelCustom {
-    
+
     private DefaultTableModel tablaNotificaciones;
     private ControladorPrincipal controlador;
     private PanelAdPersonas panelPersonas;
@@ -40,25 +40,30 @@ public class PanelPrincipal extends JPanelCustom {
     private PanelAdPagos panelAdPagos;
     private ArrayList<Notificador> cheques;
     private ArrayList<Notificador> reparaciones;
-    private ArrayList<Notificador> planillas;
-  //  private ArrayList<Notificador> clientes;  -- Todavía no estoy seguro
-    
+    private ArrayList<Notificador> planillasImpagas;
+    //  private ArrayList<Notificador> clientes;  -- Todavía no estoy seguro
+
     public PanelPrincipal() {
-        tablaNotificaciones = new DefaultTableModel(null, getColumnas()){
+        tablaNotificaciones = new DefaultTableModel(null, getColumnas()) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 //all cells false
-            return false;
-            } 
+                return false;
+            }
         };
 
         initComponents();
         this.jTableNotificaciones.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
-        this.jTableNotificaciones.getColumnModel().getColumn(0).setMinWidth(140);
-        this.jTableNotificaciones.getColumnModel().getColumn(0).setMaxWidth(160);
-        this.jTableNotificaciones.getColumnModel().getColumn(1).setMinWidth(300);
-        this.jTableNotificaciones.getColumnModel().getColumn(2).setMaxWidth(220);
-        this.jTableNotificaciones.getColumnModel().getColumn(2).setMinWidth(180);
+        this.jTableNotificaciones.getColumnModel().getColumn(0).setMinWidth(90);
+        this.jTableNotificaciones.getColumnModel().getColumn(0).setMaxWidth(100);
+        this.jTableNotificaciones.getColumnModel().getColumn(1).setMinWidth(90);
+        this.jTableNotificaciones.getColumnModel().getColumn(1).setMaxWidth(150);
+        this.jTableNotificaciones.getColumnModel().getColumn(2).setMaxWidth(850);
+        this.jTableNotificaciones.getColumnModel().getColumn(2).setMinWidth(300);
+        this.jTableNotificaciones.getColumnModel().getColumn(3).setMinWidth(90);
+        this.jTableNotificaciones.getColumnModel().getColumn(3).setMaxWidth(150);
+        this.jTableNotificaciones.getColumnModel().getColumn(4).setMinWidth(160);
+        this.jTableNotificaciones.getColumnModel().getColumn(4).setMaxWidth(350);
         controlador = ControladorPrincipal.getInstancia(); //De esta manera uso solo un controlador
         //Creando todos los paneles - al momento de pasarlos al controlador siempre es la misma instancia
         // --> Podemos controlar que no aparezcan más de una vez la misma instancia
@@ -66,18 +71,17 @@ public class PanelPrincipal extends JPanelCustom {
         this.panelRepNueva = new PanelRepNueva();
         this.panelVehiculos = new PanelAdVehiculos();
         this.panelPlanillaNueva = new PanelPlanillaNueva();
-        this.panelVerPlanillas = new PanelVerPlanillas(); 
-        
+        this.panelVerPlanillas = new PanelVerPlanillas();
+
         //añadirNotifDePrueba();  //Para poder mostrar dos notificaciones de ejemplo a Leo
         iniciarEnComun();
     }
 
-    
     private String[] getColumnas() {
-        String columna[] = new String[]{"Tipo Notif.", "Descripción", "Camión"};
+        String columna[] = new String[]{"Id", "Tipo Notif.", "Descripción", "Prioridad", "Cliente"};
         return columna;
     }
-    
+
     /*
     private void añadirNotifDePrueba(){
         String datos[] = new String[3];  //Tipo, Descripción, Patente
@@ -93,18 +97,13 @@ public class PanelPrincipal extends JPanelCustom {
         
         this.jTableNotificaciones.updateUI();
     }
-    */
-    
-    private void iniciarEnComun(){
+     */
+    private void iniciarEnComun() {
         //Cosas para iniciar en Constructor PanelPrincipal()
-        JTextFieldDateEditor editor = (JTextFieldDateEditor) this.jDateChooserFiltro.getDateEditor();
-        editor.setEditable(false);
-        editor = (JTextFieldDateEditor) this.jDateChooserFiltro.getDateEditor();
-        editor.setEditable(false);
         this.jRadioButtonTodasLasNotif.setSelected(true);
         this.cargarNotificadores();
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -120,9 +119,9 @@ public class PanelPrincipal extends JPanelCustom {
         jButtonAdPagos = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jRadioButtonHoy = new javax.swing.JRadioButton();
-        jRadioButtonNose = new javax.swing.JRadioButton();
+        jRadioButtonReparaciones = new javax.swing.JRadioButton();
         jRadioButtonTodasLasNotif = new javax.swing.JRadioButton();
-        jDateChooserFiltro = new com.toedter.calendar.JDateChooser();
+        jRadioButtonPlanillas = new javax.swing.JRadioButton();
 
         setPreferredSize(new java.awt.Dimension(1000, 533));
 
@@ -185,18 +184,19 @@ public class PanelPrincipal extends JPanelCustom {
 
         buttonGroupFiltros.add(jRadioButtonHoy);
         jRadioButtonHoy.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jRadioButtonHoy.setText("Fecha de Hoy");
+        jRadioButtonHoy.setText("Cheques");
 
-        buttonGroupFiltros.add(jRadioButtonNose);
-        jRadioButtonNose.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jRadioButtonNose.setText("Desde Fecha:");
+        buttonGroupFiltros.add(jRadioButtonReparaciones);
+        jRadioButtonReparaciones.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jRadioButtonReparaciones.setText("Reparaciones");
 
         buttonGroupFiltros.add(jRadioButtonTodasLasNotif);
         jRadioButtonTodasLasNotif.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jRadioButtonTodasLasNotif.setText("Todas las notificaciones");
 
-        jDateChooserFiltro.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
-        jDateChooserFiltro.setMinimumSize(new java.awt.Dimension(155, 27));
+        buttonGroupFiltros.add(jRadioButtonPlanillas);
+        jRadioButtonPlanillas.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jRadioButtonPlanillas.setText("Planillas");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -219,10 +219,10 @@ public class PanelPrincipal extends JPanelCustom {
                         .addGap(18, 18, 18)
                         .addComponent(jRadioButtonHoy)
                         .addGap(18, 18, 18)
-                        .addComponent(jRadioButtonNose)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jDateChooserFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                        .addComponent(jRadioButtonReparaciones)
+                        .addGap(18, 18, 18)
+                        .addComponent(jRadioButtonPlanillas)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 111, Short.MAX_VALUE)
                         .addComponent(jRadioButtonTodasLasNotif)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton1)))
@@ -232,14 +232,13 @@ public class PanelPrincipal extends JPanelCustom {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jDateChooserFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButtonAdCamiones)
-                        .addComponent(jButton1)
-                        .addComponent(jRadioButtonHoy)
-                        .addComponent(jRadioButtonNose)
-                        .addComponent(jRadioButtonTodasLasNotif)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonAdCamiones)
+                    .addComponent(jButton1)
+                    .addComponent(jRadioButtonHoy)
+                    .addComponent(jRadioButtonReparaciones)
+                    .addComponent(jRadioButtonTodasLasNotif)
+                    .addComponent(jRadioButtonPlanillas))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -258,19 +257,27 @@ public class PanelPrincipal extends JPanelCustom {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cargarNotificadores(){
+    private void cargarNotificadores() {
         //Este método carga los ArrayList de Notificadores.
         this.cheques = cargarCheques(); //Tanto los comunes como los diferidos
         Arrays.sort(this.cheques.toArray());
         Collections.sort(cheques);
-        for (Notificador cheque : this.cheques) {
-            System.out.println(cheque.getTipo());  //Funciona - hay que quitarlo o modificarlo
+        String[] ch = new String[5];
+        for (Notificador cheque : this.cheques) {  //Código de Prueba
+            ch[0] = "" + cheque.getId();
+            ch[1] = cheque.getTipo();
+            ch[2] = cheque.getDescripcion();
+            ch[3] = "" + cheque.getPrioridad();
+            ch[4] = cheque.getNombre() + " " + cheque.getApellido();
+            this.tablaNotificaciones.addRow(ch);
         }
+        //... Cargamos las planillas impagas
+        this.planillasImpagas = cargarPlanillasImpagas();
     }
-    
-    private ArrayList cargarCheques(){
+
+    private ArrayList cargarCheques() {
         // Carga los cheques que están listos para cobrar, los que tienen menos días para cobrar tienen más prioridad
-        ArrayList<Notificador> chequesComunes, chequesDiferidos, todosLosCheques = new ArrayList<>();
+        ArrayList<Notificador> chequesComunes, chequesDiferidos, todosLosCheques;
         chequesComunes = obtenerChequeComun();
         chequesDiferidos = obtenerChequesDiferidos();
         chequesDiferidos.addAll(chequesComunes);
@@ -278,63 +285,80 @@ public class PanelPrincipal extends JPanelCustom {
         //Faltaría obtener los cheques con pago diferido
         return todosLosCheques;
     }
-    
-    private ArrayList<Notificador> obtenerChequeComun(){
+
+    private ArrayList<Notificador> obtenerChequeComun() {
         //Cargo los cheques sin fecha de cobro (Cheques comunes)
         LocalDate fechaHoy = LocalDate.now();
         ArrayList<Notificador> chequesComunes = new ArrayList<>();
-        LocalDate fechaEmision, fechaCobro;
+        LocalDate fechaEmision;
+        String nombre, apellido;
         int prioridad;
         //Query para cargar los cheques sin fecha de cobro. Estos se pueden cobrar 30 días después de emitidos
-            String query = "SELECT k.idcheque, k.fecha_emision, k.numerocheque, p.nombre, p.apellido FROM cheque AS k "
-                    + "NATURAL JOIN forma_de_pago AS f INNER JOIN planilla AS pl ON pl.idplanilla = f.idplanilla INNER JOIN cliente AS c "
-                    + "ON pl.idcliente = c.idcliente INNER JOIN persona as p ON c.idpersona = p.idpersona WHERE cobrado = false AND "
-                    + "fecha_cobro is null ORDER BY k.fecha_emision";
-        try{
+        String query = "SELECT k.idcheque, k.fecha_emision, k.numerocheque, p.nombre, p.apellido FROM cheque AS k "
+                + "NATURAL JOIN forma_de_pago AS f INNER JOIN planilla AS pl ON pl.idplanilla = f.idplanilla INNER JOIN cliente AS c "
+                + "ON pl.idcliente = c.idcliente INNER JOIN persona as p ON c.idpersona = p.idpersona WHERE cobrado = false AND "
+                + "fecha_cobro is null ORDER BY k.fecha_emision";
+        try {
             Statement st = this.controlador.obtenerConexion().createStatement();
             ResultSet rs = st.executeQuery(query);
-            while(rs.next()){ //Cargo todos los cheques
+            while (rs.next()) { //Cargo todos los cheques
                 //Además de esta consulta hay que hacer una consulta más por los cheques que tienen fecha de cobro
                 Date fecha = new Date(rs.getDate(2).getTime());
                 fechaEmision = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); //Si lo pasaba directamente explota
-                prioridad = (int) DAYS.between(fechaEmision, fechaHoy);
-                Cheque cheque = new Cheque(rs.getInt(1), prioridad, rs.getLong(3), "cheque común"); //idcheque, prioridad, numeroDeCheque
+                prioridad = (int) DAYS.between(fechaEmision, fechaHoy); //Mas días --> más prioridad
+                nombre = rs.getString(4);
+                apellido = rs.getString(5);
+                Cheque cheque = new Cheque(rs.getInt(1), prioridad, rs.getLong(3), "cheque",
+                        "cheque Pago inmediato sin cobrar", nombre, apellido); //idcheque, prioridad, numeroDeCheque
                 chequesComunes.add(cheque);  //Se cargan primero los que tienen más prioridad
-            } 
-        }catch(SQLException ex){
-            JLabel label = new JLabelAriel("Error al obtener cheques comunes: "+ex.getMessage());
-            JOptionPane.showMessageDialog(null, label, "ATENCIÓN!!", JOptionPane.WARNING_MESSAGE);  
+            }
+        } catch (SQLException ex) {
+            JLabel label = new JLabelAriel("Error al obtener cheques comunes: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ATENCIÓN!!", JOptionPane.WARNING_MESSAGE);
         }
         return chequesComunes;
     }
-    
-        private ArrayList<Notificador> obtenerChequesDiferidos(){
+
+    private ArrayList<Notificador> obtenerChequesDiferidos() {
         //Cargo los cheques sin fecha de cobro (Cheques comunes)
         LocalDate fechaHoy = LocalDate.now();
+        String nombre, apellido;
         ArrayList<Notificador> chequesComunes = new ArrayList<>();
-        LocalDate fechaEmision, fechaCobro;
+        LocalDate fechaCobro;
         int prioridad;
         //Query para cargar los cheques sin fecha de cobro. Estos se pueden cobrar 30 días después de emitidos
-            String query = "SELECT k.idcheque, k.fecha_cobro, k.numerocheque, p.nombre, p.apellido FROM cheque AS k NATURAL JOIN "
-                    + "forma_de_pago AS f INNER JOIN planilla AS pl ON pl.idplanilla = f.idplanilla INNER JOIN cliente AS c ON "
-                    + "pl.idcliente = c.idcliente INNER JOIN persona as p ON c.idpersona = p.idpersona WHERE cobrado = false AND "
-                    + "fecha_cobro is not null ORDER BY k.fecha_cobro";
-        try{
+        String query = "SELECT k.idcheque, k.fecha_cobro, k.numerocheque, p.nombre, p.apellido FROM cheque AS k NATURAL JOIN "
+                + "forma_de_pago AS f INNER JOIN planilla AS pl ON pl.idplanilla = f.idplanilla INNER JOIN cliente AS c ON "
+                + "pl.idcliente = c.idcliente INNER JOIN persona as p ON c.idpersona = p.idpersona WHERE cobrado = false AND "
+                + "fecha_cobro is not null ORDER BY k.fecha_cobro";
+        try {
             Statement st = this.controlador.obtenerConexion().createStatement();
             ResultSet rs = st.executeQuery(query);
-            while(rs.next()){ //Cargo todos los cheques
+            while (rs.next()) { //Cargo todos los cheques
                 //Además de esta consulta hay que hacer una consulta más por los cheques que tienen fecha de cobro
                 Date fecha = new Date(rs.getDate(2).getTime());
-                fechaEmision = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                prioridad = (int) DAYS.between(fechaEmision, fechaHoy);
-                Cheque cheque = new Cheque(rs.getInt(1), prioridad, rs.getLong(3), "cheque pago diferido"); //idcheque, prioridad, numeroDeCheque
+                fechaCobro = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                prioridad = (int) DAYS.between(fechaCobro, fechaHoy);
+                nombre = rs.getString(4);
+                apellido = rs.getString(5);
+                Cheque cheque = new Cheque(rs.getInt(1), prioridad, rs.getLong(3), "cheque",
+                        "cheque Pago Diferido sin Cobrar", nombre, apellido);
                 chequesComunes.add(cheque);  //Se cargan primero los que tienen más prioridad
-            } 
-        }catch(SQLException ex){
-            JLabel label = new JLabelAriel("Error al obtener cheques diferidos: "+ex.getMessage());
-            JOptionPane.showMessageDialog(null, label, "ATENCIÓN!!", JOptionPane.WARNING_MESSAGE);  
+            }
+        } catch (SQLException ex) {
+            JLabel label = new JLabelAriel("Error al obtener cheques diferidos: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ATENCIÓN!!", JOptionPane.WARNING_MESSAGE);
         }
         return chequesComunes;
+    }
+
+    private ArrayList<Notificador> cargarPlanillasImpagas(){
+        LocalDate fechaHoy = LocalDate.now();
+        String nombre, apellido;
+        ArrayList<Notificador> planillasImpagas = new ArrayList<>();
+        
+        
+        return planillasImpagas;
     }
     
     private void jButtonNuevaPlanillaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNuevaPlanillaActionPerformed
@@ -417,9 +441,9 @@ public class PanelPrincipal extends JPanelCustom {
     private javax.swing.JButton jButtonNuevaPlanilla;
     private javax.swing.JButton jButtonVerPlanillas;
     private javax.swing.JButton jButtonVerReparaciones;
-    private com.toedter.calendar.JDateChooser jDateChooserFiltro;
     private javax.swing.JRadioButton jRadioButtonHoy;
-    private javax.swing.JRadioButton jRadioButtonNose;
+    private javax.swing.JRadioButton jRadioButtonPlanillas;
+    private javax.swing.JRadioButton jRadioButtonReparaciones;
     private javax.swing.JRadioButton jRadioButtonTodasLasNotif;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableNotificaciones;
@@ -429,7 +453,7 @@ public class PanelPrincipal extends JPanelCustom {
     public boolean sePuedeCerrar() {
         JLabel label = new JLabelAriel(" ¿DESEA CERRAR EL PROGRAMA? ");
         int valor = JOptionPane.showConfirmDialog(panelPersonas, label, " ¡ATENCIÓN! ", JOptionPane.YES_NO_OPTION);
-        return valor == JOptionPane.YES_OPTION; 
+        return valor == JOptionPane.YES_OPTION;
     }
 
     @Override

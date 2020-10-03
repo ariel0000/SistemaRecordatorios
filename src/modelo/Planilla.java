@@ -11,8 +11,8 @@ package modelo;
  */
 public class Planilla extends Notificador{
 
-    public Planilla(int id, int prioridad, String tipo){
-        super(id, prioridad, tipo);
+    public Planilla(int id, int prioridad, String tipo, String descripcion, String nombre, String apellido){
+        super(id, prioridad, tipo, descripcion, nombre, apellido); 
     }        
     
     @Override
