@@ -23,6 +23,7 @@ import javax.swing.table.DefaultTableModel;
 import modelo.Cheque;
 import modelo.JLabelAriel;
 import modelo.Notificador;
+import modelo.Planilla;
 
 /**
  *
@@ -261,18 +262,13 @@ public class PanelPrincipal extends JPanelCustom {
         //Este método carga los ArrayList de Notificadores.
         this.cheques = cargarCheques(); //Tanto los comunes como los diferidos
         Arrays.sort(this.cheques.toArray());
-        Collections.sort(cheques);
-        String[] ch = new String[5];
-        for (Notificador cheque : this.cheques) {  //Código de Prueba
-            ch[0] = "" + cheque.getId();
-            ch[1] = cheque.getTipo();
-            ch[2] = cheque.getDescripcion();
-            ch[3] = "" + cheque.getPrioridad();
-            ch[4] = cheque.getNombre() + " " + cheque.getApellido();
-            this.tablaNotificaciones.addRow(ch);
-        }
+        
         //... Cargamos las planillas impagas
         this.planillasImpagas = cargarPlanillasImpagas();
+        ArrayList<Notificador> notificadores = new ArrayList<>(); 
+        notificadores.addAll(this.planillasImpagas);
+        notificadores.addAll(this.cheques);
+        cargarNotificadores(notificadores);
     }
 
     private ArrayList cargarCheques() {
@@ -347,18 +343,82 @@ public class PanelPrincipal extends JPanelCustom {
             }
         } catch (SQLException ex) {
             JLabel label = new JLabelAriel("Error al obtener cheques diferidos: " + ex.getMessage());
-            JOptionPane.showMessageDialog(null, label, "ATENCIÓN!!", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, label, "¡¡ATENCIÓN!!", JOptionPane.WARNING_MESSAGE);
         }
         return chequesComunes;
     }
 
     private ArrayList<Notificador> cargarPlanillasImpagas(){
         LocalDate fechaHoy = LocalDate.now();
-        String nombre, apellido;
-        ArrayList<Notificador> planillasImpagas = new ArrayList<>();
+        LocalDate fechaSalida; //Cuando el Vh fue entregado
+        String nombre, apellido, descripcion;
+        int prioridad = 1;
+        ArrayList<Notificador> planillasImpagass = new ArrayList<>();
+        String query = "SELECT p.idplanilla, p.fecha_de_salida, p.descripcion, per.nombre, per.apellido FROM planilla AS p INNER JOIN cliente"
+                + " AS c ON p.idcliente = c.idcliente INNER JOIN persona AS per ON per.idpersona = c.idpersona WHERE p.notificar = TRUE"
+                + " AND p.fecha_de_salida is not null AND p.pagado = false";
         
+        try{
+            Statement st = this.controlador.obtenerConexion().createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while(rs.next()){
+                Date fecha = new Date(rs.getDate(2).getTime());
+                fechaSalida = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                prioridad = (int) DAYS.between(fechaSalida, fechaHoy);
+                descripcion = rs.getString(3);
+                nombre = rs.getString(4);
+                apellido = rs.getString(5);
+                Planilla planilla = new Planilla(rs.getInt(1), prioridad, "planilla Impaga", descripcion, nombre, apellido);
+                planillasImpagass.add(planilla);
+            }
+        }catch(SQLException ex){
+            JLabel label = new JLabelAriel("Error al obtener planillas impagas: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "¡¡ATENCIÓN!!", JOptionPane.WARNING_MESSAGE);  
+        }
         
-        return planillasImpagas;
+        return planillasImpagass;
+    }
+    
+    private void cargarChequesATabla(int valor){
+        //Método para cargar los cheques a la tabla. Por ahora es múy básico quizás dsps se pueda hacer más completo
+        Collections.sort(cheques);
+        String[] ch = new String[5];
+        for (Notificador cheque : this.cheques) {  //Código de Prueba
+            ch[0] = "" + cheque.getId();
+            ch[1] = cheque.getTipo();
+            ch[2] = cheque.getDescripcion();
+            ch[3] = "" + cheque.getPrioridad();
+            ch[4] = cheque.getNombre() + " " + cheque.getApellido();
+            this.tablaNotificaciones.addRow(ch);
+        }
+    }
+    
+    private void cargarPlanillasATabla(int valor){
+    //Método para cargar las planillas imapgas
+        Collections.sort(this.planillasImpagas);
+        String pl[] = new String[5];
+        for (Notificador planilla : this.planillasImpagas) {
+            pl[0] = "" + planilla.getId();
+            pl[1] = "" + planilla.getTipo();
+            pl[2] = "" + planilla.getDescripcion();
+            pl[3] = "" + planilla.getPrioridad();
+            pl[4] = planilla.getNombre() + " " + planilla.getApellido();
+            this.tablaNotificaciones.addRow(pl);
+        }
+    }
+    
+    private void cargarNotificadores(ArrayList<Notificador> notificadores){
+    //Método para cargar las notificaciones ordenadas según su prioridad
+        Collections.sort(notificadores);
+        String pl[] = new String[5];
+        for (Notificador notificador : notificadores) {
+            pl[0] = "" + notificador.getId();
+            pl[1] = "" + notificador.getTipo();
+            pl[2] = "" + notificador.getDescripcion();
+            pl[3] = "" + notificador.getPrioridad();
+            pl[4] = notificador.getNombre() + " " + notificador.getApellido();
+            this.tablaNotificaciones.addRow(pl);
+        }
     }
     
     private void jButtonNuevaPlanillaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNuevaPlanillaActionPerformed
