@@ -24,6 +24,7 @@ import modelo.Cheque;
 import modelo.JLabelAriel;
 import modelo.Notificador;
 import modelo.Planilla;
+import modelo.Reparacion;
 
 /**
  *
@@ -42,6 +43,7 @@ public class PanelPrincipal extends JPanelCustom {
     private ArrayList<Notificador> cheques;
     private ArrayList<Notificador> reparaciones;
     private ArrayList<Notificador> planillasImpagas;
+    private ArrayList<Notificador> mantenciones;  //Servis
     //  private ArrayList<Notificador> clientes;  -- Todavía no estoy seguro
 
     public PanelPrincipal() {
@@ -55,10 +57,10 @@ public class PanelPrincipal extends JPanelCustom {
 
         initComponents();
         this.jTableNotificaciones.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
-        this.jTableNotificaciones.getColumnModel().getColumn(0).setMinWidth(90);
-        this.jTableNotificaciones.getColumnModel().getColumn(0).setMaxWidth(100);
-        this.jTableNotificaciones.getColumnModel().getColumn(1).setMinWidth(90);
-        this.jTableNotificaciones.getColumnModel().getColumn(1).setMaxWidth(150);
+        this.jTableNotificaciones.getColumnModel().getColumn(0).setMinWidth(30);
+        this.jTableNotificaciones.getColumnModel().getColumn(0).setMaxWidth(50);
+        this.jTableNotificaciones.getColumnModel().getColumn(1).setMinWidth(195);
+        this.jTableNotificaciones.getColumnModel().getColumn(1).setMaxWidth(235);
         this.jTableNotificaciones.getColumnModel().getColumn(2).setMaxWidth(850);
         this.jTableNotificaciones.getColumnModel().getColumn(2).setMinWidth(300);
         this.jTableNotificaciones.getColumnModel().getColumn(3).setMinWidth(90);
@@ -166,7 +168,7 @@ public class PanelPrincipal extends JPanelCustom {
             }
         });
 
-        jScrollPane1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jScrollPane1.setFont(new java.awt.Font("SansSerif", 0, 17)); // NOI18N
 
         jTableNotificaciones.setFont(new java.awt.Font("Microsoft YaHei UI Light", 1, 16)); // NOI18N
         jTableNotificaciones.setModel(tablaNotificaciones);
@@ -265,9 +267,13 @@ public class PanelPrincipal extends JPanelCustom {
         
         //... Cargamos las planillas impagas
         this.planillasImpagas = cargarPlanillasImpagas();
+        this.reparaciones = cargarReparaciones();
+        this.mantenciones = cargarMantenciones();
         ArrayList<Notificador> notificadores = new ArrayList<>(); 
         notificadores.addAll(this.planillasImpagas);
         notificadores.addAll(this.cheques);
+        notificadores.addAll(this.reparaciones);
+        notificadores.addAll(this.mantenciones);
         cargarNotificadores(notificadores);
     }
 
@@ -302,10 +308,12 @@ public class PanelPrincipal extends JPanelCustom {
                 Date fecha = new Date(rs.getDate(2).getTime());
                 fechaEmision = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); //Si lo pasaba directamente explota
                 prioridad = (int) DAYS.between(fechaEmision, fechaHoy); //Mas días --> más prioridad
+                if(prioridad > 30)
+                    prioridad = 30;
                 nombre = rs.getString(4);
                 apellido = rs.getString(5);
                 Cheque cheque = new Cheque(rs.getInt(1), prioridad, rs.getLong(3), "cheque",
-                        "cheque Pago inmediato sin cobrar", nombre, apellido); //idcheque, prioridad, numeroDeCheque
+                        "Cheque Pago inmediato sin cobrar", nombre, apellido); //idcheque, prioridad, numeroDeCheque
                 chequesComunes.add(cheque);  //Se cargan primero los que tienen más prioridad
             }
         } catch (SQLException ex) {
@@ -335,10 +343,12 @@ public class PanelPrincipal extends JPanelCustom {
                 Date fecha = new Date(rs.getDate(2).getTime());
                 fechaCobro = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 prioridad = (int) DAYS.between(fechaCobro, fechaHoy);
+                if(prioridad > 30)
+                    prioridad = 30;
                 nombre = rs.getString(4);
                 apellido = rs.getString(5);
                 Cheque cheque = new Cheque(rs.getInt(1), prioridad, rs.getLong(3), "cheque",
-                        "cheque Pago Diferido sin Cobrar", nombre, apellido);
+                        "Cheque Pago Diferido sin Cobrar", nombre, apellido);
                 chequesComunes.add(cheque);  //Se cargan primero los que tienen más prioridad
             }
         } catch (SQLException ex) {
@@ -365,6 +375,8 @@ public class PanelPrincipal extends JPanelCustom {
                 Date fecha = new Date(rs.getDate(2).getTime());
                 fechaSalida = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 prioridad = (int) DAYS.between(fechaSalida, fechaHoy);
+                if(prioridad > 30)
+                    prioridad = 30;
                 descripcion = rs.getString(3);
                 nombre = rs.getString(4);
                 apellido = rs.getString(5);
@@ -379,32 +391,70 @@ public class PanelPrincipal extends JPanelCustom {
         return planillasImpagass;
     }
     
-    private void cargarChequesATabla(int valor){
-        //Método para cargar los cheques a la tabla. Por ahora es múy básico quizás dsps se pueda hacer más completo
-        Collections.sort(cheques);
-        String[] ch = new String[5];
-        for (Notificador cheque : this.cheques) {  //Código de Prueba
-            ch[0] = "" + cheque.getId();
-            ch[1] = cheque.getTipo();
-            ch[2] = cheque.getDescripcion();
-            ch[3] = "" + cheque.getPrioridad();
-            ch[4] = cheque.getNombre() + " " + cheque.getApellido();
-            this.tablaNotificaciones.addRow(ch);
+    
+    
+    private ArrayList<Notificador> cargarReparaciones(){
+        //Método que devuelve las reparaciones incompletas
+        
+        String nombre, apellido, descripcion;
+        int prioridad, idRep;
+        String tipoRep;
+        ArrayList<Notificador> reparacioness = new ArrayList();
+        String query = "SELECT r.idreparacion, r.descripcion, per.nombre, per.apellido, r.tipo FROM reparacion AS r INNER JOIN planilla AS p"
+                + " ON r.idplanilla = p.idplanilla INNER JOIN cliente AS c ON c.idcliente = p.idcliente INNER JOIN persona AS per ON"
+                + " per.idpersona = c.idpersona WHERE r.completada = false AND r.notificar = true";
+        try{
+            Statement st = this.controlador.obtenerConexion().createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while(rs.next()){
+                idRep = rs.getInt(1); //el idreparacion
+                prioridad = 15;  //La prioridad de la reparación es fija
+                descripcion = rs.getString(2);
+                nombre = rs.getString(3);
+                apellido = rs.getString(4);
+                tipoRep = rs.getString(5); 
+                Reparacion reparacion = new Reparacion(idRep, prioridad, tipoRep+" incompleta", descripcion, nombre, apellido);
+                reparacioness.add(reparacion);
+            }
+        }catch(SQLException ex){
+            JLabel label = new JLabelAriel("Error al obtener Reparaciones incompletas: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "¡¡ATENCIÓN!!", JOptionPane.WARNING_MESSAGE);  
         }
+        return reparacioness;
     }
     
-    private void cargarPlanillasATabla(int valor){
-    //Método para cargar las planillas imapgas
-        Collections.sort(this.planillasImpagas);
-        String pl[] = new String[5];
-        for (Notificador planilla : this.planillasImpagas) {
-            pl[0] = "" + planilla.getId();
-            pl[1] = "" + planilla.getTipo();
-            pl[2] = "" + planilla.getDescripcion();
-            pl[3] = "" + planilla.getPrioridad();
-            pl[4] = planilla.getNombre() + " " + planilla.getApellido();
-            this.tablaNotificaciones.addRow(pl);
+    private ArrayList<Notificador> cargarMantenciones(){
+        //Método que devuelve una lista de todas las mantenciones por realizar.  
+        String nombre, apellido, descripcion, modelo, marca;
+        LocalDate fechaSalida;
+        int prioridad, idRep;
+        ArrayList<Notificador> reparacioness = new ArrayList();
+        String query = "SELECT r.idreparacion, r.descripcion, per.nombre, per.apellido, v.marca, v.modelo, r.fecha_terminado FROM reparacion "
+                + " AS r INNER JOIN planilla AS p ON r.idplanilla = p.idplanilla INNER JOIN cliente AS c ON c.idcliente = p.idcliente "
+                + " INNER JOIN persona AS per ON per.idpersona = c.idpersona INNER JOIN vehiculo AS v ON v.idvehiculo = p.idvehiculo "
+                + " WHERE r.tipo = 'mantenimiento' AND r.completada = true AND r.notificar = true";
+        try{
+            Statement st = this.controlador.obtenerConexion().createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while(rs.next()){
+                idRep = rs.getInt(1); //el idreparacion
+                prioridad = 15;  //La prioridad de la reparación es fija
+                descripcion = rs.getString(2);
+                nombre = rs.getString(3);
+                apellido = rs.getString(4);
+                marca = rs.getString(5);
+                modelo = rs.getString(6);
+                Date fecha = new Date(rs.getDate(7).getTime());  //Fecha de mantención finalizada.
+                fechaSalida = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                Reparacion reparacion = new Reparacion(idRep, prioridad, "Service por realizar: "+marca+" "+modelo, 
+                        descripcion, nombre, apellido);
+                reparacioness.add(reparacion);
+            }
+        }catch(SQLException ex){
+            JLabel label = new JLabelAriel("Error al obtener Reparaciones incompletas: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "¡¡ATENCIÓN!!", JOptionPane.WARNING_MESSAGE);  
         }
+        return reparacioness;
     }
     
     private void cargarNotificadores(ArrayList<Notificador> notificadores){
