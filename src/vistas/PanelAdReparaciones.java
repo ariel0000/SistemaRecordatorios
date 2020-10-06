@@ -112,7 +112,6 @@ public class PanelAdReparaciones extends JPanelCustom {
 
         jFrameInfo.setAlwaysOnTop(true);
         jFrameInfo.setLocationByPlatform(true);
-        jFrameInfo.setPreferredSize(new java.awt.Dimension(815, 405));
         jFrameInfo.setResizable(false);
         jFrameInfo.setSize(new java.awt.Dimension(825, 415));
         jFrameInfo.setType(java.awt.Window.Type.POPUP);
@@ -304,7 +303,7 @@ public class PanelAdReparaciones extends JPanelCustom {
         jComboBoxPeriodo.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel9.setText("Días");
+        jLabel9.setText("Meses");
 
         jDateChooserFinalizado.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
         jDateChooserFinalizado.setMinimumSize(new java.awt.Dimension(155, 27));
@@ -508,7 +507,7 @@ public class PanelAdReparaciones extends JPanelCustom {
     private javax.swing.JButton jButtonInfo;
     private javax.swing.JCheckBox jCheckBoxCompletada;
     private javax.swing.JCheckBox jCheckBoxNotificar;
-    private javax.swing.JComboBox<String> jComboBoxPeriodo;
+    private javax.swing.JComboBox<Integer> jComboBoxPeriodo;
     private com.toedter.calendar.JDateChooser jDateChooserFinalizado;
     private javax.swing.JFrame jFrameInfo;
     private javax.swing.JLabel jLabel1;
@@ -658,11 +657,10 @@ public class PanelAdReparaciones extends JPanelCustom {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error: "+ex.getMessage());
         }
-        while(i < 360){ //El 365 se agregará aparte
-            i+= 15;
-            this.jComboBoxPeriodo.addItem(""+i); //Empiezo por 15 días
+        while(i < 36){ // 36 meses = 3 años
+            i++;
+            this.jComboBoxPeriodo.addItem(i); //Empiezo por 15 días
         }
-        this.jComboBoxPeriodo.addItem(""+365);
     }
 
     private void cargarDatosReparacion(int idReparacion){

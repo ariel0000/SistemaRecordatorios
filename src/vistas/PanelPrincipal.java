@@ -12,15 +12,21 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import static java.time.temporal.ChronoUnit.DAYS;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.Cheque;
+import modelo.Estado;
+import modelo.EstadoCheque;
+import modelo.EstadoMantencion;
+import modelo.EstadoNotifHoy;
+import modelo.EstadoPlanilla;
+import modelo.EstadoReparacion;
 import modelo.JLabelAriel;
 import modelo.Notificador;
 import modelo.Planilla;
@@ -40,6 +46,7 @@ public class PanelPrincipal extends JPanelCustom {
     private PanelPlanillaNueva panelPlanillaNueva;
     private PanelVerPlanillas panelVerPlanillas;
     private PanelAdPagos panelAdPagos;
+    private Estado estado;  //Para tener siempre el estado correcto para ejecutar el filtrado de planillas
     private ArrayList<Notificador> cheques;
     private ArrayList<Notificador> reparaciones;
     private ArrayList<Notificador> planillasImpagas;
@@ -103,7 +110,8 @@ public class PanelPrincipal extends JPanelCustom {
      */
     private void iniciarEnComun() {
         //Cosas para iniciar en Constructor PanelPrincipal()
-        this.jRadioButtonTodasLasNotif.setSelected(true);
+        this.jRadioButtonNotifHoy.setSelected(true);
+        this.estado = new EstadoNotifHoy();  //Por defecto tengo el estado de Notificaciones de Hoy
         this.cargarNotificadores();
     }
 
@@ -120,11 +128,12 @@ public class PanelPrincipal extends JPanelCustom {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableNotificaciones = new javax.swing.JTable();
         jButtonAdPagos = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jRadioButtonHoy = new javax.swing.JRadioButton();
+        jButtonFiltrar = new javax.swing.JButton();
+        jRadioButtonCheques = new javax.swing.JRadioButton();
         jRadioButtonReparaciones = new javax.swing.JRadioButton();
-        jRadioButtonTodasLasNotif = new javax.swing.JRadioButton();
+        jRadioButtonNotifHoy = new javax.swing.JRadioButton();
         jRadioButtonPlanillas = new javax.swing.JRadioButton();
+        jRadioButtonMantencion = new javax.swing.JRadioButton();
 
         setPreferredSize(new java.awt.Dimension(1000, 533));
 
@@ -182,24 +191,58 @@ public class PanelPrincipal extends JPanelCustom {
             }
         });
 
-        jButton1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jButton1.setText("Filtrar");
+        jButtonFiltrar.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jButtonFiltrar.setText("Filtrar");
+        jButtonFiltrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonFiltrarActionPerformed(evt);
+            }
+        });
 
-        buttonGroupFiltros.add(jRadioButtonHoy);
-        jRadioButtonHoy.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jRadioButtonHoy.setText("Cheques");
+        buttonGroupFiltros.add(jRadioButtonCheques);
+        jRadioButtonCheques.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jRadioButtonCheques.setText("Cheques");
+        jRadioButtonCheques.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonChequesActionPerformed(evt);
+            }
+        });
 
         buttonGroupFiltros.add(jRadioButtonReparaciones);
         jRadioButtonReparaciones.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jRadioButtonReparaciones.setText("Reparaciones");
+        jRadioButtonReparaciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonReparacionesActionPerformed(evt);
+            }
+        });
 
-        buttonGroupFiltros.add(jRadioButtonTodasLasNotif);
-        jRadioButtonTodasLasNotif.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jRadioButtonTodasLasNotif.setText("Todas las notificaciones");
+        buttonGroupFiltros.add(jRadioButtonNotifHoy);
+        jRadioButtonNotifHoy.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jRadioButtonNotifHoy.setText("Notif. de Hoy");
+        jRadioButtonNotifHoy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonNotifHoyActionPerformed(evt);
+            }
+        });
 
         buttonGroupFiltros.add(jRadioButtonPlanillas);
         jRadioButtonPlanillas.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jRadioButtonPlanillas.setText("Planillas");
+        jRadioButtonPlanillas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonPlanillasActionPerformed(evt);
+            }
+        });
+
+        buttonGroupFiltros.add(jRadioButtonMantencion);
+        jRadioButtonMantencion.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jRadioButtonMantencion.setText("Mantencion");
+        jRadioButtonMantencion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonMantencionActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -214,21 +257,21 @@ public class PanelPrincipal extends JPanelCustom {
                     .addComponent(jButtonVerReparaciones, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
                     .addComponent(jButtonVerPlanillas, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
                     .addComponent(jButtonAdPagos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addComponent(jScrollPane1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jRadioButtonHoy)
+                        .addComponent(jRadioButtonCheques)
                         .addGap(18, 18, 18)
                         .addComponent(jRadioButtonReparaciones)
                         .addGap(18, 18, 18)
                         .addComponent(jRadioButtonPlanillas)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 111, Short.MAX_VALUE)
-                        .addComponent(jRadioButtonTodasLasNotif)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton1)))
+                        .addGap(18, 18, 18)
+                        .addComponent(jRadioButtonMantencion)
+                        .addGap(18, 18, 18)
+                        .addComponent(jRadioButtonNotifHoy)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                        .addComponent(jButtonFiltrar))
+                    .addComponent(jScrollPane1))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -237,11 +280,12 @@ public class PanelPrincipal extends JPanelCustom {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonAdCamiones)
-                    .addComponent(jButton1)
-                    .addComponent(jRadioButtonHoy)
+                    .addComponent(jButtonFiltrar)
+                    .addComponent(jRadioButtonCheques)
                     .addComponent(jRadioButtonReparaciones)
-                    .addComponent(jRadioButtonTodasLasNotif)
-                    .addComponent(jRadioButtonPlanillas))
+                    .addComponent(jRadioButtonNotifHoy)
+                    .addComponent(jRadioButtonPlanillas)
+                    .addComponent(jRadioButtonMantencion))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -263,7 +307,6 @@ public class PanelPrincipal extends JPanelCustom {
     private void cargarNotificadores() {
         //Este método carga los ArrayList de Notificadores.
         this.cheques = cargarCheques(); //Tanto los comunes como los diferidos
-        Arrays.sort(this.cheques.toArray());
         
         //... Cargamos las planillas impagas
         this.planillasImpagas = cargarPlanillasImpagas();
@@ -395,8 +438,7 @@ public class PanelPrincipal extends JPanelCustom {
     
     private ArrayList<Notificador> cargarReparaciones(){
         //Método que devuelve las reparaciones incompletas
-        
-        String nombre, apellido, descripcion;
+        String nombre, apellido, descripcion, incompleto = "incompleta";
         int prioridad, idRep;
         String tipoRep;
         ArrayList<Notificador> reparacioness = new ArrayList();
@@ -413,7 +455,9 @@ public class PanelPrincipal extends JPanelCustom {
                 nombre = rs.getString(3);
                 apellido = rs.getString(4);
                 tipoRep = rs.getString(5); 
-                Reparacion reparacion = new Reparacion(idRep, prioridad, tipoRep+" incompleta", descripcion, nombre, apellido);
+                if("mantenimiento".equals(tipoRep))
+                    incompleto = "incompleto";
+                Reparacion reparacion = new Reparacion(idRep, prioridad, tipoRep+" "+incompleto, descripcion, nombre, apellido);
                 reparacioness.add(reparacion);
             }
         }catch(SQLException ex){
@@ -426,19 +470,19 @@ public class PanelPrincipal extends JPanelCustom {
     private ArrayList<Notificador> cargarMantenciones(){
         //Método que devuelve una lista de todas las mantenciones por realizar.  
         String nombre, apellido, descripcion, modelo, marca;
-        LocalDate fechaSalida;
+        LocalDate fechaSalida, fechaHoy = LocalDate.now();
         int prioridad, idRep;
         ArrayList<Notificador> reparacioness = new ArrayList();
-        String query = "SELECT r.idreparacion, r.descripcion, per.nombre, per.apellido, v.marca, v.modelo, r.fecha_terminado FROM reparacion "
-                + " AS r INNER JOIN planilla AS p ON r.idplanilla = p.idplanilla INNER JOIN cliente AS c ON c.idcliente = p.idcliente "
-                + " INNER JOIN persona AS per ON per.idpersona = c.idpersona INNER JOIN vehiculo AS v ON v.idvehiculo = p.idvehiculo "
-                + " WHERE r.tipo = 'mantenimiento' AND r.completada = true AND r.notificar = true";
+        String query = "SELECT r.idreparacion, r.descripcion, per.nombre, per.apellido, v.marca, v.modelo, r.fecha_terminado, r.periodo"
+                + " FROM reparacion AS r INNER JOIN planilla AS p ON r.idplanilla = p.idplanilla INNER JOIN cliente AS c ON "
+                + "c.idcliente = p.idcliente INNER JOIN persona AS per ON per.idpersona = c.idpersona INNER JOIN vehiculo AS v ON "
+                + " v.idvehiculo = p.idvehiculo WHERE r.tipo = 'mantenimiento' AND r.completada = true AND r.notificar = true";
         try{
             Statement st = this.controlador.obtenerConexion().createStatement();
             ResultSet rs = st.executeQuery(query);
             while(rs.next()){
                 idRep = rs.getInt(1); //el idreparacion
-                prioridad = 15;  //La prioridad de la reparación es fija
+                prioridad = 15;  //La prioridad de la reparación es 15 para 2 meses 25 para 1 mes
                 descripcion = rs.getString(2);
                 nombre = rs.getString(3);
                 apellido = rs.getString(4);
@@ -446,12 +490,17 @@ public class PanelPrincipal extends JPanelCustom {
                 modelo = rs.getString(6);
                 Date fecha = new Date(rs.getDate(7).getTime());  //Fecha de mantención finalizada.
                 fechaSalida = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                Reparacion reparacion = new Reparacion(idRep, prioridad, "Service por realizar: "+marca+" "+modelo, 
-                        descripcion, nombre, apellido);
-                reparacioness.add(reparacion);
+                int mesesDiferencia = (int) ChronoUnit.MONTHS.between(fechaSalida.withDayOfMonth(1), fechaHoy.withDayOfMonth(1));
+                if((mesesDiferencia-rs.getInt(8)) <= 2){ // Si la diferencia de meses anterior "coincide" con el periodo agregamos la noti.
+                    if(mesesDiferencia-rs.getInt(8) < 2)
+                        prioridad = 25;  //Aumento la prioridad porque es una mantención para realizar pronto
+                    Reparacion reparacion = new Reparacion(idRep, prioridad, "Service por realizar: "+marca+" "+modelo, descripcion, 
+                        nombre, apellido);    
+                    reparaciones.add(reparacion);
+                }
             }
         }catch(SQLException ex){
-            JLabel label = new JLabelAriel("Error al obtener Reparaciones incompletas: " + ex.getMessage());
+            JLabel label = new JLabelAriel("Error al obtener Mantenciones (Servi): " + ex.getMessage());
             JOptionPane.showMessageDialog(null, label, "¡¡ATENCIÓN!!", JOptionPane.WARNING_MESSAGE);  
         }
         return reparacioness;
@@ -459,7 +508,7 @@ public class PanelPrincipal extends JPanelCustom {
     
     private void cargarNotificadores(ArrayList<Notificador> notificadores){
     //Método para cargar las notificaciones ordenadas según su prioridad
-        Collections.sort(notificadores);
+        Collections.sort(notificadores, Collections.reverseOrder());
         String pl[] = new String[5];
         for (Notificador notificador : notificadores) {
             pl[0] = "" + notificador.getId();
@@ -501,6 +550,36 @@ public class PanelPrincipal extends JPanelCustom {
         this.panelAdPagos = new PanelAdPagos();
         this.controlador.cambiarDePanel(this.panelAdPagos, "Administrar Pagos");
     }//GEN-LAST:event_jButtonAdPagosActionPerformed
+
+    private void jButtonFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFiltrarActionPerformed
+        // Action Performed de Filtrar Planillas. Debería cargar las planillas con respecto al jRadioButton Seleccionado
+        this.estado.cargarNotifificaciones(); 
+    }//GEN-LAST:event_jButtonFiltrarActionPerformed
+
+    private void jRadioButtonChequesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonChequesActionPerformed
+        //Action Performed del RadioButton de selección de cheques
+        this.estado = new EstadoCheque();
+    }//GEN-LAST:event_jRadioButtonChequesActionPerformed
+
+    private void jRadioButtonReparacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonReparacionesActionPerformed
+        //Action Performed del RadioButton de selección de Reparaciones
+        this.estado = new EstadoReparacion();
+    }//GEN-LAST:event_jRadioButtonReparacionesActionPerformed
+
+    private void jRadioButtonPlanillasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonPlanillasActionPerformed
+        //Action Performed del RadioButton de selección de Planillas
+        this.estado = new EstadoPlanilla();
+    }//GEN-LAST:event_jRadioButtonPlanillasActionPerformed
+
+    private void jRadioButtonMantencionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMantencionActionPerformed
+        //Action Performed del RadioButton de selección de Mantenciones (Servis)
+        this.estado = new EstadoMantencion();
+    }//GEN-LAST:event_jRadioButtonMantencionActionPerformed
+
+    private void jRadioButtonNotifHoyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonNotifHoyActionPerformed
+        //Action Performed del RadioButton de selección de Notificaciones de hoy
+        this.estado = new EstadoNotifHoy();
+    }//GEN-LAST:event_jRadioButtonNotifHoyActionPerformed
 
     public PanelAdPersonas getPanelPersonas() {
         return panelPersonas;
@@ -544,17 +623,18 @@ public class PanelPrincipal extends JPanelCustom {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroupFiltros;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonAdCamiones;
     private javax.swing.JButton jButtonAdPagos;
     private javax.swing.JButton jButtonAdPersonas;
+    private javax.swing.JButton jButtonFiltrar;
     private javax.swing.JButton jButtonNuevaPlanilla;
     private javax.swing.JButton jButtonVerPlanillas;
     private javax.swing.JButton jButtonVerReparaciones;
-    private javax.swing.JRadioButton jRadioButtonHoy;
+    private javax.swing.JRadioButton jRadioButtonCheques;
+    private javax.swing.JRadioButton jRadioButtonMantencion;
+    private javax.swing.JRadioButton jRadioButtonNotifHoy;
     private javax.swing.JRadioButton jRadioButtonPlanillas;
     private javax.swing.JRadioButton jRadioButtonReparaciones;
-    private javax.swing.JRadioButton jRadioButtonTodasLasNotif;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableNotificaciones;
     // End of variables declaration//GEN-END:variables
