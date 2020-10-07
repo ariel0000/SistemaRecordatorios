@@ -8,6 +8,8 @@ package vistas;
 import controladores.ControladorPrincipal;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  *
@@ -120,7 +122,12 @@ public class Principal extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void abrir_principal() {
-        controlador.cambiarDePanel(p1, "Principal");
+        controlador.cambiarDePanel(p1, "Principal");  //Solo se puede quitar si se cierra el programa
+        this.JTabbedPaneP.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                controlador.focusear();
+            }
+        });
     }
     
     public JPanel getP1() {

@@ -305,7 +305,7 @@ public class PanelPrincipal extends JPanelCustom {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cargarNotificadores() {
-        //Este método carga los ArrayList de Notificadores.
+        //Este método carga los ArrayList de Notificadores. (TODOS)
         this.cheques = cargarCheques(); //Tanto los comunes como los diferidos
         
         //... Cargamos las planillas impagas
@@ -320,7 +320,7 @@ public class PanelPrincipal extends JPanelCustom {
         cargarNotificadores(notificadores);
     }
 
-    private ArrayList cargarCheques() {
+    public ArrayList cargarCheques() {
         // Carga los cheques que están listos para cobrar, los que tienen menos días para cobrar tienen más prioridad
         ArrayList<Notificador> chequesComunes, chequesDiferidos, todosLosCheques;
         chequesComunes = obtenerChequeComun();
@@ -331,7 +331,7 @@ public class PanelPrincipal extends JPanelCustom {
         return todosLosCheques;
     }
 
-    private ArrayList<Notificador> obtenerChequeComun() {
+    public ArrayList<Notificador> obtenerChequeComun() {
         //Cargo los cheques sin fecha de cobro (Cheques comunes)
         LocalDate fechaHoy = LocalDate.now();
         ArrayList<Notificador> chequesComunes = new ArrayList<>();
@@ -366,7 +366,7 @@ public class PanelPrincipal extends JPanelCustom {
         return chequesComunes;
     }
 
-    private ArrayList<Notificador> obtenerChequesDiferidos() {
+    public ArrayList<Notificador> obtenerChequesDiferidos() {
         //Cargo los cheques sin fecha de cobro (Cheques comunes)
         LocalDate fechaHoy = LocalDate.now();
         String nombre, apellido;
@@ -401,7 +401,8 @@ public class PanelPrincipal extends JPanelCustom {
         return chequesComunes;
     }
 
-    private ArrayList<Notificador> cargarPlanillasImpagas(){
+    public ArrayList<Notificador> cargarPlanillasImpagas(){
+        //Devuelve un ArrayList<Notificador> con todas las planillas impagas
         LocalDate fechaHoy = LocalDate.now();
         LocalDate fechaSalida; //Cuando el Vh fue entregado
         String nombre, apellido, descripcion;
@@ -436,7 +437,7 @@ public class PanelPrincipal extends JPanelCustom {
     
     
     
-    private ArrayList<Notificador> cargarReparaciones(){
+    public ArrayList<Notificador> cargarReparaciones(){
         //Método que devuelve las reparaciones incompletas
         String nombre, apellido, descripcion, incompleto = "incompleta";
         int prioridad, idRep;
@@ -467,7 +468,7 @@ public class PanelPrincipal extends JPanelCustom {
         return reparacioness;
     }
     
-    private ArrayList<Notificador> cargarMantenciones(){
+    public ArrayList<Notificador> cargarMantenciones(){
         //Método que devuelve una lista de todas las mantenciones por realizar.  
         String nombre, apellido, descripcion, modelo, marca;
         LocalDate fechaSalida, fechaHoy = LocalDate.now();
@@ -506,7 +507,7 @@ public class PanelPrincipal extends JPanelCustom {
         return reparacioness;
     }
     
-    private void cargarNotificadores(ArrayList<Notificador> notificadores){
+    public void cargarNotificadores(ArrayList<Notificador> notificadores){
     //Método para cargar las notificaciones ordenadas según su prioridad
         Collections.sort(notificadores, Collections.reverseOrder());
         String pl[] = new String[5];
@@ -551,6 +552,11 @@ public class PanelPrincipal extends JPanelCustom {
         this.controlador.cambiarDePanel(this.panelAdPagos, "Administrar Pagos");
     }//GEN-LAST:event_jButtonAdPagosActionPerformed
 
+    public void borrarTabla(){
+        DefaultTableModel dtm = (DefaultTableModel) this.jTableNotificaciones.getModel();
+        dtm.setRowCount(0);
+    }
+    
     private void jButtonFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFiltrarActionPerformed
         // Action Performed de Filtrar Planillas. Debería cargar las planillas con respecto al jRadioButton Seleccionado
         this.estado.cargarNotifificaciones(); 
@@ -649,5 +655,6 @@ public class PanelPrincipal extends JPanelCustom {
     @Override
     public void onFocus() {
         //¿Tendrían que cargarse las notificaciones de la Tabla? - Someday
+        this.borrarTabla();  //Es para probar el método
     }
 }

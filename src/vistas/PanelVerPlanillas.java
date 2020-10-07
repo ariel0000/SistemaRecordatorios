@@ -60,7 +60,7 @@ public class PanelVerPlanillas extends JPanelCustom {
     }
     
     private String[] getColumnas() { 
-        String columna[] = new String[]{"N°", "F. Entrada", "Impaga", "F. Salida", " Cliente ", "  Vehículo  ", "    Descripcion    "};
+        String columna[] = new String[]{"N°", "F. Entrada", "Impaga", "Facturado", " Cliente ", "  Vehículo  ", "    Descripcion    "};
         return columna;
     }
 
@@ -91,7 +91,7 @@ public class PanelVerPlanillas extends JPanelCustom {
                 if (fechaNula != null)
                     Datos[3] = rs.getDate(4);
                 else
-                    Datos[3] = "Sin fecha"; 
+                    Datos[3] = "No Facturado"; 
                 //Si no seteara acá la fecha ocurre el error de que se toma la fecha equivocada de la iteración anterior para una pl. nula
                 nombre = rs.getString(5);
                 String nombreYapellido = nombre.concat(" " + rs.getString(6)); //Agrego el apellido

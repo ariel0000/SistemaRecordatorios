@@ -55,7 +55,7 @@ public class PanelAdPagos extends JPanelCustom {
     }
 
     private String[] getColumnas(){
-        String columna[] = new String[]{"N° Planilla", "Fecha de Entrada", "Fecha de Salida", "Importe", "Pagado", "Monto Pagos", 
+        String columna[] = new String[]{"N° Planilla", "Fecha de Entrada", "Fecha Facturado", "Importe", "Pagado", "Monto Pagos", 
             "Cheques por Cobrar"};
         
         return columna;
@@ -72,13 +72,13 @@ public class PanelAdPagos extends JPanelCustom {
         String query;
         if (nombreApellido.equals("")) {
             query = "SELECT per.nombre, per.apellido, c.idcliente, exists(select p.idplanilla FROM planilla as p WHERE " +
-                "p.idcliente = c.idcliente AND p.entregado = true AND p.pagado = false) FROM persona AS per NATURAL JOIN cliente AS c"
+                "p.idcliente = c.idcliente AND p.facturado = true AND p.pagado = false) FROM persona AS per NATURAL JOIN cliente AS c"
                     + " ORDER BY per.nombre";
         }
  // Lo de arriba consulta Nombre y Apellido de algún cliente y además si tiene alguna planilla impaga
         else {
             query = "SELECT per.nombre, per.apellido, c.idcliente, exists(select p.idplanilla from planilla as p WHERE p.idcliente = c.idcliente AND "
-                    + "p.entregado = true AND p.pagado = false) FROM persona AS per NATURAL JOIN cliente AS c "
+                    + "p.facturado = true AND p.pagado = false) FROM persona AS per NATURAL JOIN cliente AS c "
                     + "WHERE CONCAT(per.nombre, per.apellido) LIKE '%"+nombreApellido+"%' ORDER BY per.nombre"; 
         }
         this.cargarTablaCli(query);
@@ -222,7 +222,7 @@ public class PanelAdPagos extends JPanelCustom {
                 registro[1] = ""+rs.getDate(2); //fecha de entrada de Vh
                 registro[2] = ""+rs.getDate(3); //fecha de salida del Vh
                 if(rs.getDate(3) == null)
-                    registro[2] = "El Vehículo no fue entregado";
+                    registro[2] = "La planilla no fue Facturada";
                 registro[3] = ""+cargarImporteReparaciones(rs.getInt(1), co);
                 if(rs.getBoolean(4)) //Si es verdadero la planilla esta pagada
                     registro[4] = "SI";

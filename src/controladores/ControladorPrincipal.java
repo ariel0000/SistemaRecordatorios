@@ -7,7 +7,6 @@ package controladores;
 
 import conexion.DataBase;
 import java.sql.Connection;
-import javax.swing.JPanel;
 import vistas.JPanelCustom;
 import vistas.Principal;
 
@@ -25,25 +24,29 @@ public class ControladorPrincipal {
         return instancia;
     }
     
-    public void cambiarDePanel(JPanel panel, String titulo){
-        boolean yaExiste = false; //Es para corroborar si una vista ya está desplegada
-        principal.getJTabbedPaneP().getTabCount();
-        for(int i = 0; i < principal.getJTabbedPaneP().getTabCount(); i++){ //.getComponentCount() reemplazado por getTabCount()
-            if(this.principal.getJTabbedPaneP().getTabComponentAt(i) == panel){
+    public void cambiarDePanel(JPanelCustom panel, String titulo){
+     // boolean yaExiste = false; //Es para corroborar si una vista ya está desplegada
+     //   principal.getJTabbedPaneP().getTabCount();
+     /*   for(int i = 0; i < principal.getJTabbedPaneP().getTabCount(); i++){ //.getComponentCount() reemplazado por getTabCount()
+            if(this.principal.getJTabbedPaneP().getTabComponentAt(i) == panel){  //Parece no funcionar - Y si funciona no creo que convenga
                 yaExiste = true; //No hago break porque este if "dura poco"
             }
-        }
-        if(yaExiste)
+        } */
+      /*  if(yaExiste)
             this.principal.getJTabbedPaneP().setSelectedComponent(panel);
-        else{
-            this.principal.getJTabbedPaneP().addTab(titulo, panel);
-            this.principal.getJTabbedPaneP().setSelectedComponent(panel);
-            
-        }    
+        else{  */
+        this.principal.getJTabbedPaneP().addTab(titulo, panel);
+        this.principal.getJTabbedPaneP().setSelectedComponent(panel);
+       // }    
     }
 
+    public void focusear(){
+        JPanelCustom panel = (JPanelCustom) this.principal.getJTabbedPaneP().getSelectedComponent();  //Obtengo el panel actual
+        panel.onFocus();   //Actualizo su info
+    }
+    
     public void cerrarPanelSeleccionado() {
-         JPanelCustom panelPrincipal;
+        JPanelCustom panelPrincipal;
         if(this.principal.getJTabbedPaneP().getTabCount() > 0){
             int i = this.principal.getJTabbedPaneP().getSelectedIndex();
             if(!this.principal.getJTabbedPaneP().getTitleAt(i).equals("Principal")) { //Si no es el panel Principal
@@ -81,5 +84,5 @@ public class ControladorPrincipal {
     public void setPrincipal(Principal principal) {
         this.principal = principal;
     }
-
+    
 }

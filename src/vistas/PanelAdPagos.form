@@ -7,9 +7,6 @@
         <Property name="alwaysOnTop" type="boolean" value="true"/>
         <Property name="focusable" type="boolean" value="false"/>
         <Property name="locationByPlatform" type="boolean" value="true"/>
-        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[635, 350]"/>
-        </Property>
         <Property name="size" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[620, 350]"/>
         </Property>

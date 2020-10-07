@@ -173,7 +173,6 @@ public class PanelPlanillaNueva extends JPanelCustom {
         jLabel10 = new javax.swing.JLabel();
         jButtonVerPago = new javax.swing.JButton();
         jCheckBoxPagado = new javax.swing.JCheckBox();
-        jCheckBoxEntregado = new javax.swing.JCheckBox();
         jLabel5 = new javax.swing.JLabel();
         jDateChooserSalida = new com.toedter.calendar.JDateChooser();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -193,6 +192,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         jButtonModifRep = new javax.swing.JButton();
         jCheckBoxNotificar = new javax.swing.JCheckBox();
         jButtonInfo = new javax.swing.JButton();
+        jCheckBoxEntregado = new javax.swing.JCheckBox();
 
         jFrameContado.setAlwaysOnTop(true);
         jFrameContado.setLocationByPlatform(true);
@@ -573,7 +573,6 @@ public class PanelPlanillaNueva extends JPanelCustom {
 
         jFrameInfo.setAlwaysOnTop(true);
         jFrameInfo.setLocationByPlatform(true);
-        jFrameInfo.setPreferredSize(new java.awt.Dimension(768, 389));
         jFrameInfo.setResizable(false);
         jFrameInfo.setSize(new java.awt.Dimension(770, 385));
         jFrameInfo.setType(java.awt.Window.Type.POPUP);
@@ -585,7 +584,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         jLabel25.setText("* Importe total de las reparaciones");
 
         jLabel26.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel26.setText("* Fechas de llegada y salida de un vehículo del taller ");
+        jLabel26.setText("* Fechas de llegada y Fecha de Facturado");
 
         jLabel27.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabel27.setText("* Reparaciones realizadas a un vehículo ");
@@ -606,7 +605,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         });
 
         jLabel30.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel30.setText("* Atributo \"Notificar\": Permite elegir si se quieren notificaciones de la planilla.");
+        jLabel30.setText("* Atributo \"Notificar\": Permite elegir si se quieren recibir notificaciones de la planilla.");
 
         javax.swing.GroupLayout jFrameInfoLayout = new javax.swing.GroupLayout(jFrameInfo.getContentPane());
         jFrameInfo.getContentPane().setLayout(jFrameInfoLayout);
@@ -750,9 +749,6 @@ public class PanelPlanillaNueva extends JPanelCustom {
         jCheckBoxPagado.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jCheckBoxPagado.setText("Planilla Paga");
 
-        jCheckBoxEntregado.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jCheckBoxEntregado.setText("Entregado -");
-
         jLabel5.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabel5.setText("Fecha:");
 
@@ -768,6 +764,11 @@ public class PanelPlanillaNueva extends JPanelCustom {
         jCheckBoxFacturado.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jCheckBoxFacturado.setText("Facturado");
         jCheckBoxFacturado.setToolTipText("Cuando se activa empieza la Cuenta Corriente");
+        jCheckBoxFacturado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxFacturadoActionPerformed(evt);
+            }
+        });
 
         jButtonPagoCheque.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButtonPagoCheque.setText("Agregar Cheque");
@@ -842,6 +843,9 @@ public class PanelPlanillaNueva extends JPanelCustom {
             }
         });
 
+        jCheckBoxEntregado.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jCheckBoxEntregado.setText("Vh Entregado");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -883,11 +887,11 @@ public class PanelPlanillaNueva extends JPanelCustom {
                         .addComponent(jButtonBorrarPago)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addComponent(jScrollPane2)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jCheckBoxFacturado)
-                    .addComponent(jCheckBoxPagado))
-                .addGap(40, 40, 40))
+                    .addComponent(jCheckBoxPagado)
+                    .addComponent(jCheckBoxEntregado))
+                .addGap(50, 50, 50))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -924,13 +928,13 @@ public class PanelPlanillaNueva extends JPanelCustom {
                         .addComponent(jTextFieldDueñoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
+                .addGap(8, 8, 8)
                 .addComponent(jLabel4)
-                .addGap(10, 10, 10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabelNumPlanilla)
-                .addGap(18, 18, 18)
-                .addComponent(jCheckBoxEntregado)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(25, 25, 25)
+                .addComponent(jCheckBoxFacturado)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jDateChooserSalida, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -948,16 +952,14 @@ public class PanelPlanillaNueva extends JPanelCustom {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(jLabel4))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(16, 16, 16)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabelNumPlanilla)
-                                    .addComponent(jCheckBoxEntregado)
-                                    .addComponent(jLabel5))
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jCheckBoxFacturado))
                                 .addComponent(jDateChooserSalida, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(1, 1, 1)
@@ -1007,20 +1009,20 @@ public class PanelPlanillaNueva extends JPanelCustom {
                             .addComponent(jButtonModifRep))))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel10)
                                 .addGap(25, 25, 25)
-                                .addComponent(jButtonBorrarPago))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(13, 13, 13)
-                                .addComponent(jCheckBoxFacturado)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jCheckBoxPagado)))
-                        .addGap(0, 23, Short.MAX_VALUE)))
-                .addGap(6, 6, 6)
+                                .addComponent(jButtonBorrarPago)
+                                .addGap(0, 27, Short.MAX_VALUE)))
+                        .addGap(6, 6, 6))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jCheckBoxPagado)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jCheckBoxEntregado)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButtonVerPago)
                     .addComponent(jFrameDeudaPlanilla)
@@ -1057,7 +1059,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
                 this.jDateChooserEntrada.setDate(rs.getDate(6));
                 this.jDateChooserSalida.setDate(rs.getDate(7)); //Fecha de salida - puede fallar por ser nula?
                 if(this.jDateChooserSalida.getDate() != null)
-                    this.jCheckBoxEntregado.setSelected(true);
+                    this.jCheckBoxFacturado.setSelected(true);
                 this.jTextFieldDescripcion.setText(rs.getString(9));
                 this.jTextFieldDueñoCliente.setText("Cliente: " + nombreApellido);
                 this.jLabelVh.setText(" ,Camión: " + marcaModeloPat);
@@ -1371,12 +1373,12 @@ public class PanelPlanillaNueva extends JPanelCustom {
     private void actualizarPlanilla(){
     //Método posterior a ActionPerformed de guardar planilla y anterior a método que actualiza la planilla directamente en la Base de datos.
         Object fSalida = this.jDateChooserSalida.getDate();
-        //Si hay fecha de salida no puede estar el jCheckBoxEntregado en 'False'. Lo mismo viceversa.
+        //Si hay fecha de salida no puede estar el jCheckBoxFacturado en 'False'. Lo mismo viceversa.
         if(fSalida != null){ //Hay fecha de Salida
-            this.jCheckBoxEntregado.setSelected(true);
+            this.jCheckBoxFacturado.setSelected(true);
             actualizarPlanilla(fSalida == null); //Condicional: 'true' o 'false' - 'true' en caso de que la fecha de salida sea nula
         }
-        else if(this.jCheckBoxEntregado.isSelected()){
+        else if(this.jCheckBoxFacturado.isSelected()){
             JLabel label = new JLabelAriel(" Datos incompletos - La planilla figura entregada pero no hay fecha de entrega. "
                     + "\n Elija una fecha de entrega e intente actualizar la planilla nuevamente");
             JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
@@ -1399,7 +1401,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
 
             ps.setInt(1, Integer.valueOf(this.jLabelNumPlanilla.getText()));
             ps.setDate(2, new java.sql.Date(this.jDateChooserEntrada.getDate().getTime()));
-            if (this.jCheckBoxEntregado.isSelected()) { //Si está facturado cargo la fecha
+            if (this.jCheckBoxFacturado.isSelected()) { //Si está facturado cargo la fecha
                 if (!fSalidaNula) { //Si no es nula guarda la fecha
                     ps.setDate(3, new java.sql.Date(this.jDateChooserSalida.getDate().getTime())); //Problemas cuando es null
                 } else {
@@ -1442,7 +1444,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
                     + "pagado = ?, descripcion = ?, facturado = ?, entregado = ?, notificar = ? WHERE idplanilla = '" + idPlanilla + "' ");
             
             ps.setDate(1, new java.sql.Date(this.jDateChooserEntrada.getDate().getTime()));
-            if (this.jCheckBoxEntregado.isSelected()) { //Si está entregado el Vh cargo la fecha  
+            if (this.jCheckBoxFacturado.isSelected()) { //Si está Facturado el Vh cargo la fecha  
                 if (!fSalidaNula) {
                     ps.setDate(2, new java.sql.Date(this.jDateChooserSalida.getDate().getTime())); //Problemas cuando es null-resuelto
                 } else {
@@ -1495,7 +1497,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         JLabel label2;
 
         long montoRestante = 0;
-        if (!true/*this.jCheckBoxEntregado.isSelected()*/) { //si el vh no está entregado -- Modificado para que no joda
+        if (!true/*this.jCheckBoxFacturado.isSelected()*/) { //si el vh no está entregado -- Modificado para que no joda
             label2 = new JLabelAriel("El Vehículo debe ser entregado antes de calcular Deudas");
             JOptionPane.showMessageDialog(null, label2, "Error", JOptionPane.INFORMATION_MESSAGE);
         } else {
@@ -1707,6 +1709,12 @@ public class PanelPlanillaNueva extends JPanelCustom {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         this.jFrameInfo.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jCheckBoxFacturadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxFacturadoActionPerformed
+        // Cuando selecciono facturado pongo la fecha de hoy en "fecha_salida" aunque en realidad es fecha de facturado
+        if(this.jCheckBoxFacturado.isSelected())
+            this.jDateChooserSalida.setDate(new Date());
+    }//GEN-LAST:event_jCheckBoxFacturadoActionPerformed
 
     /**/
     private void borrarCheque(String idcheque){
