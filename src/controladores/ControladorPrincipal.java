@@ -8,6 +8,7 @@ package controladores;
 import conexion.DataBase;
 import java.sql.Connection;
 import vistas.JPanelCustom;
+import vistas.PanelPrincipal;
 import vistas.Principal;
 
 public class ControladorPrincipal {
@@ -15,8 +16,9 @@ public class ControladorPrincipal {
     
     private Principal principal;
     private static ControladorPrincipal instancia;
+    private PanelPrincipal panelPrincipal;
 
-   // public ControladorPrincipal() {} No se usa con el patrón Singleton
+   // public ControladorPrincipal() {} No se usa con el patrón Singleton  - O se pone en privado
     
     public static ControladorPrincipal getInstancia(){
         if(instancia == null)
@@ -85,4 +87,12 @@ public class ControladorPrincipal {
         this.principal = principal;
     }
     
+    public void setPanelPrincipal(PanelPrincipal panel){
+        //Método utilizado por el Panel Principal
+        this.panelPrincipal = panel;
+    }
+
+    public PanelPrincipal getPanelPrincipal(){
+        return this.panelPrincipal;
+    }
 }

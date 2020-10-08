@@ -113,6 +113,7 @@ public class PanelPrincipal extends JPanelCustom {
         this.jRadioButtonNotifHoy.setSelected(true);
         this.estado = new EstadoNotifHoy();  //Por defecto tengo el estado de Notificaciones de Hoy
         this.cargarNotificadores();
+        this.controlador.setPanelPrincipal(this);
     }
 
     @SuppressWarnings("unchecked")
@@ -304,7 +305,7 @@ public class PanelPrincipal extends JPanelCustom {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cargarNotificadores() {
+    public void cargarNotificadores() {
         //Este método carga los ArrayList de Notificadores. (TODOS)
         this.cheques = cargarCheques(); //Tanto los comunes como los diferidos
         
@@ -317,7 +318,7 @@ public class PanelPrincipal extends JPanelCustom {
         notificadores.addAll(this.cheques);
         notificadores.addAll(this.reparaciones);
         notificadores.addAll(this.mantenciones);
-        cargarNotificadores(notificadores);
+        cargarNotificadoresATabla(notificadores);
     }
 
     public ArrayList cargarCheques() {
@@ -507,7 +508,7 @@ public class PanelPrincipal extends JPanelCustom {
         return reparacioness;
     }
     
-    public void cargarNotificadores(ArrayList<Notificador> notificadores){
+    public void cargarNotificadoresATabla(ArrayList<Notificador> notificadores){
     //Método para cargar las notificaciones ordenadas según su prioridad
         Collections.sort(notificadores, Collections.reverseOrder());
         String pl[] = new String[5];

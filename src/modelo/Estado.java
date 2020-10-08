@@ -13,7 +13,7 @@ import controladores.ControladorPrincipal;
  */
 public abstract class Estado {
     //Interface Estado que va a permitir cambiar el comportamiento de la carga de las notificaciones del panel principal
-    private ControladorPrincipal controlador;
+    private ControladorPrincipal controlador = ControladorPrincipal.getInstancia();
     
     public abstract void cargarNotifificaciones();
 

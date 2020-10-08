@@ -13,7 +13,8 @@ public class EstadoNotifHoy extends Estado{
 
     @Override
     public void cargarNotifificaciones() {
-
+        super.getControlador().getPanelPrincipal().borrarTabla();
+        super.getControlador().getPanelPrincipal().cargarNotificadores(); //
     }
     
 }

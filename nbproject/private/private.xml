@@ -3,9 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/Ariel/Documents/GitHub/SistemaRecordatorios/src/modelo/EstadoCheque.java</file>
             <file>file:/C:/Users/Ariel/Documents/GitHub/SistemaRecordatorios/src/vistas/PanelVerPlanillas.java</file>
             <file>file:/C:/Users/Ariel/Documents/GitHub/SistemaRecordatorios/src/vistas/PanelAdPagos.java</file>
+            <file>file:/C:/Users/Ariel/Documents/GitHub/SistemaRecordatorios/src/modelo/Estado.java</file>
             <file>file:/C:/Users/Ariel/Documents/GitHub/SistemaRecordatorios/src/vistas/PanelPrincipal.java</file>
+            <file>file:/C:/Users/Ariel/Documents/GitHub/SistemaRecordatorios/src/controladores/ControladorPrincipal.java</file>
         </group>
     </open-files>
 </project-private>
