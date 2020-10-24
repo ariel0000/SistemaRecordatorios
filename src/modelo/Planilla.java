@@ -9,7 +9,7 @@ package modelo;
  *
  * @author Ariel
  */
-public class Planilla extends Notificador{
+public class Planilla extends Notificador {
 
     public Planilla(int id, int prioridad, String tipo, String descripcion, String nombre, String apellido){
         super(id, prioridad, tipo, descripcion, nombre, apellido); 

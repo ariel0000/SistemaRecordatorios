@@ -5,6 +5,8 @@
  */
 package modelo;
 
+import controladores.ControladorPrincipal;
+
 /**
  *
  * @author Ariel
@@ -13,6 +15,11 @@ public abstract class Notificador implements Comparable<Notificador>{
     private int id;
     private int prioridad;
     private String tipo, nombre, apellido, descripcion;
+    private static ControladorPrincipal controlador;
+    
+    public Notificador(){
+
+    }
     
     public Notificador(int id, int prioridad, String tipo, String descripcion, String nombre, String apellido){
         this.id = id;
@@ -21,6 +28,7 @@ public abstract class Notificador implements Comparable<Notificador>{
         this.nombre = nombre;
         this.apellido = apellido; //Serían nombre y apellido del cliente
         this.descripcion = descripcion;
+        Notificador.controlador = ControladorPrincipal.getInstancia();
     }
     
     public abstract void Notificar(boolean valor);
@@ -60,4 +68,14 @@ public abstract class Notificador implements Comparable<Notificador>{
             return 1;
         return 0;
     }
+
+    public ControladorPrincipal getControlador() {
+        return controlador;
+    }
+
+    public void setControlador(ControladorPrincipal controlador) {
+        Notificador.controlador = controlador;
+    }
+    
+    
 }

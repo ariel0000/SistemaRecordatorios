@@ -9,7 +9,7 @@ package modelo;
  *
  * @author Ariel
  */
-public class Mantenimiento extends Notificador{
+public class Mantenimiento extends Notificador {
  
     public Mantenimiento(int id, int prioridad, String tipo, String descripcion, String nombre, String apellido){
         super(id, prioridad, tipo, descripcion, nombre, apellido);  

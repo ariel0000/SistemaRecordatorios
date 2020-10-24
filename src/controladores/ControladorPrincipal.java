@@ -39,35 +39,35 @@ public class ControladorPrincipal {
         else{  */
         this.principal.getJTabbedPaneP().addTab(titulo, panel);
         this.principal.getJTabbedPaneP().setSelectedComponent(panel);
-       // }    
+        // }    
     }
 
-    public void focusear(){
+    public void focusear() {
         JPanelCustom panel = (JPanelCustom) this.principal.getJTabbedPaneP().getSelectedComponent();  //Obtengo el panel actual
         panel.onFocus();   //Actualizo su info
     }
-    
+
     public void cerrarPanelSeleccionado() {
-        JPanelCustom panelPrincipal;
-        if(this.principal.getJTabbedPaneP().getTabCount() > 0){
+        JPanelCustom panelPr;
+        if (this.principal.getJTabbedPaneP().getTabCount() > 0) {
             int i = this.principal.getJTabbedPaneP().getSelectedIndex();
-            if(!this.principal.getJTabbedPaneP().getTitleAt(i).equals("Principal")) { //Si no es el panel Principal
-            //Solo se borra si no es el panel Principal
-                
+            if (!this.principal.getJTabbedPaneP().getTitleAt(i).equals("Principal")) { //Si no es el panel Principal
+                //Solo se borra si no es el panel Principal
+
                 // public boolean sePuedeCerrar()
                 JPanelCustom seleccionado = (JPanelCustom) this.principal.getJTabbedPaneP().getSelectedComponent();
-                if(seleccionado.sePuedeCerrar())  //JPanelCustom tendría que ser extendido por todas las vistas
-                    this.principal.getJTabbedPaneP().remove(i); 
+                if (seleccionado.sePuedeCerrar()) //JPanelCustom tendría que ser extendido por todas las vistas
+                {
+                    this.principal.getJTabbedPaneP().remove(i);
+                }
                 //Tendría que llamar acá al método onFocus del JPanelCustom para que la vista cargue lo necesario por obtener el foco
                 seleccionado = (JPanelCustom) this.principal.getJTabbedPaneP().getSelectedComponent();
-                i = this.principal.getJTabbedPaneP().getSelectedIndex();
-                if(!this.principal.getJTabbedPaneP().getTitleAt(i).equals("Principal")) //Despues de cerrar, me quedó el Principal?
-                    seleccionado.onFocus(); //No es el principal asi que hay que avisarle que tiene el "foco"
-            }
-            else{
-                panelPrincipal = (JPanelCustom) this.principal.getJTabbedPaneP().getSelectedComponent();
-                if(panelPrincipal.sePuedeCerrar())
+                seleccionado.onFocus(); //Le avisamos a la vista actual que tiene el foco
+            } else { //Es el panel principal al que le pusimos cerrar
+                panelPr = (JPanelCustom) this.principal.getJTabbedPaneP().getSelectedComponent();
+                if (panelPr.sePuedeCerrar()) {
                     this.principal.dispose(); //Si el panelPrincipal me deja cerrar cierro el programa
+                }
             }
         }
     }

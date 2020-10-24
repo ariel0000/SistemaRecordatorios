@@ -5,6 +5,11 @@
  */
 package modelo;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+import vistas.PanelPlanillaNueva;
 /**
  *
  * @author Ariel
@@ -24,8 +29,23 @@ public class Cheque extends Notificador {
 
     @Override
     public void verNotificacion() {
-        //Desde acá se abre la vista correspondiente para poder ver el cheque.
-        
+        int idPlanilla = 0;
+        PanelPlanillaNueva planilla;
+        try {
+            //Desde acá se abre la vista correspondiente para poder ver el cheque. Será la vista principal?
+            String query = "SELECT p.idplanilla FROM planilla AS p INNER JOIN forma_de_pago AS fdp ON fdp.idplanilla = p.idplanilla INNER JOIN"
+                    + " cheque AS c ON c.idforma_de_pago = fdp.idforma_de_pago WHERE c.idcheque = '"+this.getId()+"' ";
+            Statement st = super.getControlador().obtenerConexion().createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while(rs.next()){ //En teoría no tendría que haber más de una iteración
+                idPlanilla = rs.getInt(1);
+                planilla = new PanelPlanillaNueva(idPlanilla);
+                super.getControlador().cambiarDePanel(planilla, "Ver/Modificar Planilla");
+            }
+        } catch (SQLException ex) {
+            JLabelAriel label = new JLabelAriel("Error al intentar ver la planilla asociada al cheque: "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);  
+        }
     }
    
     private long getNumeroCheque(){

@@ -47,6 +47,7 @@ public class PanelPrincipal extends JPanelCustom {
     private PanelVerPlanillas panelVerPlanillas;
     private PanelAdPagos panelAdPagos;
     private Estado estado;  //Para tener siempre el estado correcto para ejecutar el filtrado de planillas
+    private ArrayList<Notificador> notificaciones;
     private ArrayList<Notificador> cheques;
     private ArrayList<Notificador> reparaciones;
     private ArrayList<Notificador> planillasImpagas;
@@ -135,6 +136,8 @@ public class PanelPrincipal extends JPanelCustom {
         jRadioButtonNotifHoy = new javax.swing.JRadioButton();
         jRadioButtonPlanillas = new javax.swing.JRadioButton();
         jRadioButtonMantencion = new javax.swing.JRadioButton();
+        jButtonInfo = new javax.swing.JButton();
+        jButtonVerNotif = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(1000, 533));
 
@@ -245,20 +248,37 @@ public class PanelPrincipal extends JPanelCustom {
             }
         });
 
+        jButtonInfo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/info-icon2.png"))); // NOI18N
+        jButtonInfo.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/info-icon2.png"))); // NOI18N
+
+        jButtonVerNotif.setFont(new java.awt.Font("SansSerif", 0, 24)); // NOI18N
+        jButtonVerNotif.setText("<html><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ver</p><p>&nbsp;&nbsp;Notificacion</p></html>");
+        jButtonVerNotif.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonVerNotifActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButtonAdPersonas, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
-                    .addComponent(jButtonAdCamiones, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
-                    .addComponent(jButtonNuevaPlanilla, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
-                    .addComponent(jButtonVerReparaciones, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
-                    .addComponent(jButtonVerPlanillas, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
-                    .addComponent(jButtonAdPagos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButtonAdPersonas, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
+                            .addComponent(jButtonAdCamiones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonNuevaPlanilla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonVerReparaciones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonVerPlanillas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonAdPagos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonVerNotif, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButtonInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jRadioButtonCheques)
@@ -270,7 +290,7 @@ public class PanelPrincipal extends JPanelCustom {
                         .addComponent(jRadioButtonMantencion)
                         .addGap(18, 18, 18)
                         .addComponent(jRadioButtonNotifHoy)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonFiltrar))
                     .addComponent(jScrollPane1))
                 .addContainerGap())
@@ -278,29 +298,33 @@ public class PanelPrincipal extends JPanelCustom {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonAdCamiones)
-                    .addComponent(jButtonFiltrar)
-                    .addComponent(jRadioButtonCheques)
-                    .addComponent(jRadioButtonReparaciones)
-                    .addComponent(jRadioButtonNotifHoy)
-                    .addComponent(jRadioButtonPlanillas)
-                    .addComponent(jRadioButtonMantencion))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButtonFiltrar)
+                        .addComponent(jRadioButtonCheques)
+                        .addComponent(jRadioButtonReparaciones)
+                        .addComponent(jRadioButtonNotifHoy)
+                        .addComponent(jRadioButtonPlanillas)
+                        .addComponent(jRadioButtonMantencion))
+                    .addComponent(jButtonInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButtonAdCamiones)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonAdPersonas)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonNuevaPlanilla)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonVerReparaciones)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonVerPlanillas)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonAdPagos)
-                        .addGap(0, 196, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonVerNotif)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -313,12 +337,12 @@ public class PanelPrincipal extends JPanelCustom {
         this.planillasImpagas = cargarPlanillasImpagas();
         this.reparaciones = cargarReparaciones();
         this.mantenciones = cargarMantenciones();
-        ArrayList<Notificador> notificadores = new ArrayList<>(); 
-        notificadores.addAll(this.planillasImpagas);
-        notificadores.addAll(this.cheques);
-        notificadores.addAll(this.reparaciones);
-        notificadores.addAll(this.mantenciones);
-        cargarNotificadoresATabla(notificadores);
+        this.notificaciones = new ArrayList<>(); 
+        this.notificaciones.addAll(this.planillasImpagas);
+        this.notificaciones.addAll(this.cheques);
+        this.notificaciones.addAll(this.reparaciones);
+        this.notificaciones.addAll(this.mantenciones);
+        cargarNotificadoresATabla(this.notificaciones);
     }
 
     public ArrayList cargarCheques() {
@@ -588,6 +612,83 @@ public class PanelPrincipal extends JPanelCustom {
         this.estado = new EstadoNotifHoy();
     }//GEN-LAST:event_jRadioButtonNotifHoyActionPerformed
 
+    private void jButtonVerNotifActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVerNotifActionPerformed
+        // Action Performed que sirve para llamar a la vista que se encargará de administrar cada notificacion
+        int filaSelect = this.jTableNotificaciones.getSelectedRow(), idNotif;
+        String clase;
+        if (filaSelect != -1) {
+            clase = ((String) this.jTableNotificaciones.getValueAt(filaSelect, 1));
+            //clase = clase.substring(0, 1).toUpperCase() + clase.substring(1).toLowerCase();  //Pongo la primera letra en mayúscula
+            int lugarEspacio = clase.indexOf(" ");  //Obtengo la posición del espacio
+
+            if (clase.contains(" ")) //Si tenemos espacios (ej: Planilla impaga)
+                clase = clase.substring(0, lugarEspacio);  //Supuestamente corta el String en el espacio. (Queda: Planilla, Reparacion,     ...)
+                      // y el resto del String en minúscula
+            idNotif = Integer.valueOf((String) this.jTableNotificaciones.getValueAt(filaSelect, 0)); //El id de la notificación
+            switch (clase) {
+                case "cheque":
+                    notificacionCheque(idNotif);
+                    break;
+                case "reparacion":
+                    notificacionReparacion(idNotif);
+                    break;
+                case "mantenimiento":
+                    notificacionMantenimiento(idNotif);
+                    break;
+                case "planilla":
+                    notificacionPlanilla(idNotif);
+                    break;
+                default:
+                    break;
+            }
+        }
+        else{
+            JLabel label = new JLabelAriel("No hay fila seleccionada ");
+            JOptionPane.showMessageDialog(this, label, "¡¡ATENCIÓN!!", JOptionPane.WARNING_MESSAGE);  
+        }
+    }//GEN-LAST:event_jButtonVerNotifActionPerformed
+    
+    private void notificacionCheque(int id){
+     //busca el cheque con el id "id" y ejecuta su método "ver Notificacion"
+        for(Notificador cheque : this.cheques){
+            if(cheque.getId() == id){
+                JLabel label = new JLabelAriel("Se muestra la planilla donde está anotado el cheque");
+                JOptionPane.showMessageDialog(this, label, "¡INFO!", JOptionPane.INFORMATION_MESSAGE);  
+                cheque.verNotificacion();
+                break;
+            }    
+        }
+    }
+    
+    private void notificacionReparacion(int id){
+        for(Notificador reparacion : this.reparaciones){
+            if(reparacion.getId() == id){
+                reparacion.verNotificacion();
+                break;
+            }    
+        }
+    }
+    
+    private void notificacionMantenimiento(int id){
+     //busca el mantenimiento con el id "id" y ejecuta su método "ver Notificacion"
+        for(Notificador mantenimiento : this.mantenciones){
+            if(mantenimiento.getId() == id){
+                mantenimiento.verNotificacion();
+                break;
+            }    
+        }
+    }
+    
+    private void notificacionPlanilla(int id){
+    //busca el mantenimiento con el id "id" y ejecuta su método "ver Notificacion"
+        for(Notificador planilla : this.cheques){
+            if(planilla.getId() == id){
+                planilla.verNotificacion();
+                break;
+            }    
+        }
+    }
+    
     public PanelAdPersonas getPanelPersonas() {
         return panelPersonas;
     }
@@ -634,7 +735,9 @@ public class PanelPrincipal extends JPanelCustom {
     private javax.swing.JButton jButtonAdPagos;
     private javax.swing.JButton jButtonAdPersonas;
     private javax.swing.JButton jButtonFiltrar;
+    private javax.swing.JButton jButtonInfo;
     private javax.swing.JButton jButtonNuevaPlanilla;
+    private javax.swing.JButton jButtonVerNotif;
     private javax.swing.JButton jButtonVerPlanillas;
     private javax.swing.JButton jButtonVerReparaciones;
     private javax.swing.JRadioButton jRadioButtonCheques;
@@ -657,5 +760,6 @@ public class PanelPrincipal extends JPanelCustom {
     public void onFocus() {
         //¿Tendrían que cargarse las notificaciones de la Tabla? - Someday
         this.borrarTabla();  //Es para probar el método
+        this.cargarNotificadores();  //Si cambio algún notificador se podrá notar por esta recarga y el borrado anterior de la tabla
     }
 }

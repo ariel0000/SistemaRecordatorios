@@ -54,7 +54,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         // guardarPlanilla();
     }
 
-    PanelPlanillaNueva(int numero) { //Constructor para planillas a modificar por eso tiene numero
+    public PanelPlanillaNueva(int numero) { //Constructor para planillas a modificar por eso tiene numero
         //Número que representa el idplanilla, usado en la vista "Ver planillas" para cuando se quiera modificar una
         //Por esto algunas funciones desaparecen "setVisible(false)"
         //   tablaReparaciones = new DefaultTableModel();
