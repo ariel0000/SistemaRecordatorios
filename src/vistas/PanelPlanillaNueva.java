@@ -5,7 +5,6 @@
  */
 package vistas;
 
-import Atxy2k.CustomTextField.RestrictedTextField;
 import com.toedter.calendar.JTextFieldDateEditor;
 import modelo.ComboItem;
 import controladores.ControladorPrincipal;
@@ -35,7 +34,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
 
     private DefaultTableModel tablaReparaciones, modeloPagos;
     ControladorPrincipal controlador;
-    RestrictedTextField montoCheque, montoContado;
+  //  RestrictedTextField montoCheque, montoContado;
     ItemListener itemListennerCli, itemListennerVh, itemListennerPersona;
     private String nombre, apellido, apodo;
     private int itemVh = 0;  //contador para que el ActionPerformed perzonalido de Vh no se ejecute dos veces
@@ -1183,8 +1182,8 @@ public class PanelPlanillaNueva extends JPanelCustom {
         JLabel label = new JLabelAriel("Debe guardar la planilla antes de agregar un Pago");
         
         if (estaGuardada()) {
-            this.montoContado = new RestrictedTextField(this.jTextFieldMontoContado);
-            this.montoContado.setOnlyNums(true);
+     //       this.montoContado = new RestrictedTextField(this.jTextFieldMontoContado);
+     //       this.montoContado.setOnlyNums(true);
 
             this.jFrameContado.setVisible(true);  //Abro la Planilla del pago Contado
             this.jDateChooserContado.setDate(new Date());
@@ -1202,9 +1201,9 @@ public class PanelPlanillaNueva extends JPanelCustom {
         JLabel label = new JLabelAriel("Debe guardar la planilla antes de agregar un Pago");
         //Hay que preguntar si es para modificar o nueva y dividir debajo un camino a cada método
         if (estaGuardada()) { //Pregunta si la planilla está guardada -- Sin sentido, sino no hubiera llegado hasta acá
-            this.montoCheque = new RestrictedTextField(this.jTextFieldMontoCheque);
+      //      this.montoCheque = new RestrictedTextField(this.jTextFieldMontoCheque);
             this.jTextFieldMontoCheque.setText("0"); //Posiblemente tenga conflicto con el de arriba, aunque recién abajo Restrinjo
-            this.montoCheque.setOnlyNums(true);
+     //       this.montoCheque.setOnlyNums(true);
             this.jCheckBoxChCobrado.setSelected(false);
             this.jFrameCheque.setVisible(true);
             this.jDateChooserChCobro.setDate(new Date());
@@ -1215,6 +1214,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
     }//GEN-LAST:event_jButtonPagoChequeActionPerformed
 
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
+        this.jTextFieldMontoContado.setText("");
         this.jFrameContado.dispose();
     }//GEN-LAST:event_jButtonCancelarActionPerformed
 
@@ -2432,8 +2432,9 @@ public class PanelPlanillaNueva extends JPanelCustom {
                 this.jDateChooserChCobro.setDate(rs.getDate(3));
                 this.jDateChooserChEmision.setDate(rs.getDate(2));
     //    this.jTextFieldMontoCheque.setText(""+rs.getLong(5)); //Problemas porque es un RestrictedTextField -- queda vacío
-                this.montoCheque = new RestrictedTextField(this.jTextFieldMontoCheque);
-                this.montoCheque.setOnlyNums(true);
+                this.jTextFieldMontoCheque.setText(rs.getLong(5)+"");
+      //          this.montoCheque = new RestrictedTextField(this.jTextFieldMontoCheque);
+      //          this.montoCheque.setOnlyNums(true);        
                 this.jTextFieldNCheque.setText(rs.getString(6));
                 this.jCheckBoxChCobrado.setSelected(rs.getBoolean(7));
             }
@@ -2457,8 +2458,8 @@ public class PanelPlanillaNueva extends JPanelCustom {
         //----------------------------------------------------
         // Acá iria la consulta para rellenar los 2 siguientes datos:
         cargarDatosContado(idPago);
-        this.montoContado = new RestrictedTextField(this.jTextFieldMontoContado);
-        this.montoContado.setOnlyNums(true);  //Hace que se borre el monto
+       // this.montoContado = new RestrictedTextField(this.jTextFieldMontoContado);
+       // this.montoContado.setOnlyNums(true);  //Hace que se borre el monto
     }
 
     private void cargarDatosContado(int idPago){

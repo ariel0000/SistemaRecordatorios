@@ -681,8 +681,10 @@ public class PanelPrincipal extends JPanelCustom {
     
     private void notificacionPlanilla(int id){
     //busca el mantenimiento con el id "id" y ejecuta su método "ver Notificacion"
-        for(Notificador planilla : this.cheques){
+        for(Notificador planilla : this.planillasImpagas){
             if(planilla.getId() == id){
+                JLabel label = new JLabelAriel("Verifique el importe y los pagos de la planilla y marquela como paga o impaga");
+                JOptionPane.showMessageDialog(this, label, "¡INFO!", JOptionPane.INFORMATION_MESSAGE); 
                 planilla.verNotificacion();
                 break;
             }    
