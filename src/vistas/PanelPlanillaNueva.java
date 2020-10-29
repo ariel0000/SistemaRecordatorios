@@ -5,6 +5,7 @@
  */
 package vistas;
 
+import com.toedter.calendar.IDateEditor;
 import com.toedter.calendar.JTextFieldDateEditor;
 import modelo.ComboItem;
 import controladores.ControladorPrincipal;
@@ -126,6 +127,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
 
         jCheckBoxNotificarCh = new javax.swing.JCheckBox();
         jLabel18 = new javax.swing.JLabel();
+        jLabelIdCheque1 = new javax.swing.JLabel();
         jFrameEstadoPagos = new javax.swing.JFrame();
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
@@ -301,7 +303,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         jLabel8.setText("Fecha de Cobro:");
 
         jLabel11.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel11.setText("* Fecha de Emisión:");
+        jLabel11.setText("Fecha de Emisión:");
 
         jLabel12.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabel12.setText("Monto:");
@@ -353,6 +355,9 @@ public class PanelPlanillaNueva extends JPanelCustom {
         jLabel18.setForeground(new java.awt.Color(255, 0, 0));
         jLabel18.setText("<html><p>¡Atención! - Si desmarca esta casilla <br> no recibirá avisos para cobrar el cheque</p></html>");
 
+        jLabelIdCheque1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabelIdCheque1.setText("Este dato no es obligatorio");
+
         javax.swing.GroupLayout jFrameChequeLayout = new javax.swing.GroupLayout(jFrameCheque.getContentPane());
         jFrameCheque.getContentPane().setLayout(jFrameChequeLayout);
         jFrameChequeLayout.setHorizontalGroup(
@@ -367,25 +372,28 @@ public class PanelPlanillaNueva extends JPanelCustom {
                         .addComponent(jButtonAgregarCheque))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jFrameChequeLayout.createSequentialGroup()
                         .addGroup(jFrameChequeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jFrameChequeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jFrameChequeLayout.createSequentialGroup()
-                                    .addComponent(jLabel12)
-                                    .addGap(123, 123, 123)
-                                    .addComponent(jTextFieldMontoCheque))
-                                .addGroup(jFrameChequeLayout.createSequentialGroup()
-                                    .addGroup(jFrameChequeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addGroup(jFrameChequeLayout.createSequentialGroup()
-                                            .addGroup(jFrameChequeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jLabel8)
-                                                .addComponent(jLabel11))
-                                            .addGap(18, 18, 18))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jFrameChequeLayout.createSequentialGroup()
-                                            .addComponent(jLabelIdCheque)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                                    .addGroup(jFrameChequeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jDateChooserChEmision, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jDateChooserChCobro, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jCheckBoxChequeNuevo))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jFrameChequeLayout.createSequentialGroup()
+                                .addGroup(jFrameChequeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jFrameChequeLayout.createSequentialGroup()
+                                        .addComponent(jLabel12)
+                                        .addGap(123, 123, 123)
+                                        .addComponent(jTextFieldMontoCheque))
+                                    .addGroup(jFrameChequeLayout.createSequentialGroup()
+                                        .addGroup(jFrameChequeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addGroup(jFrameChequeLayout.createSequentialGroup()
+                                                .addGroup(jFrameChequeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jLabel8)
+                                                    .addComponent(jLabel11))
+                                                .addGap(18, 18, 18))
+                                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jFrameChequeLayout.createSequentialGroup()
+                                                .addComponent(jLabelIdCheque)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                                        .addGroup(jFrameChequeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jDateChooserChEmision, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jDateChooserChCobro, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jCheckBoxChequeNuevo))))
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabelIdCheque1))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jFrameChequeLayout.createSequentialGroup()
                                 .addComponent(jLabel13)
                                 .addGap(18, 18, 18)
@@ -398,7 +406,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
                                 .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 384, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jCheckBoxNotificarCh)))
-                        .addGap(0, 19, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jFrameChequeLayout.setVerticalGroup(
@@ -411,7 +419,8 @@ public class PanelPlanillaNueva extends JPanelCustom {
                 .addGap(18, 18, 18)
                 .addGroup(jFrameChequeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel8)
-                    .addComponent(jDateChooserChCobro, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jDateChooserChCobro, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelIdCheque1))
                 .addGap(18, 18, 18)
                 .addGroup(jFrameChequeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jDateChooserChEmision, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1169,11 +1178,12 @@ public class PanelPlanillaNueva extends JPanelCustom {
         return existe;
     }
     
-    public void agregarReparacion(int idRep) {
+  /*  public void agregarReparacion(int idRep) {
         //Método que utiliza el idRep para agregar la reparación a su lista
 
         //Se usa cuando se retorne desde la vista de nueva reparación
-    }
+    } */ 
+    
     private void jButtonPagoContadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPagoContadoActionPerformed
         //Se pulso el botón de agregar Pago. Es entonces un pago nuevo -- Para que dsps el método de agregar lo sepa:
         // --> El jRadioButtonNuevoPago se marcara como seleccionado y el label del id desaparece
@@ -1189,6 +1199,8 @@ public class PanelPlanillaNueva extends JPanelCustom {
             this.jDateChooserContado.setDate(new Date());
             this.jTextFieldMontoContado.setText("");       
             this.jRadioButtonNuevoPago.setSelected(true); //Es un nuevo pago
+            JTextFieldDateEditor dateEditor =(JTextFieldDateEditor) this.jDateChooserContado.getDateEditor();
+            dateEditor.setEditable(false);  //Para que no se puede ingresar manualmente la fecha
         }
         else
             JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
@@ -1233,24 +1245,29 @@ public class PanelPlanillaNueva extends JPanelCustom {
         //----------
     }//GEN-LAST:event_jButtonAgregarChequeActionPerformed
 
-    private void actualizarCheque(){
+    private void actualizarCheque() {
         //Actualizo el cheque con los datos de la vista y el id del cheque
         int idCheque = Integer.valueOf(this.jLabelIdCheque.getText());
         int numPlanilla = Integer.valueOf((this.jLabelNumPlanilla.getText()));
         Date chequeCobro = this.jDateChooserChCobro.getDate();
         Date chequeEmision = this.jDateChooserChEmision.getDate();
-        long monto = Integer.valueOf(this.jTextFieldMontoCheque.getText());
-        boolean cobrado = this.jCheckBoxChCobrado.isSelected();
-        String numeroCheque = this.jTextFieldNCheque.getText();
-        if (chequeEmision != null && monto != 0 && numeroCheque != null) {
-            actualizarChequeBdB(idCheque, chequeCobro, numeroCheque, monto, chequeEmision, cobrado);
-            this.jFrameCheque.dispose();
-            DefaultTableModel dtm = (DefaultTableModel) this.jTablePagos.getModel();
-            dtm.setRowCount(0);  //Magicamente funciona y sirve para eliminar las filas de la tabla  
-            this.cargarTablaPagos(numPlanilla);
-        } else {
-            JLabel label = new JLabelAriel("Faltan Datos");
-            JOptionPane.showMessageDialog(null, label, "ATENCIÓN!!", JOptionPane.WARNING_MESSAGE);      
+        try {
+            long monto = Integer.valueOf(this.jTextFieldMontoCheque.getText());
+            boolean cobrado = this.jCheckBoxChCobrado.isSelected();
+            String numeroCheque = this.jTextFieldNCheque.getText();
+            if (chequeEmision != null && monto != 0 && numeroCheque != null) {
+                actualizarChequeBdB(idCheque, chequeCobro, numeroCheque, monto, chequeEmision, cobrado);
+                this.jFrameCheque.dispose();
+                DefaultTableModel dtm = (DefaultTableModel) this.jTablePagos.getModel();
+                dtm.setRowCount(0);  //Magicamente funciona y sirve para eliminar las filas de la tabla  
+                this.cargarTablaPagos(numPlanilla);
+            } else {
+                JLabel label = new JLabelAriel("Faltan Datos");
+                JOptionPane.showMessageDialog(null, label, "ATENCIÓN!!", JOptionPane.WARNING_MESSAGE);
+            }
+        }catch(NumberFormatException ex){
+            JLabel label = new JLabelAriel("Error en el monto: "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ATENCIÓN!", JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -1620,25 +1637,31 @@ public class PanelPlanillaNueva extends JPanelCustom {
         //Método agregar cheque --- La fecha de emisión puede ser nula
         //--Dsps habría que preguntar acá si es para Actualizar o Grabar Nuevo -- NOSE COMO
         int numPlanilla = Integer.valueOf(this.jLabelNumPlanilla.getText());
-        if (this.jRadioButtonNuevoPago.isSelected()) //Es un Pago Contado Nuevo
-            agregarPagoContado();
-        else
-            actualizarPagoContado(); //No es nuevo así que hay que actualizar 
-        this.jFrameContado.dispose();
-        this.cargarTablaPagos(numPlanilla);
+        try{
+            if (this.jRadioButtonNuevoPago.isSelected()) //Es un Pago Contado Nuevo
+                agregarPagoContado();
+            else
+                actualizarPagoContado(); //No es nuevo así que hay que actualizar 
+            this.jFrameContado.dispose();
+            this.cargarTablaPagos(numPlanilla);
+        
+        }catch(NumberFormatException ex){
+            JLabel label = new JLabelAriel(" Error al procesar el monto: "+ex.getMessage());
+            JOptionPane.showMessageDialog(this.jFrameContado, label, "ATENCIÓN", JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_jButtonAgregarContadoActionPerformed
 
-    private void agregarPagoContado(){
+    private void agregarPagoContado() throws NumberFormatException{
         int idFdP = 0; //id forma de pago
      //   int numPlanilla = Integer.valueOf(this.jLabelNumPlanilla.getText());
-        long monto = 0;
+        long monto;
         this.jRadioButtonNuevoPago.setEnabled(false);
         Date diaCobro = this.jDateChooserContado.getDate();
-        if (!this.jTextFieldMontoContado.getText().equals("")){ //Si el monto no está vacío
-            monto = Integer.valueOf(this.jTextFieldMontoContado.getText());
-        }
+   /*     if (!this.jTextFieldMontoContado.getText().equals("")){ //Si el monto no está vacío
+        } */
+        monto = (Long.valueOf(this.jTextFieldMontoContado.getText()));
         if (diaCobro != null && monto != 0) {
-            idFdP = grabarNuevoPagoContado(monto, diaCobro); //valor distinto de 0 si grabó bien
+            idFdP = grabarNuevoPagoContado(diaCobro); //valor distinto de 0 si grabó bien
             if (idFdP != 0) {
                 DefaultTableModel dtm = (DefaultTableModel) this.jTablePagos.getModel();
                 dtm.setRowCount(0);  //Magicamente anduvo y sirve para eliminar las filas de la tabla            
@@ -1646,8 +1669,8 @@ public class PanelPlanillaNueva extends JPanelCustom {
                 JOptionPane.showMessageDialog(this.jFrameContado, label2, "MENSAJE", JOptionPane.INFORMATION_MESSAGE);
             }
         } else {
-            JLabel label3 = new JLabelAriel("Faltan Datos");
-            JOptionPane.showMessageDialog(null, label3, "FALTAN DATOS", JOptionPane.WARNING_MESSAGE);
+            JLabel label3 = new JLabelAriel("La fecha y el monto son obligatorios");
+            JOptionPane.showMessageDialog(this.jFrameContado, label3, "FALTAN DATOS", JOptionPane.WARNING_MESSAGE);
         }      
     }
     
@@ -1756,7 +1779,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         }
     } */
 
-    private int grabarNuevoPagoContado(long monto, Date diaCobro) {
+    private int grabarNuevoPagoContado(Date diaCobro) {
         // En este método hay que grabar primero la forma de pago y dsps tomar el id generado y grabar el pago contado
         // Todo esto en forma de transacción para que no queden datos afori
         int idFdP = 0; //paqe no joda -dsps borrar
@@ -1764,6 +1787,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         Connection co = this.controlador.obtenerConexion();
         try {
             co.setAutoCommit(false);
+            long monto = Integer.valueOf(this.jTextFieldMontoContado.getText());
             //Codigo para grabar fDP
             PreparedStatement ps = co.prepareStatement("INSERT INTO forma_de_pago VALUES(default, ?, ?)", 
                     Statement.RETURN_GENERATED_KEYS);
@@ -1782,7 +1806,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
                 ps2.executeUpdate();
                 co.commit();
             }
-        } catch (SQLException ex) {
+        } catch (SQLException | NumberFormatException ex) {
             System.out.println("Error: " + ex.getMessage());
             try {
                 co.rollback();
@@ -1797,11 +1821,11 @@ public class PanelPlanillaNueva extends JPanelCustom {
         // Actualizo un pago contado
         int idPago = Integer.valueOf(this.jLabelIdPago.getText());
    //   int numPlanilla = Integer.valueOf(this.jLabelNumPlanilla.getText());
-        long monto = Integer.valueOf(this.jTextFieldMontoContado.getText());
         this.jRadioButtonNuevoPago.setEnabled(false);
         Date diaCobro = this.jDateChooserContado.getDate();
         Connection co = this.controlador.obtenerConexion();
         try {
+            long monto = Integer.valueOf(this.jTextFieldMontoContado.getText());
             co.setAutoCommit(false);
             PreparedStatement ps = co.prepareStatement("UPDATE contado SET monto = '"+monto+"', "
             + "fecha = '"+diaCobro+"' WHERE idcontado = '"+idPago+"' "); //La fecha no creo que ande
@@ -1810,7 +1834,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
             dtm.setRowCount(0);  //Magicamente anduvo y sirve para eliminar las filas de la tabla 
             ps.executeUpdate();
             co.commit();
-        } catch (SQLException ex) {
+        } catch (SQLException | NumberFormatException ex) {
             System.out.println("Error: " + ex.getMessage());
             try {
                 co.rollback();
@@ -2018,6 +2042,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
     private javax.swing.JLabel jLabelFechaPl;
     private javax.swing.JLabel jLabelId;
     private javax.swing.JLabel jLabelIdCheque;
+    private javax.swing.JLabel jLabelIdCheque1;
     private javax.swing.JLabel jLabelIdPago;
     private javax.swing.JLabel jLabelNombreApodo;
     private javax.swing.JLabel jLabelNumPlanilla;
@@ -2438,11 +2463,12 @@ public class PanelPlanillaNueva extends JPanelCustom {
                 this.jTextFieldNCheque.setText(rs.getString(6));
                 this.jCheckBoxChCobrado.setSelected(rs.getBoolean(7));
             }
-        }catch(SQLException ex){
+            this.jFrameCheque.setVisible(true);
+            this.jButtonAgregarCheque.setText("Actualizar");
+        } catch (SQLException ex) {
             JLabel label = new JLabelAriel("Error: " + ex.getMessage());
             JOptionPane.showMessageDialog(null, label, " ERROR ", JOptionPane.WARNING_MESSAGE);
         }
-        this.jFrameCheque.setVisible(true);
     }
 
     private void modificarContado(int idPago) {
@@ -2455,6 +2481,8 @@ public class PanelPlanillaNueva extends JPanelCustom {
         this.jRadioButtonNuevoPago.setVisible(false); //Para que se disimule
         this.jLabelIdPago.setText(""+idPago);
         this.jLabelId.setVisible(true);
+        JTextFieldDateEditor dateEditor =(JTextFieldDateEditor) this.jDateChooserContado.getDateEditor();
+        dateEditor.setEditable(false);  //Para que no se puede ingresar manualmente la fecha
         //----------------------------------------------------
         // Acá iria la consulta para rellenar los 2 siguientes datos:
         cargarDatosContado(idPago);
@@ -2476,7 +2504,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
             }  
         } catch (SQLException ex) {
             JLabel label = new JLabelAriel("Error en la carga de Datos " + ex.getMessage());
-            JOptionPane.showMessageDialog(null, label, " ERROR ", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this.jFrameContado, label, " ERROR ", JOptionPane.WARNING_MESSAGE);
         }
 
     }
@@ -2498,12 +2526,12 @@ public class PanelPlanillaNueva extends JPanelCustom {
             ps.setLong(3, monto);
             ps.setString(4, numeroCheque);
             ps.setBoolean(5, cobrado);
-            ps.setInt(6, idCheque);
-            ps.setBoolean(7, this.jCheckBoxNotificarCh.isSelected());  //Atributo notificar
+            ps.setBoolean(6, this.jCheckBoxNotificarCh.isSelected());  //Atributo notificar
+            ps.setInt(7, idCheque);
             ps.executeUpdate();
         } catch (SQLException ex) {
             JLabel label = new JLabelAriel("Error al actualizar el cheque: "+ex.getMessage());
-            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this.jFrameCheque, label, "ERROR", JOptionPane.WARNING_MESSAGE);
         }
     }
 }
