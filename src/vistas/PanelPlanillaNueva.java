@@ -700,7 +700,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         jComboBoxVh.setFont(new java.awt.Font("Segoe UI Semibold", 0, 20)); // NOI18N
 
         jLabelFPatente.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabelFPatente.setText("Filtrar por patente:");
+        jLabelFPatente.setText("Filtrar por Marca:");
 
         jTextFieldFPatente.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jTextFieldFPatente.setToolTipText("ABC123CD ó ABC123");
@@ -813,7 +813,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         });
 
         jLabelCliente.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabelCliente.setText("Dueño o Cliente:");
+        jLabelCliente.setText("Dueño:");
 
         jTextFieldDueñoCliente.setEditable(false);
         jTextFieldDueñoCliente.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
@@ -1300,7 +1300,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
     }
     
     private void jButtonFVhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFVhActionPerformed
-        //Filtro para los vehículos. A travéz de una patente filtra los datos del JComboBoxCamiones
+        //Filtro para los vehículos. A travéz de la marca filtra los datos del JComboBoxCamiones
         String marca, modelo, patente;
         try {
             //Acá hay que filtrar los vehículos por la patente escrita en jTextFielFPatente
@@ -1309,7 +1309,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
             patenteFiltro = patenteFiltro.toLowerCase();
 
             PreparedStatement ps = this.controlador.obtenerConexion().prepareStatement("SELECT v.idvehiculo, v.marca, v.modelo, v.patente "
-                    + "FROM vehiculo AS v WHERE lower(v.patente) LIKE ? ");
+                    + "FROM vehiculo AS v WHERE lower(v.marca) LIKE ? ");
             ps.setString(1, "%"+patenteFiltro+"%");
             // En este método el ActionItemListener debería haber sido quitado
             this.jComboBoxVh.removeAllItems();
@@ -1900,7 +1900,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
     }
 
     private void jComboBoxVhItemStateChanged(java.awt.event.ItemEvent evt) {
-        //Método que se ejecuta cuando hago selecciono un item en el ComboBox de Vehículos
+        //Método que se ejecuta cuando selecciono un item en el ComboBox de Vehículos
         if (itemVh == 0) {  //Primera vez que se ejecuta
             itemVh++;
             quitarActionListenersJComboBox();

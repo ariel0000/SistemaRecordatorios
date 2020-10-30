@@ -41,48 +41,177 @@ public class PanelRepNueva extends JPanelCustom {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jTextField1 = new javax.swing.JTextField();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jTextField2 = new javax.swing.JTextField();
-        jCheckBox3 = new javax.swing.JCheckBox();
-        jTextField3 = new javax.swing.JTextField();
+        buttonGroupRep = new javax.swing.ButtonGroup();
+        jFrameInfo = new javax.swing.JFrame();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
+        jLabel29 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jCheckBox3 = new javax.swing.JCheckBox();
+        jLabel31 = new javax.swing.JLabel();
+        jLabel30 = new javax.swing.JLabel();
+        jLabelFiltro = new javax.swing.JLabel();
+        jButtonFiltrar = new javax.swing.JButton();
+        jScrollPane = new javax.swing.JScrollPane();
         jTableVh = new javax.swing.JTable();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        jButtonPlanilla = new javax.swing.JButton();
+        jRadioButtonReparacion = new javax.swing.JRadioButton();
+        jRadioButtonMantenimiento = new javax.swing.JRadioButton();
+        jComboBoxVh = new javax.swing.JComboBox<>();
+        jTextField1 = new javax.swing.JTextField();
+        jLabelFPatente = new javax.swing.JLabel();
+        jButtonFiltrar1 = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
+        jCheckBox1 = new javax.swing.JCheckBox();
+        jCheckBox2 = new javax.swing.JCheckBox();
+        jSeparator2 = new javax.swing.JSeparator();
+        jButtonInfo = new javax.swing.JButton();
 
-        jLabel1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel1.setText("Filtro:");
+        jFrameInfo.setAlwaysOnTop(true);
+        jFrameInfo.setLocationByPlatform(true);
+        jFrameInfo.setResizable(false);
+        jFrameInfo.setSize(new java.awt.Dimension(770, 385));
+        jFrameInfo.setType(java.awt.Window.Type.POPUP);
 
-        jCheckBox1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jCheckBox1.setText("Patente:");
+        jLabel24.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel24.setText("Esta vista permite ver las Reparaciones o Mantenciones de todos los Vehículos o de uno en particular");
+
+        jLabel25.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel25.setText("  * Filtro por Vehículo - Con la posibilidad de buscar el Vh por Marca.");
+
+        jLabel26.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel26.setText("Para filtrar las reparaciones se pueden usar 2 filtros:");
+
+        jLabel27.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel27.setText("  * Filtro por tipo de reparación ");
+
+        jLabel29.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel29.setForeground(new java.awt.Color(255, 0, 51));
+        jLabel29.setText("* Después de marcar o desmarcar los filtros \"cuadraditos\" haga \"click\" en el botón filtrar");
+
+        jButton1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jButton1.setText("Aceptar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jCheckBox3.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jCheckBox3.setText("\"Filtro\"  - El fitro se activa cuando se marca");
+
+        jLabel31.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel31.setText("la casilla cuadradita");
+
+        jLabel30.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel30.setForeground(new java.awt.Color(255, 0, 51));
+        jLabel30.setText("* Botón de ver planilla para ver la planilla asociada a la reparación seleccionada");
+
+        javax.swing.GroupLayout jFrameInfoLayout = new javax.swing.GroupLayout(jFrameInfo.getContentPane());
+        jFrameInfo.getContentPane().setLayout(jFrameInfoLayout);
+        jFrameInfoLayout.setHorizontalGroup(
+            jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFrameInfoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrameInfoLayout.createSequentialGroup()
+                        .addComponent(jLabel30)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1))
+                    .addGroup(jFrameInfoLayout.createSequentialGroup()
+                        .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel24)
+                            .addComponent(jLabel29)
+                            .addGroup(jFrameInfoLayout.createSequentialGroup()
+                                .addComponent(jLabel26)
+                                .addGap(18, 18, 18)
+                                .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jCheckBox3)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrameInfoLayout.createSequentialGroup()
+                                        .addComponent(jLabel31)
+                                        .addGap(115, 115, 115))))
+                            .addComponent(jLabel27)
+                            .addComponent(jLabel25))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jFrameInfoLayout.setVerticalGroup(
+            jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFrameInfoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel24)
+                .addGap(18, 18, 18)
+                .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel26)
+                    .addComponent(jCheckBox3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel31)
+                .addGap(28, 28, 28)
+                .addComponent(jLabel27)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel25)
+                .addGap(55, 55, 55)
+                .addComponent(jLabel29)
+                .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jFrameInfoLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addGap(27, 27, 27))
+                    .addGroup(jFrameInfoLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel30)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+        );
+
+        jLabelFiltro.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabelFiltro.setText("Filtros:");
+
+        jButtonFiltrar.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jButtonFiltrar.setText("Filtrar");
+
+        jTableVh.setModel(modelo);
+        jScrollPane.setViewportView(jTableVh);
+
+        jButtonPlanilla.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jButtonPlanilla.setText("Ver Planilla");
+
+        buttonGroupRep.add(jRadioButtonReparacion);
+        jRadioButtonReparacion.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jRadioButtonReparacion.setText("Reparación");
+
+        buttonGroupRep.add(jRadioButtonMantenimiento);
+        jRadioButtonMantenimiento.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jRadioButtonMantenimiento.setText("Mantenimiento");
+
+        jComboBoxVh.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
 
         jTextField1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
 
+        jLabelFPatente.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabelFPatente.setText("Filtrar por Marca:");
+
+        jButtonFiltrar1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jButtonFiltrar1.setText("Buscar");
+
+        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
+        jCheckBox1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jCheckBox1.setText("Por Tipo de Rep.");
+
         jCheckBox2.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jCheckBox2.setText("Cliente:");
+        jCheckBox2.setText("Por Camión");
 
-        jTextField2.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
-        jCheckBox3.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jCheckBox3.setText("Marca:");
-
-        jTextField3.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-
-        jButton1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jButton1.setText("Filtrar");
-
-        jTableVh.setModel(modelo);
-        jScrollPane1.setViewportView(jTableVh);
-
-        jButton2.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jButton2.setText("Ver");
-
-        jButton3.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jButton3.setText("Modificar");
+        jButtonInfo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/info-icon2.png"))); // NOI18N
+        jButtonInfo.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/info-icon2.png"))); // NOI18N
+        jButtonInfo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonInfoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -91,69 +220,109 @@ public class PanelRepNueva extends JPanelCustom {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabelFiltro)
+                        .addGap(18, 18, 18)
+                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(13, 13, 13)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(18, 18, 18)
                                 .addComponent(jCheckBox1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jCheckBox2)
+                                .addComponent(jRadioButtonReparacion)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jCheckBox3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton1))
+                                .addComponent(jRadioButtonMantenimiento))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton2)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton3)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addComponent(jCheckBox2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jComboBoxVh, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabelFPatente)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButtonFiltrar1)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButtonFiltrar, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButtonInfo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButtonPlanilla)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jCheckBox1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBox2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBox3)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelFiltro)
+                            .addComponent(jButtonFiltrar)
+                            .addComponent(jRadioButtonReparacion)
+                            .addComponent(jRadioButtonMantenimiento)
+                            .addComponent(jCheckBox1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jComboBoxVh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabelFPatente)
+                                .addComponent(jButtonFiltrar1)
+                                .addComponent(jCheckBox2))
+                            .addComponent(jButtonInfo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonPlanilla)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButtonInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInfoActionPerformed
+        // Abre el Frame de JFrameInfo para mostrar info de la vista (Para que sirve para que no sirve).
+        this.jFrameInfo.setVisible(true);
+    }//GEN-LAST:event_jButtonInfoActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        this.jFrameInfo.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroupRep;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButtonFiltrar;
+    private javax.swing.JButton jButtonFiltrar1;
+    private javax.swing.JButton jButtonInfo;
+    private javax.swing.JButton jButtonPlanilla;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JComboBox<String> jComboBoxVh;
+    private javax.swing.JFrame jFrameInfo;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel29;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabelFPatente;
+    private javax.swing.JLabel jLabelFiltro;
+    private javax.swing.JRadioButton jRadioButtonMantenimiento;
+    private javax.swing.JRadioButton jRadioButtonReparacion;
+    private javax.swing.JScrollPane jScrollPane;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTable jTableVh;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -165,6 +334,6 @@ public class PanelRepNueva extends JPanelCustom {
 
     @Override
     public void onFocus() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //
     }
 }
