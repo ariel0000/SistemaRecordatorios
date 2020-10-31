@@ -5,8 +5,15 @@
  */
 package vistas;
 
+import controladores.ControladorPrincipal;
 import java.awt.Font;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import modelo.JLabelAriel;
 
 /**
  *
@@ -14,6 +21,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class PanelRepNueva extends JPanelCustom {
 
+    private ControladorPrincipal controlador;
     DefaultTableModel modelo;
     
     public PanelRepNueva() {
@@ -25,11 +33,12 @@ public class PanelRepNueva extends JPanelCustom {
             } 
         };
         initComponents();
+        iniciarCosasEnComun();
         this.jTableVh.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
     }
 
     private String[] getColumnas() { 
-        String columna[] = new String[]{"Descripción de Reparación", "completada", "tipo", "importe"};
+        String columna[] = new String[]{"Descripción de Reparación", "completada", "tipo", "periodo", "Fecha Terminada"};
         return columna;
     }
     /**
@@ -285,6 +294,15 @@ public class PanelRepNueva extends JPanelCustom {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void iniciarCosasEnComun(){
+        // Junta funcionalidad común a los diferentes contructores que pueda haber
+        this.controlador = ControladorPrincipal.getInstancia();
+        //..
+        String query = "SELECT descripcion, completada, tipo, fecha_terminado, periodo FROM reparacion";
+        this.cargarReparaciones(query);
+        
+    }
+    
     private void jButtonInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInfoActionPerformed
         // Abre el Frame de JFrameInfo para mostrar info de la vista (Para que sirve para que no sirve).
         this.jFrameInfo.setVisible(true);
@@ -294,6 +312,34 @@ public class PanelRepNueva extends JPanelCustom {
         this.jFrameInfo.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void cargarReparaciones(String query){
+        //Carga las reparaciones segun el query pasado por parámetro
+        //Descripción de Reparación", "completada", "tipo", "periodo", "Fecha Terminada
+        Object datos[] = new String[5];
+        datos[1] = "No";
+        try {
+            Statement st = this.controlador.obtenerConexion().createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while (rs.next()) {
+                datos[0] = rs.getString(1);  //Descripcion
+                if (rs.getBoolean(2)) //Completada
+                {
+                    datos[1] = "Sí";
+                }
+                datos[2] = rs.getString(3);  //Tipo
+                if (rs.getDate(4) == null) {
+                    datos[3] = "Sin Fecha";
+                }
+                datos[3] = rs.getDate(4) + "";  // Fecha terminado
+                datos[4] = "" + rs.getInt(5);  //Periodo
+                this.modelo.addRow(datos);
+                this.jTableVh.updateUI();
+            }
+        } catch (SQLException ex) {
+            JLabel label = new JLabelAriel("Error al cargar Reparaciones en la Tabla: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);      
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroupRep;
