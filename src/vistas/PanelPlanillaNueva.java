@@ -5,7 +5,6 @@
  */
 package vistas;
 
-import com.toedter.calendar.IDateEditor;
 import com.toedter.calendar.JTextFieldDateEditor;
 import modelo.ComboItem;
 import controladores.ControladorPrincipal;
