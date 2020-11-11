@@ -26,6 +26,7 @@ public class PanelRepNueva extends JPanelCustom {
     private ControladorPrincipal controlador;
     DefaultTableModel modelo;
     private ItemListener itemListenerVh;
+    private ComboItem itemVhActual;
     
     public PanelRepNueva() {
         modelo = new DefaultTableModel(null, getColumnas()){       
@@ -64,6 +65,7 @@ public class PanelRepNueva extends JPanelCustom {
         jCheckBox3 = new javax.swing.JCheckBox();
         jLabel31 = new javax.swing.JLabel();
         jLabel30 = new javax.swing.JLabel();
+        jLabel32 = new javax.swing.JLabel();
         jLabelFiltro = new javax.swing.JLabel();
         jButtonFiltrar = new javax.swing.JButton();
         jScrollPane = new javax.swing.JScrollPane();
@@ -86,7 +88,7 @@ public class PanelRepNueva extends JPanelCustom {
         jFrameInfo.setAlwaysOnTop(true);
         jFrameInfo.setLocationByPlatform(true);
         jFrameInfo.setResizable(false);
-        jFrameInfo.setSize(new java.awt.Dimension(770, 385));
+        jFrameInfo.setSize(new java.awt.Dimension(840, 385));
         jFrameInfo.setType(java.awt.Window.Type.POPUP);
 
         jLabel24.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
@@ -123,6 +125,10 @@ public class PanelRepNueva extends JPanelCustom {
         jLabel30.setForeground(new java.awt.Color(255, 0, 51));
         jLabel30.setText("* Botón de ver planilla para ver la planilla asociada a la reparación seleccionada");
 
+        jLabel32.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel32.setForeground(new java.awt.Color(255, 0, 51));
+        jLabel32.setText("También puede abrir la planilla asociada a la reparación seleccionada:");
+
         javax.swing.GroupLayout jFrameInfoLayout = new javax.swing.GroupLayout(jFrameInfo.getContentPane());
         jFrameInfo.getContentPane().setLayout(jFrameInfoLayout);
         jFrameInfoLayout.setHorizontalGroup(
@@ -137,7 +143,6 @@ public class PanelRepNueva extends JPanelCustom {
                     .addGroup(jFrameInfoLayout.createSequentialGroup()
                         .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel24)
-                            .addComponent(jLabel29)
                             .addGroup(jFrameInfoLayout.createSequentialGroup()
                                 .addComponent(jLabel26)
                                 .addGap(18, 18, 18)
@@ -147,8 +152,10 @@ public class PanelRepNueva extends JPanelCustom {
                                         .addComponent(jLabel31)
                                         .addGap(115, 115, 115))))
                             .addComponent(jLabel27)
-                            .addComponent(jLabel25))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addComponent(jLabel25)
+                            .addComponent(jLabel32)
+                            .addComponent(jLabel29))
+                        .addGap(0, 3, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jFrameInfoLayout.setVerticalGroup(
@@ -166,17 +173,15 @@ public class PanelRepNueva extends JPanelCustom {
                 .addComponent(jLabel27)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel25)
-                .addGap(55, 55, 55)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel29)
-                .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jFrameInfoLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
-                        .addComponent(jButton1)
-                        .addGap(27, 27, 27))
-                    .addGroup(jFrameInfoLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel30)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addComponent(jLabel32)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jLabel30))
+                .addGap(27, 27, 27))
         );
 
         jLabelFiltro.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
@@ -284,8 +289,8 @@ public class PanelRepNueva extends JPanelCustom {
                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButtonFiltrar)
-                            .addComponent(jButtonInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jButtonFiltrar, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButtonInfo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jScrollPane)
                     .addComponent(jButtonPlanilla, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
@@ -359,23 +364,46 @@ public class PanelRepNueva extends JPanelCustom {
     }//GEN-LAST:event_jButtonFiltrarVhActionPerformed
 
     private void jButtonFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFiltrarActionPerformed
-        // Action Performed de botón filtrar -- deberíá comprobar que filtro esta marcado y pasar el query correspondiente al método de abajo
-    /*    ComboItem cItem = (ComboItem) this.jComboBoxVh.getSelectedItem();
-        String query = "SELECT descripcion, completada, tipo, fecha_terminado, periodo FROM reparacion";
-        if(this.jComboBoxVh.getSelectedIndex() != -1 && (!cItem.getKey().equals("0"))){  //Hay seleccionado un Item y no es el primero
-            if(this.jCheckBoxTipoRep.isSelected())  //Tengo que ver tipo de rep y pasarlo al query
-            {
-                
-            }
+        //AP del botón Filtrar. Hay que comprobar cuales de los checkBox de filtros están activados
+        String query = "SELECT r.descripcion, r.completada, r.tipo, r.fecha_terminado, r.periodo FROM vehiculo AS v INNER JOIN planilla AS p "
+                + "ON p.idvehiculo = v.idvehiculo INNER JOIN reparacion AS r ON r.idplanilla = p.idplanilla ";
+        int i = 0;
+        if(this.jCheckBoxTipoRep.isSelected()){
+            query += " WHERE "+queryPorTipoRep();
+            i = 1;
         }
-        if(!this.jCheckBoxVh.isSelected())  //Si no está seleccionado el filtro de Vh quito el Label Visible
-            this.jLabelVh.setVisible(false); */  //------ESTO NO SIRVE - USAR PATRONES PARA ESCALABILIDAD---------
-        //if(cItem.getValue().equals("0"))  //No tengo 
+        if(this.jCheckBoxVh.isSelected()){
+            if(i == 1)  //Agrego un AND si ya pase por agregar el primer filtro
+                query += " AND ";
+            else
+                query += " WHERE ";
+            String queryPorCamión = queryPorCamión();
+            query  = query.concat(queryPorCamión);
+        }
+        this.cargarReparaciones(query);
     }//GEN-LAST:event_jButtonFiltrarActionPerformed
 
+    private String queryPorTipoRep(){
+        //Método que crea una parte del query (Después del Where) para filtrar por tipo_rep
+        String subQuery;
+        if(this.jRadioButtonReparacion.isSelected())
+            subQuery = "r.tipo = 'reparacion' ";
+        else
+            subQuery = "r.tipo = 'mantenimiento' ";
+        return subQuery;
+    }
+    
+    private String queryPorCamión(){
+        //Método que crea una parte del query (Después del Where) para filtrar por tipo_rep
+        int idVh = Integer.valueOf(((ComboItem) this.jComboBoxVh.getSelectedItem()).getKey());
+        return " v.idvehiculo = '"+idVh+"' ";
+    }
+        
     private void cargarReparaciones(String query){
         //Carga las reparaciones segun el query pasado por parámetro
         //Descripción de Reparación", "completada", "tipo", "periodo", "Fecha Terminada
+        DefaultTableModel dtm = (DefaultTableModel) this.jTableVh.getModel();
+        dtm.setRowCount(0);  //Magicamente anduvo y sirve para eliminar las filas de la tabla
         Object datos[] = new String[5];
         datos[1] = "No";
         try {
@@ -417,7 +445,6 @@ public class PanelRepNueva extends JPanelCustom {
         if(!vhMarca.equals(""))  //Si tengo marca --> cargo el|los vh que correspondan a la marca vhMarca
             query = "SELECT v.idvehiculo, v.marca, v.modelo, v.patente FROM vehiculo AS v "
                     + "WHERE lower(v.marca) LIKE '"+marca+"' ";
-        
         Statement st;
         try {
             st = this.controlador.obtenerConexion().createStatement();
@@ -436,7 +463,7 @@ public class PanelRepNueva extends JPanelCustom {
         }
     }
     
-    private void cargarLabel(String idVh){
+    private void cargarLabel(String idVh, boolean valor){
         //Método para cargar el Label que identifica al camión seleccionado -- Se ejecutaría cuando selecciono un Vh en el jComboBox
         String query = "SELECT v.marca, v.modelo, v.modeloanio, v.patente FROM vehiculo AS v WHERE v.idvehiculo = '"+idVh+"' ";
         String marca, modeloVh, modeloAnio, patente;
@@ -449,7 +476,7 @@ public class PanelRepNueva extends JPanelCustom {
                 modeloAnio = rs.getString(3);
                 patente = rs.getString(4);
                 this.jLabelVh.setText(marca+ " "+modeloVh+" "+modeloAnio+" Patente: "+patente);
-                this.jLabelVh.setVisible(true);
+                this.jLabelVh.setVisible(valor);
             }
         }catch(SQLException ex){
             JLabel label = new JLabelAriel("Error al cargar Label del Camión: "+ex.getMessage());
@@ -460,11 +487,12 @@ public class PanelRepNueva extends JPanelCustom {
     private void jComboBoxVhItemStateChanged(java.awt.event.ItemEvent e){
         //ActionListener propio -  se ejecuta siempre y cuando este agregado desde el método "agergarListenersJComboBox()"
         //Salta cuando se selecciona un Vh en el jComboBox
-        ComboItem cItem;
+        ComboItem cItem = null;
         int filaSelect = this.jComboBoxVh.getSelectedIndex();  // -1 si no hay nada seleccionado
         if(filaSelect != -1 && filaSelect != 0){
             cItem = (ComboItem) this.jComboBoxVh.getSelectedItem();
-            cargarLabel(cItem.getKey());
+            this.itemVhActual = cItem;
+            this.cargarLabel(cItem.getKey(), true);  // - No lo muestro ('false') porque no quiero que se confunda con la info actual
         }
     }
     
@@ -505,6 +533,7 @@ public class PanelRepNueva extends JPanelCustom {
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabelFPatente;
     private javax.swing.JLabel jLabelFiltro;
     private javax.swing.JLabel jLabelVh;
