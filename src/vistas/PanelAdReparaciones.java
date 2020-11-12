@@ -610,7 +610,7 @@ public class PanelAdReparaciones extends JPanelCustom {
                 } else {
                     ps.setDate(7, null);
                 }
-                ps.setInt(8, Integer.parseInt((String) this.jComboBoxPeriodo.getSelectedItem()));
+                ps.setInt(8, Integer.parseInt(""+this.jComboBoxPeriodo.getSelectedItem()));
                 ps.setBoolean(9, this.jCheckBoxNotificar.isSelected());
                 int resultado = ps.executeUpdate();
                 this.controlador.obtenerConexion().commit(); //Todo bien si pasa esta línea - falta hacerle el catch al commit()
@@ -665,7 +665,8 @@ public class PanelAdReparaciones extends JPanelCustom {
 
     private void cargarDatosReparacion(int idReparacion){
         //Cargo los datos de la reparación a modificar
-        String query = "SELECT r.descripcion, r.importe, r.fecha_terminado, r.tipo, periodo, r.completada FROM reparacion AS r ";
+        String query = "SELECT r.descripcion, r.importe, r.fecha_terminado, r.tipo, periodo, r.completada, r.notificar FROM reparacion AS r "
+                + "WHERE r.idreparacion = '"+idReparacion+"' ";
         String tipo_rep;
         try{
             Statement st = this.controlador.obtenerConexion().createStatement();
@@ -684,8 +685,9 @@ public class PanelAdReparaciones extends JPanelCustom {
                     this.jRadioButtonReparacion.setSelected(true);
                     this.jRadioButtonMantenimiento.setSelected(false);
                 }
-                this.jComboBoxPeriodo.setSelectedItem(rs.getString(5));
+                this.jComboBoxPeriodo.setSelectedIndex(Integer.valueOf(rs.getString(5))-1);
                 this.jCheckBoxCompletada.setSelected(rs.getBoolean(6));
+                this.jCheckBoxNotificar.setSelected(rs.getBoolean(7));
             }
             
         }catch(SQLException ex){

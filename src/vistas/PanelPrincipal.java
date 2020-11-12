@@ -250,6 +250,11 @@ public class PanelPrincipal extends JPanelCustom {
 
         jButtonInfo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/info-icon2.png"))); // NOI18N
         jButtonInfo.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/info-icon2.png"))); // NOI18N
+        jButtonInfo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonInfoActionPerformed(evt);
+            }
+        });
 
         jButtonVerNotif.setFont(new java.awt.Font("SansSerif", 0, 24)); // NOI18N
         jButtonVerNotif.setText("<html><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ver</p><p>&nbsp;&nbsp;Notificacion</p></html>");
@@ -264,20 +269,17 @@ public class PanelPrincipal extends JPanelCustom {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButtonAdPersonas, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
-                            .addComponent(jButtonAdCamiones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonNuevaPlanilla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonVerReparaciones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonVerPlanillas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonAdPagos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButtonVerNotif, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jButtonInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jButtonAdPersonas, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
+                        .addComponent(jButtonAdCamiones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonNuevaPlanilla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonVerReparaciones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonVerPlanillas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonAdPagos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonVerNotif, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButtonInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -324,7 +326,7 @@ public class PanelPrincipal extends JPanelCustom {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonVerNotif)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -463,7 +465,7 @@ public class PanelPrincipal extends JPanelCustom {
     
     
     public ArrayList<Notificador> cargarReparaciones(){
-        //Método que devuelve las reparaciones incompletas
+        //Método que devuelve las reparaciones o mantenciones incompletas
         String nombre, apellido, descripcion, incompleto = "incompleta";
         int prioridad, idRep;
         String tipoRep;
@@ -494,7 +496,7 @@ public class PanelPrincipal extends JPanelCustom {
     }
     
     public ArrayList<Notificador> cargarMantenciones(){
-        //Método que devuelve una lista de todas las mantenciones por realizar.  
+        //Método que devuelve una lista de todas las mantenciones por realizar. No devuelve las incompletas
         String nombre, apellido, descripcion, modelo, marca;
         LocalDate fechaSalida, fechaHoy = LocalDate.now();
         int prioridad, idRep;
@@ -518,7 +520,7 @@ public class PanelPrincipal extends JPanelCustom {
                 fechaSalida = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 int mesesDiferencia = (int) ChronoUnit.MONTHS.between(fechaSalida.withDayOfMonth(1), fechaHoy.withDayOfMonth(1));
                 if((mesesDiferencia-rs.getInt(8)) <= 2){ // Si la diferencia de meses anterior "coincide" con el periodo agregamos la noti.
-                    if(mesesDiferencia-rs.getInt(8) < 2)
+                    if(mesesDiferencia-rs.getInt(8) < 2)                                      // 0 a 2
                         prioridad = 25;  //Aumento la prioridad porque es una mantención para realizar pronto
                     Reparacion reparacion = new Reparacion(idRep, prioridad, "Service por realizar: "+marca+" "+modelo, descripcion, 
                         nombre, apellido);    
@@ -627,8 +629,8 @@ public class PanelPrincipal extends JPanelCustom {
             idNotif = Integer.valueOf((String) this.jTableNotificaciones.getValueAt(filaSelect, 0)); //El id de la notificación
             switch (clase) {
                 case "cheque":
-                    notificacionCheque(idNotif);
-                    break;
+                    notificacionCheque(idNotif);   // Todo esto se podría reemplazar por un bucle for que recorre el arreglo de notif...
+                    break;                          //y compare por fila de la tabla e índice del arreglo
                 case "reparacion":
                     notificacionReparacion(idNotif);
                     break;
@@ -647,6 +649,10 @@ public class PanelPrincipal extends JPanelCustom {
             JOptionPane.showMessageDialog(this, label, "¡¡ATENCIÓN!!", JOptionPane.WARNING_MESSAGE);  
         }
     }//GEN-LAST:event_jButtonVerNotifActionPerformed
+
+    private void jButtonInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInfoActionPerformed
+       // 
+    }//GEN-LAST:event_jButtonInfoActionPerformed
     
     private void notificacionCheque(int id){
      //busca el cheque con el id "id" y ejecuta su método "ver Notificacion"

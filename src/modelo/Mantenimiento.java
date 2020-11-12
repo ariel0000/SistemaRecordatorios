@@ -22,6 +22,6 @@ public class Mantenimiento extends Notificador {
 
     @Override
     public void verNotificacion() {
-        //Desde acá se abre la vista correspondiente para poder ver el cheque
+        //Creo que tendría que abrir la vista de "Ver Reparaciones" con el vehículo seleccionado
     }
 }
