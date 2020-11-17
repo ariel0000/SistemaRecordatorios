@@ -31,6 +31,8 @@ public class Cheque extends Notificador {
     public void verNotificacion() {
         int idPlanilla = 0;
         PanelPlanillaNueva planilla;
+        JLabelAriel label1 = new JLabelAriel("Se muestra la planilla que contiene el cheque seleccionado");
+        JOptionPane.showMessageDialog(null, label1, "INFO", JOptionPane.INFORMATION_MESSAGE); 
         try {
             //Desde acá se abre la vista correspondiente para poder ver el cheque. Será la vista principal?
             String query = "SELECT p.idplanilla FROM planilla AS p INNER JOIN forma_de_pago AS fdp ON fdp.idplanilla = p.idplanilla INNER JOIN"

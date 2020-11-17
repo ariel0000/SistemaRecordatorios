@@ -21,14 +21,31 @@ import modelo.JLabelAriel;
  *
  * @author ari_0
  */
-public class PanelRepNueva extends JPanelCustom {
+public class PanelReparaciones extends JPanelCustom {
 
     private ControladorPrincipal controlador;
     DefaultTableModel modelo;
     private ItemListener itemListenerVh;
     private ComboItem itemVhActual;
     
-    public PanelRepNueva() {
+    public PanelReparaciones() {
+        modeloTablas();
+        initComponents();
+        iniciarCosasEnComun();
+        this.jTableVh.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
+    }
+
+    public PanelReparaciones(int idReparacion, int idCamion){  //Constructor para mantenimiento
+     //Constructor para una reparación existente. La notificación de mantención por hacer puede llamarse desde acá
+        modeloTablas();
+        initComponents();
+        iniciarCosasEnComun();
+        this.jTableVh.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
+        
+    }
+    
+    private void modeloTablas(){
+        //Método para preparar todo lo referido a las tablas
         modelo = new DefaultTableModel(null, getColumnas()){       
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -36,13 +53,10 @@ public class PanelRepNueva extends JPanelCustom {
             return false;
             } 
         };
-        initComponents();
-        iniciarCosasEnComun();
-        this.jTableVh.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
     }
-
+    
     private String[] getColumnas() { 
-        String columna[] = new String[]{"Descripción de Reparación", "completada", "tipo", "periodo (Meses)", "Fecha Terminada"};
+        String columna[] = new String[]{"Marca y Modelo", "Descripción de Reparación", "completada", "tipo", "periodo (Meses)", "Fecha Terminado"};
         return columna;
     }
     /**
@@ -334,11 +348,16 @@ public class PanelRepNueva extends JPanelCustom {
     private void iniciarCosasEnComun(){
         // Junta funcionalidad común a los diferentes contructores que pueda haber
         this.controlador = ControladorPrincipal.getInstancia();
-        this.jTableVh.getColumnModel().getColumn(0).setMinWidth(590);  //La descripción
-        this.jTableVh.getColumnModel().getColumn(1).setMaxWidth(200);
-        this.jTableVh.getColumnModel().getColumn(1).setMinWidth(100);
+        this.jTableVh.getColumnModel().getColumn(0).setMinWidth(220);
+        this.jTableVh.getColumnModel().getColumn(1).setMinWidth(520);  //La descripción
+        this.jTableVh.getColumnModel().getColumn(2).setMaxWidth(140);
+        this.jTableVh.getColumnModel().getColumn(2).setMinWidth(95);
+        this.jTableVh.getColumnModel().getColumn(3).setMinWidth(140);
+        this.jTableVh.getColumnModel().getColumn(4).setMinWidth(130);
+        this.jTableVh.getColumnModel().getColumn(5).setMinWidth(230);        
         //..
-        String query = "SELECT descripcion, completada, tipo, fecha_terminado, periodo FROM reparacion";
+        String query = "SELECT v.marca, v.modelo, r.descripcion, r.completada, r.tipo, r.fecha_terminado, r.periodo FROM reparacion AS r "
+                + " INNER JOIN planilla AS p ON p.idplanilla = r.idplanilla INNER JOIN vehiculo AS v ON v.idvehiculo = p.idvehiculo";
         this.cargarReparaciones(query);
         this.cargarVh("");
         this.jLabelVh.setVisible(false);  //No muestro el Label del Vh.
@@ -365,7 +384,12 @@ public class PanelRepNueva extends JPanelCustom {
 
     private void jButtonFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFiltrarActionPerformed
         //AP del botón Filtrar. Hay que comprobar cuales de los checkBox de filtros están activados
-        String query = "SELECT r.descripcion, r.completada, r.tipo, r.fecha_terminado, r.periodo FROM vehiculo AS v INNER JOIN planilla AS p "
+        filtrarReparaciones();
+    }//GEN-LAST:event_jButtonFiltrarActionPerformed
+
+    public void filtrarReparaciones(){
+        //Método que permite "usarse desde afuera" para filtrar las reparaciones o vehículos correspondientes
+    String query = "SELECT v.marca, v.modelo, r.descripcion, r.completada, r.tipo, r.fecha_terminado, r.periodo FROM vehiculo AS v INNER JOIN planilla AS p "
                 + "ON p.idvehiculo = v.idvehiculo INNER JOIN reparacion AS r ON r.idplanilla = p.idplanilla ";
         int i = 0;
         if(this.jCheckBoxTipoRep.isSelected()){
@@ -381,8 +405,8 @@ public class PanelRepNueva extends JPanelCustom {
             query  = query.concat(queryPorCamión);
         }
         this.cargarReparaciones(query);
-    }//GEN-LAST:event_jButtonFiltrarActionPerformed
-
+    };
+    
     private String queryPorTipoRep(){
         //Método que crea una parte del query (Después del Where) para filtrar por tipo_rep
         String subQuery;
@@ -404,27 +428,29 @@ public class PanelRepNueva extends JPanelCustom {
         //Descripción de Reparación", "completada", "tipo", "periodo", "Fecha Terminada
         DefaultTableModel dtm = (DefaultTableModel) this.jTableVh.getModel();
         dtm.setRowCount(0);  //Magicamente anduvo y sirve para eliminar las filas de la tabla
-        Object datos[] = new String[5];
+        Object datos[] = new String[6];
         datos[1] = "No";
         try {
             Statement st = this.controlador.obtenerConexion().createStatement();
             ResultSet rs = st.executeQuery(query);
             while (rs.next()) {
-                datos[0] = rs.getString(1);  //Descripcion
-                if (rs.getBoolean(2)) //Completada
-                {
-                    datos[1] = "Sí";
-                }
-                datos[2] = rs.getString(3);  //Tipo
-                if (rs.getDate(4) == null)
-                    datos[4] = "Sin Fecha";
+                datos[0] = rs.getString(1)+" "+rs.getString(2);  //Marca y modelo
+                datos[1] = rs.getString(3);  //La descripción de la reparación
+                if (rs.getBoolean(4)) //Completada
+                    datos[2] = "Sí";
                 else
-                    datos[4] = rs.getDate(4) + "";  // Fecha Terminado
-                if(rs.getString(3).equals("reparacion"))
-                    datos[3] = "-";  //No hay periódo para una reparación común
+                    datos[2] = "No";
+               
+                datos[3] = rs.getString(5);  //Tipo
+                if (rs.getDate(6) == null)
+                    datos[5] = "Sin Fecha";
                 else
-                    datos[3] = "" + rs.getInt(5);  //Periodo
-                
+                    datos[5] = rs.getDate(6) + "";  // Fecha Terminado
+ //Marca y Modelo", "Descripción de Reparación", "completada", "tipo", "periodo (Meses)", "Fecha Terminada"
+                if(rs.getString(5).equals("reparacion"))
+                    datos[4] = "-";  //No hay periódo para una reparación común
+                else
+                    datos[4] = "" + rs.getInt(7);  //Periodo
                 this.modelo.addRow(datos);
                 this.jTableVh.updateUI();
             }
@@ -506,11 +532,6 @@ public class PanelRepNueva extends JPanelCustom {
         };
         this.jComboBoxVh.addItemListener(vh);
         this.itemListenerVh = vh;
-    }
-    
-    private void quitarItemListennerJComboBox(){
-        //Quito el ItemListener del JComboBox
-        this.jComboBoxVh.removeItemListener(this.itemListenerVh);
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -28,6 +28,7 @@ import modelo.EstadoNotifHoy;
 import modelo.EstadoPlanilla;
 import modelo.EstadoReparacion;
 import modelo.JLabelAriel;
+import modelo.Mantenimiento;
 import modelo.Notificador;
 import modelo.Planilla;
 import modelo.Reparacion;
@@ -41,7 +42,7 @@ public class PanelPrincipal extends JPanelCustom {
     private DefaultTableModel tablaNotificaciones;
     private ControladorPrincipal controlador;
     private PanelAdPersonas panelPersonas;
-    private PanelRepNueva panelRepNueva;
+    private PanelReparaciones panelRepNueva;
     private PanelAdVehiculos panelVehiculos;
     private PanelPlanillaNueva panelPlanillaNueva;
     private PanelVerPlanillas panelVerPlanillas;
@@ -79,7 +80,7 @@ public class PanelPrincipal extends JPanelCustom {
         //Creando todos los paneles - al momento de pasarlos al controlador siempre es la misma instancia
         // --> Podemos controlar que no aparezcan más de una vez la misma instancia
         this.panelPersonas = new PanelAdPersonas();
-        this.panelRepNueva = new PanelRepNueva();
+        this.panelRepNueva = new PanelReparaciones();
         this.panelVehiculos = new PanelAdVehiculos();
         this.panelPlanillaNueva = new PanelPlanillaNueva();
         this.panelVerPlanillas = new PanelVerPlanillas();
@@ -496,7 +497,7 @@ public class PanelPrincipal extends JPanelCustom {
     }
     
     public ArrayList<Notificador> cargarMantenciones(){
-        //Método que devuelve una lista de todas las mantenciones por realizar. No devuelve las incompletas
+            //Método que devuelve una lista de todas las mantenciones por realizar. No devuelve las incompletas
         String nombre, apellido, descripcion, modelo, marca;
         LocalDate fechaSalida, fechaHoy = LocalDate.now();
         int prioridad, idRep;
@@ -522,9 +523,9 @@ public class PanelPrincipal extends JPanelCustom {
                 if((mesesDiferencia-rs.getInt(8)) <= 2){ // Si la diferencia de meses anterior "coincide" con el periodo agregamos la noti.
                     if(mesesDiferencia-rs.getInt(8) < 2)                                      // 0 a 2
                         prioridad = 25;  //Aumento la prioridad porque es una mantención para realizar pronto
-                    Reparacion reparacion = new Reparacion(idRep, prioridad, "Service por realizar: "+marca+" "+modelo, descripcion, 
+                    Mantenimiento mantenimiento = new Mantenimiento(idRep, prioridad, "Service por realizar", descripcion, 
                         nombre, apellido);    
-                    reparaciones.add(reparacion);
+                    reparaciones.add(mantenimiento);
                 }
             }
         }catch(SQLException ex){
@@ -559,7 +560,7 @@ public class PanelPrincipal extends JPanelCustom {
     }//GEN-LAST:event_jButtonAdCamionesActionPerformed
 
     private void jButtonVerReparacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVerReparacionesActionPerformed
-        this.panelRepNueva = new PanelRepNueva();
+        this.panelRepNueva = new PanelReparaciones();
         controlador.cambiarDePanel(this.panelRepNueva, "Ver Reparaciones");
     }//GEN-LAST:event_jButtonVerReparacionesActionPerformed
 
@@ -616,33 +617,12 @@ public class PanelPrincipal extends JPanelCustom {
 
     private void jButtonVerNotifActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVerNotifActionPerformed
         // Action Performed que sirve para llamar a la vista que se encargará de administrar cada notificacion
-        int filaSelect = this.jTableNotificaciones.getSelectedRow(), idNotif;
-        String clase;
+        int filaSelect = this.jTableNotificaciones.getSelectedRow();
         if (filaSelect != -1) {
-            clase = ((String) this.jTableNotificaciones.getValueAt(filaSelect, 1));
-            //clase = clase.substring(0, 1).toUpperCase() + clase.substring(1).toLowerCase();  //Pongo la primera letra en mayúscula
-            int lugarEspacio = clase.indexOf(" ");  //Obtengo la posición del espacio
-
-            if (clase.contains(" ")) //Si tenemos espacios (ej: Planilla impaga)
-                clase = clase.substring(0, lugarEspacio);  //Supuestamente corta el String en el espacio. (Queda: Planilla, Reparacion,     ...)
-                      // y el resto del String en minúscula
-            idNotif = Integer.valueOf((String) this.jTableNotificaciones.getValueAt(filaSelect, 0)); //El id de la notificación
-            switch (clase) {
-                case "cheque":
-                    notificacionCheque(idNotif);   // Todo esto se podría reemplazar por un bucle for que recorre el arreglo de notif...
-                    break;                          //y compare por fila de la tabla e índice del arreglo
-                case "reparacion":
-                    notificacionReparacion(idNotif);
-                    break;
-                case "mantenimiento":
-                    notificacionMantenimiento(idNotif);
-                    break;
-                case "planilla":
-                    notificacionPlanilla(idNotif);
-                    break;
-                default:
-                    break;
-            }
+            Notificador notif;
+            notif = this.notificaciones.get(filaSelect);  //Obtengo la notificacion seleccionada
+            //idNotif = Integer.valueOf((String) this.jTableNotificaciones.getValueAt(filaSelect, 0)); //El id de la notificación
+            notif.verNotificacion(); //No importa el tipo de notificación la misma es llamada mediante la clase padre abstracta
         }
         else{
             JLabel label = new JLabelAriel("No hay fila seleccionada ");
@@ -651,51 +631,9 @@ public class PanelPrincipal extends JPanelCustom {
     }//GEN-LAST:event_jButtonVerNotifActionPerformed
 
     private void jButtonInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInfoActionPerformed
-       // 
+       //  Cargar el Frame de información
+      
     }//GEN-LAST:event_jButtonInfoActionPerformed
-    
-    private void notificacionCheque(int id){
-     //busca el cheque con el id "id" y ejecuta su método "ver Notificacion"
-        for(Notificador cheque : this.cheques){
-            if(cheque.getId() == id){
-                JLabel label = new JLabelAriel("Se muestra la planilla donde está anotado el cheque");
-                JOptionPane.showMessageDialog(this, label, "¡INFO!", JOptionPane.INFORMATION_MESSAGE);  
-                cheque.verNotificacion();
-                break;
-            }    
-        }
-    }
-    
-    private void notificacionReparacion(int id){
-        for(Notificador reparacion : this.reparaciones){
-            if(reparacion.getId() == id){
-                reparacion.verNotificacion();
-                break;
-            }    
-        }
-    }
-    
-    private void notificacionMantenimiento(int id){
-     //busca el mantenimiento con el id "id" y ejecuta su método "ver Notificacion"
-        for(Notificador mantenimiento : this.mantenciones){
-            if(mantenimiento.getId() == id){
-                mantenimiento.verNotificacion();
-                break;
-            }    
-        }
-    }
-    
-    private void notificacionPlanilla(int id){
-    //busca el mantenimiento con el id "id" y ejecuta su método "ver Notificacion"
-        for(Notificador planilla : this.planillasImpagas){
-            if(planilla.getId() == id){
-                JLabel label = new JLabelAriel("Verifique el importe y los pagos de la planilla y marquela como paga o impaga");
-                JOptionPane.showMessageDialog(this, label, "¡INFO!", JOptionPane.INFORMATION_MESSAGE); 
-                planilla.verNotificacion();
-                break;
-            }    
-        }
-    }
     
     public PanelAdPersonas getPanelPersonas() {
         return panelPersonas;
@@ -705,11 +643,11 @@ public class PanelPrincipal extends JPanelCustom {
         this.panelPersonas = panelPersonas;
     }
 
-    public PanelRepNueva getPanelReparaciones() {
+    public PanelReparaciones getPanelReparaciones() {
         return panelRepNueva;
     }
 
-    public void setPanelReparaciones(PanelRepNueva panelReparaciones) {
+    public void setPanelReparaciones(PanelReparaciones panelReparaciones) {
         this.panelRepNueva = panelReparaciones;
     }
 

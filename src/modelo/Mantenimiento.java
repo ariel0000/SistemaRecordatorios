@@ -5,6 +5,8 @@
  */
 package modelo;
 
+import vistas.PanelReparaciones;
+
 /**
  *
  * @author Ariel
@@ -23,5 +25,9 @@ public class Mantenimiento extends Notificador {
     @Override
     public void verNotificacion() {
         //Creo que tendría que abrir la vista de "Ver Reparaciones" con el vehículo seleccionado
+        PanelReparaciones panelRep;
+        String query = "SELECT vh.idvehiculo FROM vehiculo AS vh INNER JOIN planilla AS p ON vh.idvehiculo = p.idvehiculo INNER JOIN "
+                + "reparacion AS r ON r.idplanilla = p.idplanilla WHERE r.idrepracion = '"+super.getId()+"' ";
+        
     }
 }

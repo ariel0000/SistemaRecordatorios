@@ -22,7 +22,7 @@ public class Reparacion extends Notificador{
 
     @Override
     public void verNotificacion() {
-        //Desde acá se abre la vista correspondiente para poder ver la Reparación
+        //Desde acá se abre la vista correspondiente para poder ver la Reparación.
         
     }
 }

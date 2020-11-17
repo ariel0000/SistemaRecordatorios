@@ -45,6 +45,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
 //--------------------------------------
         prepararModelosTablas(); //Prepara las tablas con sus respectivos encabezados de columna
         initComponents();
+        controlador = ControladorPrincipal.getInstancia();
         cosasParaIniciarEnComun(); //Algunas variables de las vistas y el controlador
         //Este método va acá porque difiere de la planilla a modificar
         cargarPersonas("0"); // El 0 representa el id de la persona: como no tiene id va 0
@@ -59,8 +60,9 @@ public class PanelPlanillaNueva extends JPanelCustom {
         //   tablaReparaciones = new DefaultTableModel();
         prepararModelosTablas();
         initComponents();
-        cosasParaIniciarEnComun();
+        controlador = ControladorPrincipal.getInstancia();
         cosasParaPlanillaAModificar(numero);
+        cosasParaIniciarEnComun();
     }
 
     private void cosasParaIniciarEnComun() {
@@ -68,7 +70,14 @@ public class PanelPlanillaNueva extends JPanelCustom {
         this.jFrameContado.setLocationRelativeTo(null);
         this.jFrameCheque.setLocationRelativeTo(null);
         desactivoEdicionTextFieldDeDateChooser();
-        controlador = ControladorPrincipal.getInstancia();
+        this.jTableReparaciones.getColumnModel().getColumn(0).setMinWidth(60);
+        this.jTableReparaciones.getColumnModel().getColumn(0).setMaxWidth(70);
+        this.jTableReparaciones.getColumnModel().getColumn(1).setMinWidth(770);
+        this.jTableReparaciones.getColumnModel().getColumn(1).setMaxWidth(1170);
+        this.jTableReparaciones.getColumnModel().getColumn(2).setMinWidth(140);
+        this.jTableReparaciones.getColumnModel().getColumn(2).setMaxWidth(175);
+        this.jTableReparaciones.getColumnModel().getColumn(3).setMinWidth(100);
+        this.jTableReparaciones.getColumnModel().getColumn(3).setMaxWidth(175);
     }
 
     private void desactivoEdicionTextFieldDeDateChooser() {
@@ -664,7 +673,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         jScrollPane1.setPreferredSize(new java.awt.Dimension(0, 0));
 
         jTableReparaciones.setAutoCreateRowSorter(true);
-        jTableReparaciones.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTableReparaciones.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         jTableReparaciones.setModel(tablaReparaciones);
         jScrollPane1.setViewportView(jTableReparaciones);
 
@@ -764,7 +773,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
 
         jScrollPane2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        jTablePagos.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        jTablePagos.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
         jTablePagos.setModel(modeloPagos);
         jScrollPane2.setViewportView(jTablePagos);
 
@@ -1254,6 +1263,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
             long monto = Integer.valueOf(this.jTextFieldMontoCheque.getText());
             boolean cobrado = this.jCheckBoxChCobrado.isSelected();
             String numeroCheque = this.jTextFieldNCheque.getText();
+            //El atributo notificar se agrega en el método que actualiza la BdD
             if (chequeEmision != null && monto != 0 && numeroCheque != null) {
                 actualizarChequeBdB(idCheque, chequeCobro, numeroCheque, monto, chequeEmision, cobrado);
                 this.jFrameCheque.dispose();
@@ -2321,12 +2331,6 @@ public class PanelPlanillaNueva extends JPanelCustom {
         }
     }
 
-    /*  private void guardarPlanilla() {
-        Conecction co = this.controlador.obtenerConexion().prepareStatement(""
-                + "INSERT INTO PLANILLA ")
-                
-    }
-     */
     private void cargarPersonas(String idpersona) {
         //Crea la consulta correspondiente para completar el ComboBoxPersona. -1 Los choferes, 0 Todas las personas
         String consulta = "";
@@ -2403,22 +2407,8 @@ public class PanelPlanillaNueva extends JPanelCustom {
         }
     }
 
-    /*   @Override
-   public void limpiarDatos(){
-        //Necesario para cuando cierre y habra otra vez nueva planilla y no queden los mismos datos que antes
-      //  this.cargarPersonas("0");
-      // this.cargarCamiones("0");
-        this.jTextFieldDueñoCliente.setText("");
-        this.jTextFieldFPatente.setText("");
-        this.jTextFieldDescripcion.setText("");
-        this.jTextFieldFPersona.setText("");
-        this.jTablePagos.removeAll();
-    } */
-
     private void cargarImporte(){
         //Cargar el importe total de las reparaciones en un JTextField
-        this.jTableReparaciones.getColumnModel().getColumn(0).setMinWidth(60);
-        this.jTableReparaciones.getColumnModel().getColumn(0).setMaxWidth(70);
         long montoPorReparaciones = this.montoPorReparaciones();
         //this.jTextFieldImporte.setText(""+montoPorReparaciones);
         Object registro[] = new Object[5];
@@ -2461,6 +2451,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
       //          this.montoCheque.setOnlyNums(true);        
                 this.jTextFieldNCheque.setText(rs.getString(6));
                 this.jCheckBoxChCobrado.setSelected(rs.getBoolean(7));
+                this.jCheckBoxNotificarCh.setSelected(rs.getBoolean(8)); //El atributo "notificar"
             }
             this.jFrameCheque.setVisible(true);
             this.jButtonAgregarCheque.setText("Actualizar");
