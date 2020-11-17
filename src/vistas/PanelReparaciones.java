@@ -35,11 +35,14 @@ public class PanelReparaciones extends JPanelCustom {
         this.jTableVh.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
     }
 
-    public PanelReparaciones(int idReparacion, int idCamion){  //Constructor para mantenimiento
+    public PanelReparaciones(int idReparacion, int idCamion, String tipo_rep){  //Constructor para mantenimiento
      //Constructor para una reparación existente. La notificación de mantención por hacer puede llamarse desde acá
         modeloTablas();
         initComponents();
         iniciarCosasEnComun();
+        if(tipo_rep.equals("mantenimiento"))
+            this.iniciarPerzonalizadoMantencion(idCamion);
+
         this.jTableVh.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
         
     }
@@ -365,6 +368,22 @@ public class PanelReparaciones extends JPanelCustom {
         //..
         this.jRadioButtonReparacion.setSelected(true);
         //..
+    }
+    
+    private void iniciarPerzonalizadoMantencion(int idCamion){
+        // Método que se llama desde un constructor especial para un vehículo específico y con mantención
+        this.jCheckBoxVh.setSelected(true);
+        this.jRadioButtonMantenimiento.setSelected(true);
+        for(int i = 0; i < this.jComboBoxVh.getItemCount(); i++){
+            if(this.jComboBoxVh.getItemAt(i).getKey().equals(""+idCamion)){
+                this.jComboBoxVh.setSelectedIndex(i);
+                break;
+            }
+        }
+        String query = "SELECT v.marca, v.modelo, r.descripcion, r.completada, r.tipo, r.fecha_terminado, r.periodo FROM reparacion AS r "
+                + " INNER JOIN planilla AS p ON p.idplanilla = r.idplanilla INNER JOIN vehiculo AS v ON v.idvehiculo = p.idvehiculo"
+                + " WHERE p.idvehiculo = '"+idCamion+"' AND r.tipo = 'mantenimiento' ";
+        this.cargarReparaciones(query);
     }
     
     private void jButtonInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInfoActionPerformed

@@ -367,7 +367,7 @@ public class PanelPrincipal extends JPanelCustom {
         String nombre, apellido;
         int prioridad;
         //Query para cargar los cheques sin fecha de cobro. Estos se pueden cobrar 30 días después de emitidos
-        String query = "SELECT k.idcheque, k.fecha_emision, k.numerocheque, p.nombre, p.apellido FROM cheque AS k "
+        String query = "SELECT k.idcheque, k.fecha_emision, k.numerocheque, p.nombre, p.apellido, k.monto FROM cheque AS k "
                 + "NATURAL JOIN forma_de_pago AS f INNER JOIN planilla AS pl ON pl.idplanilla = f.idplanilla INNER JOIN cliente AS c "
                 + "ON pl.idcliente = c.idcliente INNER JOIN persona as p ON c.idpersona = p.idpersona WHERE cobrado = false AND "
                 + "fecha_cobro is null ORDER BY k.fecha_emision";
@@ -384,7 +384,7 @@ public class PanelPrincipal extends JPanelCustom {
                 nombre = rs.getString(4);
                 apellido = rs.getString(5);
                 Cheque cheque = new Cheque(rs.getInt(1), prioridad, rs.getLong(3), "cheque",
-                        "Cheque Pago inmediato sin cobrar", nombre, apellido); //idcheque, prioridad, numeroDeCheque
+                        "Cheque Pago inmediato sin cobrar. monto: "+rs.getLong(6), nombre, apellido); //idcheque, prioridad, numeroDeCheque
                 chequesComunes.add(cheque);  //Se cargan primero los que tienen más prioridad
             }
         } catch (SQLException ex) {
@@ -402,7 +402,7 @@ public class PanelPrincipal extends JPanelCustom {
         LocalDate fechaCobro;
         int prioridad;
         //Query para cargar los cheques sin fecha de cobro. Estos se pueden cobrar 30 días después de emitidos
-        String query = "SELECT k.idcheque, k.fecha_cobro, k.numerocheque, p.nombre, p.apellido FROM cheque AS k NATURAL JOIN "
+        String query = "SELECT k.idcheque, k.fecha_cobro, k.numerocheque, p.nombre, p.apellido, k.monto FROM cheque AS k NATURAL JOIN "
                 + "forma_de_pago AS f INNER JOIN planilla AS pl ON pl.idplanilla = f.idplanilla INNER JOIN cliente AS c ON "
                 + "pl.idcliente = c.idcliente INNER JOIN persona as p ON c.idpersona = p.idpersona WHERE cobrado = false AND "
                 + "fecha_cobro is not null ORDER BY k.fecha_cobro";
@@ -419,7 +419,7 @@ public class PanelPrincipal extends JPanelCustom {
                 nombre = rs.getString(4);
                 apellido = rs.getString(5);
                 Cheque cheque = new Cheque(rs.getInt(1), prioridad, rs.getLong(3), "cheque",
-                        "Cheque Pago Diferido sin Cobrar", nombre, apellido);
+                        "Cheque Pago Diferido sin Cobrar. monto:"+rs.getLong(6), nombre, apellido);
                 chequesComunes.add(cheque);  //Se cargan primero los que tienen más prioridad
             }
         } catch (SQLException ex) {
@@ -505,7 +505,7 @@ public class PanelPrincipal extends JPanelCustom {
         String query = "SELECT r.idreparacion, r.descripcion, per.nombre, per.apellido, v.marca, v.modelo, r.fecha_terminado, r.periodo"
                 + " FROM reparacion AS r INNER JOIN planilla AS p ON r.idplanilla = p.idplanilla INNER JOIN cliente AS c ON "
                 + "c.idcliente = p.idcliente INNER JOIN persona AS per ON per.idpersona = c.idpersona INNER JOIN vehiculo AS v ON "
-                + " v.idvehiculo = p.idvehiculo WHERE r.tipo = 'mantenimiento' AND r.completada = true AND r.notificar = true";
+                + " v.idvehiculo = p.idvehiculo WHERE r.tipo = 'mantenimiento' AND r.completada = true"; //quite el notificar = true
         try{
             Statement st = this.controlador.obtenerConexion().createStatement();
             ResultSet rs = st.executeQuery(query);
