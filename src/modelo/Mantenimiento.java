@@ -8,8 +8,6 @@ package modelo;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import vistas.PanelReparaciones;
@@ -50,8 +48,5 @@ public class Mantenimiento extends Notificador {
             JLabel label = new JLabelAriel("Error al mostrar panel de Reparaciones " + ex.getMessage());
             JOptionPane.showMessageDialog(null, label, "¡¡ATENCIÓN!!", JOptionPane.WARNING_MESSAGE); 
         }
-        
-        
-        
     }
 }

@@ -123,6 +123,15 @@ public class PanelPrincipal extends JPanelCustom {
     private void initComponents() {
 
         buttonGroupFiltros = new javax.swing.ButtonGroup();
+        jFrameInfo = new javax.swing.JFrame();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
+        jLabel28 = new javax.swing.JLabel();
+        jLabel29 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jLabel30 = new javax.swing.JLabel();
         jButtonAdCamiones = new javax.swing.JButton();
         jButtonAdPersonas = new javax.swing.JButton();
         jButtonNuevaPlanilla = new javax.swing.JButton();
@@ -139,6 +148,88 @@ public class PanelPrincipal extends JPanelCustom {
         jRadioButtonMantencion = new javax.swing.JRadioButton();
         jButtonInfo = new javax.swing.JButton();
         jButtonVerNotif = new javax.swing.JButton();
+
+        jFrameInfo.setAlwaysOnTop(true);
+        jFrameInfo.setLocationByPlatform(true);
+        jFrameInfo.setResizable(false);
+        jFrameInfo.setSize(new java.awt.Dimension(900, 385));
+        jFrameInfo.setType(java.awt.Window.Type.POPUP);
+
+        jLabel24.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel24.setText("En esta Vista podemos ver las notificaciones del Sistema. Se incluyen las siguientes:");
+
+        jLabel25.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel25.setText(" * Mantenimiento incompleto: Reparación de tipo mantenimiento marcada como incompleta");
+
+        jLabel26.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel26.setText(" * Planillas impagas. Son las planillas marcadas como facturadas pero que todavían no se pagaron ");
+
+        jLabel27.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel27.setText(" * Reparaciones incompletas: Son las reparaciones creadas que todavía no se marcaron como terminadas  ");
+
+        jLabel28.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel28.setText(" * Cheques por cobrar: Cheques de cualquier tipo que tienen que ser cobrados antes de cierta fecha ");
+
+        jLabel29.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel29.setForeground(new java.awt.Color(255, 0, 51));
+        jLabel29.setText("     - Ejemplo: Cambio de Aceite y Filtro");
+
+        jButton1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jButton1.setText("Aceptar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel30.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel30.setText(" * Service por realizar: Mantenimiento de un Camión que debe ser realizado porque se cumplió el periodo.");
+
+        javax.swing.GroupLayout jFrameInfoLayout = new javax.swing.GroupLayout(jFrameInfo.getContentPane());
+        jFrameInfo.getContentPane().setLayout(jFrameInfoLayout);
+        jFrameInfoLayout.setHorizontalGroup(
+            jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFrameInfoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrameInfoLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton1))
+                    .addGroup(jFrameInfoLayout.createSequentialGroup()
+                        .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel24)
+                            .addComponent(jLabel26)
+                            .addComponent(jLabel27)
+                            .addComponent(jLabel25)
+                            .addComponent(jLabel28)
+                            .addComponent(jLabel30)
+                            .addGroup(jFrameInfoLayout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jLabel29)))
+                        .addGap(0, 18, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jFrameInfoLayout.setVerticalGroup(
+            jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFrameInfoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel24)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel26)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel27)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel25)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel28)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel30)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel29)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(27, 27, 27))
+        );
 
         setPreferredSize(new java.awt.Dimension(1000, 533));
 
@@ -293,7 +384,7 @@ public class PanelPrincipal extends JPanelCustom {
                         .addComponent(jRadioButtonMantencion)
                         .addGap(18, 18, 18)
                         .addComponent(jRadioButtonNotifHoy)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 153, Short.MAX_VALUE)
                         .addComponent(jButtonFiltrar))
                     .addComponent(jScrollPane1))
                 .addContainerGap())
@@ -505,7 +596,7 @@ public class PanelPrincipal extends JPanelCustom {
         String query = "SELECT r.idreparacion, r.descripcion, per.nombre, per.apellido, v.marca, v.modelo, r.fecha_terminado, r.periodo"
                 + " FROM reparacion AS r INNER JOIN planilla AS p ON r.idplanilla = p.idplanilla INNER JOIN cliente AS c ON "
                 + "c.idcliente = p.idcliente INNER JOIN persona AS per ON per.idpersona = c.idpersona INNER JOIN vehiculo AS v ON "
-                + " v.idvehiculo = p.idvehiculo WHERE r.tipo = 'mantenimiento' AND r.completada = true"; //quite el notificar = true
+                + " v.idvehiculo = p.idvehiculo WHERE r.tipo = 'mantenimiento' AND r.completada = true AND r.notificar = TRUE";
         try{
             Statement st = this.controlador.obtenerConexion().createStatement();
             ResultSet rs = st.executeQuery(query);
@@ -632,8 +723,12 @@ public class PanelPrincipal extends JPanelCustom {
 
     private void jButtonInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInfoActionPerformed
        //  Cargar el Frame de información
-      
+       this.jFrameInfo.setVisible(true);
     }//GEN-LAST:event_jButtonInfoActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        this.jFrameInfo.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
     
     public PanelAdPersonas getPanelPersonas() {
         return panelPersonas;
@@ -677,6 +772,7 @@ public class PanelPrincipal extends JPanelCustom {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroupFiltros;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonAdCamiones;
     private javax.swing.JButton jButtonAdPagos;
     private javax.swing.JButton jButtonAdPersonas;
@@ -686,6 +782,14 @@ public class PanelPrincipal extends JPanelCustom {
     private javax.swing.JButton jButtonVerNotif;
     private javax.swing.JButton jButtonVerPlanillas;
     private javax.swing.JButton jButtonVerReparaciones;
+    private javax.swing.JFrame jFrameInfo;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
+    private javax.swing.JLabel jLabel30;
     private javax.swing.JRadioButton jRadioButtonCheques;
     private javax.swing.JRadioButton jRadioButtonMantencion;
     private javax.swing.JRadioButton jRadioButtonNotifHoy;

@@ -12,6 +12,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import modelo.ComboItem;
@@ -1109,13 +1111,30 @@ public class PanelNuevaPersona extends JPanelCustom {
             activarDesactivarCasillasChofer(false); //Estoy desactivando una persona que era chofer pero ahora no lo sería
             //Acá habría que borrar el chofer y los vehículos¿? ¿Y las planillas asociadas?
             if(this.jComboBoxVh.getItemCount() > 0){ // La persona tiene camiones asociados
-                JLabel label = new JLabelAriel("No se puede destildar esta opción porque el chofer tiene camiones asociados");
+                JLabel label = new JLabelAriel("No se puede destildar esta opción porque el chofer tiene camiones asociados.");
                 JOptionPane.showMessageDialog(null, label, "ATENCIÓN", JOptionPane.INFORMATION_MESSAGE);
                 this.jCheckBoxChofer.setSelected(true);
+            }
+            else{  //La persona no tiene camiones asociados --> Hay que borrar la tupla de la tabla chofer que apunta a la persona
+                borrarChofer();
             }
         }
     }//GEN-LAST:event_jCheckBoxChoferActionPerformed
 
+    private void borrarChofer(){
+        try {
+            //Borro el chofer (tupla) que representa a la persona con id "this.idpersona"
+            PreparedStatement ps = this.controlador.obtenerConexion().prepareStatement("DELETE FROM chofer WHERE idpersona = ? ");
+            ps.setInt(1, this.idPersona);
+            ps.executeUpdate();
+            JLabel label = new JLabelAriel("La persona ya no es más chofer");
+            JOptionPane.showMessageDialog(null, label, "INFO", JOptionPane.INFORMATION_MESSAGE);
+        } catch (SQLException ex) {
+            JLabel label = new JLabelAriel("Error al borrar chofer");
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+    
     private void jCheckBoxClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxClienteActionPerformed
         // Activo o desactivo las casillas de Cliente según esté seteado el CheckBox
         if (this.jCheckBoxCliente.isSelected()) {  //Tengo que activar los campos referidos a Cliente
@@ -1290,11 +1309,13 @@ public class PanelNuevaPersona extends JPanelCustom {
 
     private void jButtonVerVhChActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVerVhChActionPerformed
         // Este Action Performed tendría que abrir una nueva pestaña con el panel 'ver/modificar Camión'
-        String idVh = ((ComboItem) this.jComboBoxVh.getSelectedItem()).getKey();
-        
-        NuevoModificarVh mdVh = new NuevoModificarVh(Integer.valueOf(idVh));
-        
-        this.controlador.cambiarDePanel(mdVh, "Modificar Vehículo");   //Abre una nueva pestaña para edición del vehículo.
+        if (this.jComboBoxVh.getSelectedIndex() != -1) {
+            String idVh = ((ComboItem) this.jComboBoxVh.getSelectedItem()).getKey();
+
+            NuevoModificarVh mdVh = new NuevoModificarVh(Integer.valueOf(idVh));
+
+            this.controlador.cambiarDePanel(mdVh, "Modificar Vehículo");   //Abre una nueva pestaña para edición del vehículo.
+        }
     }//GEN-LAST:event_jButtonVerVhChActionPerformed
 
     private void jButtonAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAceptarActionPerformed
@@ -1308,11 +1329,13 @@ public class PanelNuevaPersona extends JPanelCustom {
 
     private void jButtonAgregarCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAgregarCliActionPerformed
         // Este Action Performed tendría que abrir una nueva pestaña con el panel 'ver/modificar Camión'
-        String idVh = ((ComboItem) this.jComboBoxCli.getSelectedItem()).getKey();
-        
-        NuevoModificarVh mdVh = new NuevoModificarVh(Integer.valueOf(idVh));
-        
-        this.controlador.cambiarDePanel(mdVh, "Modificar Vehículo");   //Abre una nueva pestaña para edición del vehículo.
+        if (this.jComboBoxCli.getSelectedIndex() != -1) {
+            String idVh = ((ComboItem) this.jComboBoxCli.getSelectedItem()).getKey();
+
+            NuevoModificarVh mdVh = new NuevoModificarVh(Integer.valueOf(idVh));
+
+            this.controlador.cambiarDePanel(mdVh, "Modificar Vehículo");   //Abre una nueva pestaña para edición del vehículo
+        }
     }//GEN-LAST:event_jButtonAgregarCliActionPerformed
 
     private void cargarDatosJFrameChofer(){

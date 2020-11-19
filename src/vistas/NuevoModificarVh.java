@@ -217,6 +217,8 @@ public class NuevoModificarVh extends JPanelCustom {
         String apellido, nombre;
         String apodo;
         ComboItem cmItem;
+        cmItem = new ComboItem("0", "--En este lugar se puede seleccionar un chofer--");
+        this.jComboBoxChofer.addItem(cmItem);
         String query = "SELECT c.apodo, p.nombre, p.apellido, c.idchofer FROM chofer AS c INNER JOIN persona AS p ON "
                 + "p.idpersona = c.idpersona ORDER BY p.nombre";
         try {
@@ -379,7 +381,7 @@ public class NuevoModificarVh extends JPanelCustom {
         jLabelCh.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabelCh.setText("Chofer:");
 
-        jTableChoferes.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
+        jTableChoferes.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         jTableChoferes.setModel(choferesModel);
         jScrollPane2.setViewportView(jTableChoferes);
 
@@ -513,9 +515,9 @@ public class NuevoModificarVh extends JPanelCustom {
                                             .addComponent(jLabelCh)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jComboBoxChofer, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(jLabelAtencionCh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGap(18, 18, 18)
+                                                .addComponent(jLabelAtencionCh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jComboBoxChofer, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                                 .addGroup(layout.createSequentialGroup()
                                                     .addComponent(jButtonAgregarCh)
@@ -635,21 +637,29 @@ public class NuevoModificarVh extends JPanelCustom {
             //Cuando se agrega un chofer puede que sea un chofer que ya esté asociado al vh, en caso de vh a modificar.
             //Datos de la tabla de choferes: p.nombre, p.apellido, c.apodo, t.numero, t.tipo_tel
             //Lo lógico sería agregar el nuevo chofer y dsps volver a cargar los datos de la tabla con el método correspondiente
-            String idChofer = ((ComboItem)this.jComboBoxChofer.getSelectedItem()).getKey();
-            PreparedStatement ps = this.controlador.obtenerConexion().prepareStatement("INSERT INTO maneja values(default, ?, ?, ?, ?)");
-            //idmaneja, idvh, idchofer, fecha_inicio, fecha_fin
-            ps.setInt(1, idVh);
-            ps.setInt(2, Integer.valueOf(idChofer));
-            ps.setDate(3, new java.sql.Date(new Date().getTime()));
-            ps.setDate(4, null); //Nunca se carga la fecha de fin
-            ps.executeUpdate();
-            JLabelAriel label3 = new JLabelAriel("Chofer agregado: ");
-            this.cargarChoferesActuales(idVh);
-            JOptionPane.showMessageDialog(null, label3, "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE); 
+            ComboItem cItm= (ComboItem) this.jComboBoxChofer.getSelectedItem();
+            if(!cItm.getKey().equals("0")){
+                String idChofer = ((ComboItem)this.jComboBoxChofer.getSelectedItem()).getKey();
+                PreparedStatement ps = this.controlador.obtenerConexion().prepareStatement("INSERT INTO maneja values(default, ?, ?, ?, ?)");
+                //idmaneja, idvh, idchofer, fecha_inicio, fecha_fin
+                ps.setInt(1, idVh);
+                ps.setInt(2, Integer.valueOf(idChofer));
+                ps.setDate(3, new java.sql.Date(new Date().getTime()));
+                ps.setDate(4, null); //Nunca se carga la fecha de fin
+                ps.executeUpdate();
+                JLabelAriel label3 = new JLabelAriel("Chofer agregado: ");
+                this.cargarChoferesActuales(idVh);
+                JOptionPane.showMessageDialog(null, label3, "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE); 
+            }
+            else{
+                JLabelAriel label4 = new JLabelAriel("No se seleccionó ningún Chofer");
+                JOptionPane.showMessageDialog(null, label4, "INFORMACIÓN", JOptionPane.INFORMATION_MESSAGE); 
+            }
         } catch (SQLException ex) {
             JLabelAriel label3 = new JLabelAriel("Error al agregar chofer: "+ex.getMessage());
-            JOptionPane.showMessageDialog(null, label3, "ATENCIÓN", JOptionPane.WARNING_MESSAGE); 
+            JOptionPane.showMessageDialog(null, label3, "ERROR", JOptionPane.WARNING_MESSAGE); 
         }     
+        
     }//GEN-LAST:event_jButtonAgregarChActionPerformed
 
     private void jButtonQuitarChActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonQuitarChActionPerformed

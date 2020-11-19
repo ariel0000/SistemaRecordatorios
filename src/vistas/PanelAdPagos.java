@@ -15,9 +15,11 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.JLabelAriel;
+import modelo.ComboItem;
 
 /**
  *
@@ -26,18 +28,11 @@ import modelo.JLabelAriel;
 public class PanelAdPagos extends JPanelCustom {
 
     
-    private DefaultTableModel modelo, modeloCli;
+    private DefaultTableModel modeloCli;
     private ControladorPrincipal controlador;
     
     public PanelAdPagos() {
         this.controlador = ControladorPrincipal.getInstancia();
-        modelo = new DefaultTableModel() {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                //all cells false
-                return false;
-            }
-        };
         modeloCli = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -45,13 +40,12 @@ public class PanelAdPagos extends JPanelCustom {
                 return false;
             }
         };
-
         initComponents();
-        this.jTableClientes.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
-        this.jTablePlanillas.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
-        modelo.setColumnIdentifiers(getColumnas());
-        modeloCli.setColumnIdentifiers(getColumnasCliente()); 
-        this.cargarTablaClientes("");
+        this.jTablePagos.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
+  //      this.jTablePlanillas.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
+        this.cargarTablaPagos();
+        this.cargarCli("");  //Cargo los Clientes del JComboBox
+        this.jRadioButtonCheque.setSelected(true);  //Por defecto muestro los cheques
     }
 
     private String[] getColumnas(){
@@ -62,29 +56,18 @@ public class PanelAdPagos extends JPanelCustom {
     }
     
     private String[] getColumnasCliente(){
-        String columnas[] = new String[]{"Nombre", "Apellido", "id_cliente", "Estado de C.C"};
+        String columnas[] = new String[]{"ID", "Tipo", "Monto",  "Notificar", "Nombre Cliente"};
         
         return columnas;
     }
     
-    private void cargarTablaClientes(String nombreApellido){
-        //Método para cargar la tabla de clientes cuando se carga la vista o cuando se filtra por nombre. Solo elije el query correspondiente
-        String query;
-        if (nombreApellido.equals("")) {
-            query = "SELECT per.nombre, per.apellido, c.idcliente, exists(select p.idplanilla FROM planilla as p WHERE " +
-                "p.idcliente = c.idcliente AND p.facturado = true AND p.pagado = false) FROM persona AS per NATURAL JOIN cliente AS c"
-                    + " ORDER BY per.nombre";
-        }
- // Lo de arriba consulta Nombre y Apellido de algún cliente y además si tiene alguna planilla impaga
-        else {
-            query = "SELECT per.nombre, per.apellido, c.idcliente, exists(select p.idplanilla from planilla as p WHERE p.idcliente = c.idcliente AND "
-                    + "p.facturado = true AND p.pagado = false) FROM persona AS per NATURAL JOIN cliente AS c "
-                    + "WHERE CONCAT(per.nombre, per.apellido) LIKE '%"+nombreApellido+"%' ORDER BY per.nombre"; 
-        }
-        this.cargarTablaCli(query);
+    private void cargarTablaPagos(){
+        //Método para cargar la tabla de pagos cuando se carga la vista o cuando se filtra. Solo elije el query correspondiente
+        String query = "SELECT ";
+        
     }
     
-    private void cargarTablaCli(String query){
+    private void cargarTablaPago(String query){
         // Método que carga en la tabla el/los Clientes desde la Base de datos.
         int días;
         String datos[] = new String[4];  //Nombre, Apellido, ¿Pl. Impagas?, Estado de C.C
@@ -107,7 +90,7 @@ public class PanelAdPagos extends JPanelCustom {
             JLabelAriel label = new JLabelAriel("Error al cargar tabla de Clientes: "+ex.getMessage());
             JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
         }
-        this.jTableClientes.updateUI();
+        this.jTablePagos.updateUI();
     }
   
     private int diasPorPlanillasImpagas(int idCliente) throws SQLException {
@@ -130,7 +113,7 @@ public class PanelAdPagos extends JPanelCustom {
                 fecha_salida_vh = fecha_salida.toLocalDate();
                 actual = (int) ChronoUnit.DAYS.between(fecha_salida_vh, fecha_hoy);
                 if (actual > estadoCC) {
-                    estadoCC = actual;
+                   estadoCC = actual;
                 }
             }
            // else{...}  //La fecha es nula, se retorna el valor por defecto 0  
@@ -186,7 +169,8 @@ public class PanelAdPagos extends JPanelCustom {
         }
         return monto;
     }
-            
+  
+/*    
     private void cargarTablaPlanillas(int idCliente){
         //Método para cargar planillas en la tabla que tiene que llamarse dsps de un ActionPerformed de "Seleccionar Cliente"
         //Diseñar para aplicar filtro de nombre de cliente
@@ -247,6 +231,7 @@ public class PanelAdPagos extends JPanelCustom {
             }
         } 
     }
+    */
     
     private long cargarImporteReparaciones(int nPlanilla, Connection co) throws SQLException{
         //Obtiene la suma de los importes de las reparaciones asignadas a una planilla y la retorna
@@ -293,12 +278,9 @@ public class PanelAdPagos extends JPanelCustom {
         jSeparator2 = new javax.swing.JSeparator();
         jLabel19 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTablePlanillas = new javax.swing.JTable();
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTableClientes = new javax.swing.JTable();
-        jLabel2 = new javax.swing.JLabel();
+        jTablePagos = new javax.swing.JTable();
         jButtonSelectCli = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -306,14 +288,21 @@ public class PanelAdPagos extends JPanelCustom {
         jLabel6 = new javax.swing.JLabel();
         jButtonInfo = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
-        jButtonVerPlanilla = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jLabel7 = new javax.swing.JLabel();
+        jComboBoxCli = new javax.swing.JComboBox<>();
+        jCheckBoxCli = new javax.swing.JCheckBox();
+        jRadioButtonCheque = new javax.swing.JRadioButton();
+        jRadioButtonContado = new javax.swing.JRadioButton();
+        jRadioButtonTodos = new javax.swing.JRadioButton();
+        jRadioButtonChVencidos = new javax.swing.JRadioButton();
+        jTextFieldCli = new javax.swing.JTextField();
+        jButtonBuscarCli = new javax.swing.JButton();
+        jSeparator3 = new javax.swing.JSeparator();
+        jButton2 = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
 
         jFrameInfo.setAlwaysOnTop(true);
         jFrameInfo.setFocusable(false);
         jFrameInfo.setLocationByPlatform(true);
-        jFrameInfo.setPreferredSize(new java.awt.Dimension(635, 350));
         jFrameInfo.setSize(new java.awt.Dimension(620, 350));
         jFrameInfo.setType(java.awt.Window.Type.POPUP);
 
@@ -390,19 +379,9 @@ public class PanelAdPagos extends JPanelCustom {
 
         setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
 
-        jLabel1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel1.setText("Planillas del Cliente:");
-
-        jTablePlanillas.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
-        jTablePlanillas.setModel(this.modelo);
-        jScrollPane1.setViewportView(jTablePlanillas);
-
-        jTableClientes.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
-        jTableClientes.setModel(modeloCli);
-        jScrollPane2.setViewportView(jTableClientes);
-
-        jLabel2.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel2.setText("Clientes con Planillas en el sistema:");
+        jTablePagos.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
+        jTablePagos.setModel(modeloCli);
+        jScrollPane2.setViewportView(jTablePagos);
 
         jButtonSelectCli.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButtonSelectCli.setText("Seleccionar Cliente");
@@ -432,72 +411,121 @@ public class PanelAdPagos extends JPanelCustom {
             }
         });
 
-        jButtonVerPlanilla.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jButtonVerPlanilla.setText("Ver Planilla");
-        jButtonVerPlanilla.addActionListener(new java.awt.event.ActionListener() {
+        jComboBoxCli.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+
+        jCheckBoxCli.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jCheckBoxCli.setText("Cliente:");
+
+        buttonGroup1.add(jRadioButtonCheque);
+        jRadioButtonCheque.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jRadioButtonCheque.setText("Cheque");
+
+        buttonGroup1.add(jRadioButtonContado);
+        jRadioButtonContado.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jRadioButtonContado.setText("Contado");
+
+        jRadioButtonTodos.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jRadioButtonTodos.setText("Todos");
+
+        jRadioButtonChVencidos.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jRadioButtonChVencidos.setText("Vencidos");
+
+        jTextFieldCli.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+
+        jButtonBuscarCli.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jButtonBuscarCli.setText("Buscar");
+        jButtonBuscarCli.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonVerPlanillaActionPerformed(evt);
+                jButtonBuscarCliActionPerformed(evt);
             }
         });
 
-        jButton1.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
-        jButton1.setText("Ver todos los pagos del Cliente");
+        jSeparator3.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
-        jLabel7.setFont(new java.awt.Font("SansSerif", 0, 15)); // NOI18N
-        jLabel7.setText("Este botón sirve para abrir una nueva pestaña que muestra en detalle los cheques y pagos al contado del Cliente");
+        jButton2.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jButton2.setText("Filtrar");
+
+        jTextField1.setFont(new java.awt.Font("SansSerif", 0, 36)); // NOI18N
+        jTextField1.setText("↳");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSeparator1)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane2)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel3)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(jLabel4))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel5)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(jLabel6)))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jButtonInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel2)
-                                        .addGap(0, 0, Short.MAX_VALUE)))
-                                .addGap(18, 18, 18)
-                                .addComponent(jButtonSelectCli))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jButtonVerPlanilla))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton1)
+                                .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel7)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap())
+                                .addComponent(jLabel4))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel6)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonSelectCli))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE))))
-            .addComponent(jSeparator1)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jRadioButtonCheque)
+                                .addGap(18, 18, 18)
+                                .addComponent(jRadioButtonContado)
+                                .addGap(51, 51, 51)
+                                .addComponent(jCheckBoxCli)
+                                .addGap(18, 18, 18)
+                                .addComponent(jComboBoxCli, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jTextFieldCli, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButtonBuscarCli))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(33, 33, 33)
+                                .addComponent(jRadioButtonTodos)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jRadioButtonChVencidos)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 9, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(11, 11, 11)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jRadioButtonCheque)
+                            .addComponent(jRadioButtonContado)
+                            .addComponent(jCheckBoxCli)
+                            .addComponent(jComboBoxCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButtonBuscarCli))
+                        .addGap(5, 5, 5)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jRadioButtonTodos)
+                            .addComponent(jRadioButtonChVencidos)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -511,31 +539,21 @@ public class PanelAdPagos extends JPanelCustom {
                     .addComponent(jButtonInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jLabel7))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonVerPlanilla)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonSelectCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSelectCliActionPerformed
         // ActionPerformed para seleccionar un Cliente. Se deben llenar los campos debajo de la tabla con información y la tabla de planillas
         //Debo cargar las planillas de este cliente y poner información en los jLabel del estado de la cueta (saldo)
-        int filaSelect = this.jTableClientes.getSelectedRow();
+        int filaSelect = this.jTablePagos.getSelectedRow();
         int idCliente;
         if(filaSelect != -1){
                 //Acá deberán consultarse los métodos para calcular el saldo del cliente, activas los labels y cargarlo con la información
                 // que se obtenga
-                idCliente = Integer.valueOf((String)this.jTableClientes.getValueAt(filaSelect, 2));
-                this.cargarTablaPlanillas(idCliente);
-                this.cargarEstadoCliente(idCliente);
+                idCliente = Integer.valueOf((String)this.jTablePagos.getValueAt(filaSelect, 2));
+              //  this.cargarTablaPlanillas(idCliente);
+              //  this.cargarEstadoCliente(idCliente);
         }
         else{
             JLabelAriel label = new JLabelAriel("Debe seleccionar una fila de la tabla: ");
@@ -553,21 +571,42 @@ public class PanelAdPagos extends JPanelCustom {
         this.jFrameInfo.dispose();
     }//GEN-LAST:event_jButtonAceptarActionPerformed
 
-    private void jButtonVerPlanillaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVerPlanillaActionPerformed
-        // Abre la vista de planillas con la planilla seleccionada.
-        PanelPlanillaNueva p1;
-        int filaSelect = this.jTablePlanillas.getSelectedRow();
-        if(filaSelect != -1){ //Hay fila seleccionada --> Debo tomar el N° de Planilla y crear una Nueva Planilla con ese número
-            int nPlanilla = Integer.valueOf(this.modelo.getValueAt(filaSelect, 0)+""); //paso el número de planilla
-            p1 = new PanelPlanillaNueva(nPlanilla); //Acá va el número de planilla
-            this.controlador.cambiarDePanel(p1, "Ver/Modificar Planilla");
-        }
-        else{
-            JLabelAriel label = new JLabelAriel("Debe seleccionar una fila de la tabla: ");
-            JOptionPane.showMessageDialog(null, label, "¡ATENCIÓN!", JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_jButtonVerPlanillaActionPerformed
+    
+    private void jButtonBuscarCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarCliActionPerformed
+        // ActionPerformed de filtro de marca de Vh -- llama al método para cargar el Vh
+        this.jComboBoxCli.removeAllItems();
+        this.cargarCli(this.jTextFieldCli.getText());
+    }//GEN-LAST:event_jButtonBuscarCliActionPerformed
 
+    private void cargarCli(String nombre){
+        //Método para cargar el cliente según String pasado como parámetro
+        //Carga los Vehículos en el jComboBoxVh en formato ComboItem (idVh, marca-modelo-patente)
+        String query = "SELECT c.idcliente, p.nombre, p.apellido FROM persona AS p INNER JOIN cliente AS c ON p.idpersona = c.idpersona";
+        String nombreApe = nombre.toLowerCase();
+        String apellido;
+        ComboItem cItem;
+        this.jComboBoxCli.addItem(new ComboItem("0", "--Seleccione un Cliente--"));
+        int idCli;
+        if(!nombre.equals(""))  //Si tengo nombre --> cargo el|los clientes que correspondan según el nombre o apellido
+            query = "SELECT c.idcliente, p.nombre, p.apellido FROM persona AS p INNER JOIN cliente AS c ON p.idpersona = c.idpersona"
+                    + " WHERE lower(p.nombre) LIKE '"+nombreApe+"' OR lower(p.apellido) LIKE '"+nombreApe+"' ";
+        Statement st;
+        try {
+            st = this.controlador.obtenerConexion().createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while(rs.next()){
+                idCli = rs.getInt(1);
+                nombre = rs.getString(2);
+                apellido = rs.getString(3);
+                cItem = new ComboItem(""+idCli, nombre+" "+apellido);
+                this.jComboBoxCli.addItem(cItem);
+            }
+        } catch (SQLException ex) {
+            JLabel label = new JLabelAriel("Error al cargar el/los clientes "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR!!", JOptionPane.WARNING_MESSAGE); 
+        }  
+    }
+    
     @Override
     public boolean sePuedeCerrar() {
         //Teoricamente no habría problemas para cerrar en cualquier momento esta pestaña
@@ -581,30 +620,35 @@ public class PanelAdPagos extends JPanelCustom {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButtonAceptar;
+    private javax.swing.JButton jButtonBuscarCli;
     private javax.swing.JButton jButtonInfo;
     private javax.swing.JButton jButtonSelectCli;
-    private javax.swing.JButton jButtonVerPlanilla;
+    private javax.swing.JCheckBox jCheckBoxCli;
+    private javax.swing.JComboBox<ComboItem> jComboBoxCli;
     private javax.swing.JFrame jFrameInfo;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JRadioButton jRadioButtonChVencidos;
+    private javax.swing.JRadioButton jRadioButtonCheque;
+    private javax.swing.JRadioButton jRadioButtonContado;
+    private javax.swing.JRadioButton jRadioButtonTodos;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JTable jTableClientes;
-    private javax.swing.JTable jTablePlanillas;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JTable jTablePagos;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextFieldCli;
     // End of variables declaration//GEN-END:variables
 }

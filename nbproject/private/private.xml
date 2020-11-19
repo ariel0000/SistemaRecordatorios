@@ -5,11 +5,11 @@
         <group>
             <file>file:/C:/Users/Ariel/Documents/GitHub/SistemaRecordatorios/src/modelo/Planilla.java</file>
             <file>file:/C:/Users/Ariel/Documents/GitHub/SistemaRecordatorios/src/modelo/EstadoMantencion.java</file>
-            <file>file:/C:/Users/Ariel/Documents/GitHub/SistemaRecordatorios/src/vistas/PanelReparaciones.java</file>
+            <file>file:/C:/Users/Ariel/Documents/GitHub/SistemaRecordatorios/src/modelo/Cheque.java</file>
             <file>file:/C:/Users/Ariel/Documents/GitHub/SistemaRecordatorios/src/modelo/Reparacion.java</file>
             <file>file:/C:/Users/Ariel/Documents/GitHub/SistemaRecordatorios/src/vistas/PanelPlanillaNueva.java</file>
-            <file>file:/C:/Users/Ariel/Documents/GitHub/SistemaRecordatorios/src/modelo/Mantenimiento.java</file>
             <file>file:/C:/Users/Ariel/Documents/GitHub/SistemaRecordatorios/src/vistas/PanelPrincipal.java</file>
+            <file>file:/C:/Users/Ariel/Documents/GitHub/SistemaRecordatorios/src/vistas/NuevoModificarVh.java</file>
         </group>
     </open-files>
 </project-private>
