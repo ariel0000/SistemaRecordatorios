@@ -616,7 +616,7 @@ public class PanelPrincipal extends JPanelCustom {
                         prioridad = 25;  //Aumento la prioridad porque es una mantención para realizar pronto
                     Mantenimiento mantenimiento = new Mantenimiento(idRep, prioridad, "Service por realizar", descripcion, 
                         nombre, apellido);    
-                    reparaciones.add(mantenimiento);
+                    reparacioness.add(mantenimiento);
                 }
             }
         }catch(SQLException ex){

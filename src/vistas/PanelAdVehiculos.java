@@ -64,7 +64,7 @@ public class PanelAdVehiculos extends JPanelCustom {
     }
     
     private String[] getColumnasMantenimiento(){
-        String columna[] = new String[] {"N°Planilla", "tipo", "periodo (días)", "Fecha de Salida", "Descripción"};
+        String columna[] = new String[] {"N°Planilla", "tipo", "periodo (meses)", "Fecha de Salida", "Descripción"};
         return columna;
     }
     

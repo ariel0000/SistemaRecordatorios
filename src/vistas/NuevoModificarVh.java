@@ -121,7 +121,6 @@ public class NuevoModificarVh extends JPanelCustom {
         this.jLabelCh.setEnabled(valor);
         this.jComboBoxChofer.setEnabled(valor);
         this.jButtonBorrarCh.setEnabled(valor);
-        this.jButtonVerTelefonos.setEnabled(valor);
     }
     
     private void cargarMarcas(){
@@ -333,7 +332,6 @@ public class NuevoModificarVh extends JPanelCustom {
         jLabel4 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jButtonSalir = new javax.swing.JButton();
-        jButtonVerTelefonos = new javax.swing.JButton();
         jButtonBorrarCh = new javax.swing.JButton();
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
@@ -440,9 +438,6 @@ public class NuevoModificarVh extends JPanelCustom {
             }
         });
 
-        jButtonVerTelefonos.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jButtonVerTelefonos.setText("Ver Teléfonos");
-
         jButtonBorrarCh.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jButtonBorrarCh.setText("Borrar Chofér");
         jButtonBorrarCh.addActionListener(new java.awt.event.ActionListener() {
@@ -509,8 +504,7 @@ public class NuevoModificarVh extends JPanelCustom {
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                         .addGroup(layout.createSequentialGroup()
                                             .addComponent(jScrollPane2)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                            .addComponent(jButtonVerTelefonos, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGap(159, 159, 159))
                                         .addGroup(layout.createSequentialGroup()
                                             .addComponent(jLabelCh)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -585,9 +579,7 @@ public class NuevoModificarVh extends JPanelCustom {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabelChofer)
                 .addGap(4, 4, 4)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButtonVerTelefonos)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonQuitarCh)
@@ -852,7 +844,6 @@ public class NuevoModificarVh extends JPanelCustom {
     private javax.swing.JButton jButtonGuardar;
     private javax.swing.JButton jButtonQuitarCh;
     private javax.swing.JButton jButtonSalir;
-    private javax.swing.JButton jButtonVerTelefonos;
     private javax.swing.JComboBox<String> jComboBoxAnioModelo;
     private javax.swing.JComboBox<ComboItem> jComboBoxChofer;
     private javax.swing.JComboBox<ComboItem> jComboBoxCliente;

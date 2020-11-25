@@ -54,6 +54,7 @@ public class PanelAdPersonas extends JPanelCustom {
     }
     
     private void cargarPersonas() {
+        //Cargo las persona a la tabla
         DefaultTableModel dtm = (DefaultTableModel) this.jTablePersonas.getModel();
         dtm.setRowCount(0);  //Magicamente anduvo y sirve para eliminar las filas de la tabla
         String datos[] = new String[7];  //Tipo, Descripción, Patente
@@ -75,7 +76,8 @@ public class PanelAdPersonas extends JPanelCustom {
                 this.jTablePersonas.updateUI();     
             }
         } catch (SQLException ex) {
-            System.err.println("Error en la carga de Personas: "+ex.getMessage());
+            JLabel label = new JLabelAriel("Error al cargar las personas a la tabla: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -94,7 +96,8 @@ public class PanelAdPersonas extends JPanelCustom {
                 // Hay al menos una planilla impaga para la persona (Cliente) con idPersona
             }               
         } catch (SQLException ex) {
-            System.out.println("Error :" + ex.getMessage());
+            JLabel label = new JLabelAriel("Error al consultar planillas " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
         }
         return valor;
     }
@@ -271,20 +274,12 @@ public class PanelAdPersonas extends JPanelCustom {
             ps.executeUpdate();
             JOptionPane.showMessageDialog(null, label, "ATENCIÓN", JOptionPane.WARNING_MESSAGE);
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+            JLabel label2 = new JLabelAriel("Error al borrar Persona: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, label2, "ERROR", JOptionPane.WARNING_MESSAGE);
         }
         this.cargarPersonas(); //Recargo al tabla
     }
-    
-   /* private void cambiarDePanelPersona(JInternalFrame iFrame) {
-        try {
-            this.jDesktopPane2.add(iFrame);
-            iFrame.setMaximum(true);
-            iFrame.setVisible(true);
-        } catch (PropertyVetoException ex) {
-            System.out.println("Excepción: " + ex.getMessage());
-        }
-    }  */
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAgregarPer;

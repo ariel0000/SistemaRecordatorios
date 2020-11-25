@@ -12,8 +12,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import modelo.ComboItem;
@@ -67,7 +65,8 @@ public class PanelNuevaPersona extends JPanelCustom {
             }
         
         } catch (SQLException ex) {
-            System.out.println("Error al cargar persona: "+ex.getMessage());
+            JLabel label = new JLabelAriel("Error al cargar Teléfonos: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE); 
         }
         
     }
@@ -84,7 +83,7 @@ public class PanelNuevaPersona extends JPanelCustom {
             Statement st = this.controlador.obtenerConexion().createStatement();
             String consulta = "SELECT v.idvehiculo, c.apodo, v.marca, v.modelo, v.patente FROM chofer AS c INNER JOIN persona AS p " 
                     + "ON p.idpersona = c.idpersona INNER JOIN maneja as m ON m.idchofer = c.idchofer INNER JOIN"
-                    + " vehiculo AS v ON v.idvehiculo = m.idvehiculo WHERE c.idpersona = "+this.idPersona+" ";
+                    + " vehiculo AS v ON v.idvehiculo = m.idvehiculo WHERE c.idpersona = "+this.idPersona+" AND m.fecha_fin is null";
             //Ver insercciones para hacer en la Base de Datos. ------ Leer cuaderno
             ResultSet rs = st.executeQuery(consulta);
             while(rs.next()){
@@ -98,7 +97,8 @@ public class PanelNuevaPersona extends JPanelCustom {
             }
             
         } catch (SQLException ex) {
-            System.out.println("Error carga de Camiones-Chofer: "+ex.getMessage());
+            JLabel label = new JLabelAriel("Error al cargar Camiones " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE); 
         }
     }
     
@@ -126,7 +126,8 @@ public class PanelNuevaPersona extends JPanelCustom {
                 this.jComboBoxCli.addItem(cmItem);
             }
         } catch (SQLException ex) {
-            System.out.println("Error carga de Camiones-Dueño: "+ex.getMessage());
+            JLabel label = new JLabelAriel("Error al cargar los camiones en el ComboBox:" + ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE); 
         }
     }
     
@@ -172,7 +173,8 @@ public class PanelNuevaPersona extends JPanelCustom {
                 valor = true; //porque se encontró que es Cliente y no necesariamente tiene que ser dueño de un camión
             }
         } catch (SQLException ex) {
-            System.out.println("Error en la consulta de si es Cliente: "+ex.getMessage());
+            JLabel label = new JLabelAriel("Error al comprobar si la persona es Dueño: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE); 
         }
         return valor;
     }
@@ -191,7 +193,8 @@ public class PanelNuevaPersona extends JPanelCustom {
             }
             
         } catch (SQLException ex) {
-            System.out.println("Error al cargar datos de persona a modificar: "+ex.getMessage());
+            JLabel label = new JLabelAriel("Error al cargar datos de la Persona: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE); 
         }
         
     }
@@ -970,7 +973,8 @@ public class PanelNuevaPersona extends JPanelCustom {
             }
             
         } catch (SQLException ex) {
-            System.out.println("Error al grabar persona: "+ex.getMessage());
+            JLabel label = new JLabelAriel("Error al cargar Reparaciones en la Tabla: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE); 
         }
     }
     
@@ -1002,7 +1006,8 @@ public class PanelNuevaPersona extends JPanelCustom {
             ps2.setInt(5, this.idPersona);
             ps2.executeUpdate();
         } catch (SQLException ex) {
-            System.out.println("Error al grabar persona: "+ex.getMessage());
+            JLabel label = new JLabelAriel("Error al actualizar persona: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE); 
         }
     }
     
@@ -1050,9 +1055,9 @@ public class PanelNuevaPersona extends JPanelCustom {
             ps.executeUpdate();
             
         } catch (SQLException ex) {
-            System.out.println("Error: "+ex.getMessage());
+            JLabel label = new JLabelAriel("Error al borrar persona " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE); 
         }
-        
     }
     
     private void jButtonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarActionPerformed
@@ -1417,7 +1422,8 @@ public class PanelNuevaPersona extends JPanelCustom {
             ps.executeUpdate();
                 valor = true;
         } catch (SQLException ex) {
-            System.out.println("Error al grabar teléfono: "+ex.getMessage());
+            JLabel label = new JLabelAriel("Error al grabar teléfono: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE); 
         }
         return valor;
     }
@@ -1506,8 +1512,11 @@ public class PanelNuevaPersona extends JPanelCustom {
     public boolean sePuedeCerrar() {
         // falta completar los requerimientos para saber si se puede cerrar la vista y devolver true
         //Ver ejemplo en "Nueva Planilla"
-        // Es posible que haya que consultar 
-        return true;
+        // Es posible que haya que consultar
+      //  JLabel label = new JLabelAriel("Si realizó algún cambio y no lo guardó se perderán si hace click en 'Sí'.");
+      //  int input = JOptionPane.showConfirmDialog(null, label, "ERROR", JOptionPane.INFORMATION_MESSAGE); 
+      //  return input == JOptionPane.OK_OPTION;
+      return true;
     }
 
     @Override

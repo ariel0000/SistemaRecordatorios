@@ -46,7 +46,9 @@ public class PanelAdPagos extends JPanelCustom {
   //      this.jTablePlanillas.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
         this.cargarCli("");  //Cargo los Clientes del JComboBox
         this.jRadioButtonCheque.setSelected(true);  //Por defecto muestro los cheques
-        this.jTextFieldCC.setEditable(false);
+        this.jTextFieldCC.setEditable(false); 
+        String query = this.decidirQuery();
+        this.cargarTablaPagos(query);
     }
     
     private String[] getColumnasPagos(){
@@ -198,27 +200,27 @@ public class PanelAdPagos extends JPanelCustom {
         }
         return monto;
     }
-  
-/*    
-    private void cargarTablaPlanillas(int idCliente){
-        //Método para cargar planillas en la tabla que tiene que llamarse dsps de un ActionPerformed de "Seleccionar Cliente"
-        //Diseñar para aplicar filtro de nombre de cliente
-        this.jTablePlanillas.getColumnModel().getColumn(0).setMinWidth(90);
-        this.jTablePlanillas.getColumnModel().getColumn(0).setMaxWidth(120);
-        String consulta;
-        consulta = "SELECT p.idplanilla, p.fecha_de_entrada, p.fecha_de_salida, p.pagado, exists (SELECT c.idcheque FROM cheque AS c "
-                + "NATURAL JOIN forma_de_pago AS f WHERE p.idplanilla = f.idplanilla AND p.idcliente = '"+idCliente+"' "
-                + "AND c.cobrado = false) FROM planilla AS p INNER JOIN cliente as c ON c.idcliente = p.idcliente "
-                + "INNER JOIN persona as pe ON pe.idpersona = c.idpersona WHERE c.idcliente = '"+idCliente+"' ";
-        cargarDatosTablaPlanillas(consulta);
+    
+    private void cargarPlanilla(int idPago){
+        //Método para cargar la planilla correspondiente al pago
+        String query = "SELECT p.idplanilla FROM planilla AS p INNER JOIN forma_de_pago AS fdp ON p.idplanilla = fdp.idplanilla " +
+            "WHERE fdp.idforma_de_pago = (SELECT idforma_de_pago FROM cheque WHERE cheque.idcheque = '"+idPago+"') " +
+            "OR fdp.idforma_de_pago = (SELECT idforma_de_pago FROM contado WHERE contado.idcontado = '"+idPago+"')";
+        int idPlanilla = 0;
+        try{
+            Statement st = this.controlador.obtenerConexion().createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while(rs.next()){
+                idPlanilla = rs.getInt(1);
+            }
+            PanelPlanillaNueva p1 = new PanelPlanillaNueva(idPlanilla);
+            this.controlador.cambiarDePanel(p1, "Ver/Modificar Planilla");
+        }catch(SQLException ex){
+            JLabelAriel label = new JLabelAriel("Error al cargar la planilla que corresponde al pago: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE); 
+        }
     }   
-    
-    private void cargarEstadoCliente(int idCliente){
-        //Metodo que carga en JLabel4 y JLabel6 información del estado de la cuenta del Cliente
-        this.jLabel6.setText(""+(this.montoPagos(idCliente)-this.montoPorReparaciones(idCliente))); 
-        //Diferencia entre importes y pagos del Cli.            
-    }
-    
+   /* 
     private void cargarDatosTablaPlanillas(String consulta){
         //Método para cargar datos en la tabla una vez que la consulta está lista
         //Reinició los datos de la tabla.
@@ -335,7 +337,7 @@ public class PanelAdPagos extends JPanelCustom {
         jFrameInfo.setAlwaysOnTop(true);
         jFrameInfo.setFocusable(false);
         jFrameInfo.setLocationByPlatform(true);
-        jFrameInfo.setSize(new java.awt.Dimension(620, 350));
+        jFrameInfo.setSize(new java.awt.Dimension(680, 390));
         jFrameInfo.setType(java.awt.Window.Type.POPUP);
 
         jLabel18.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
@@ -420,7 +422,7 @@ public class PanelAdPagos extends JPanelCustom {
                 .addComponent(jLabel19)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel21)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
                 .addComponent(jButtonAceptar)
                 .addContainerGap())
         );
@@ -602,13 +604,12 @@ public class PanelAdPagos extends JPanelCustom {
         // ActionPerformed para seleccionar un Cliente. Se deben llenar los campos debajo de la tabla con información y la tabla de planillas
         //Debo cargar las planillas de este cliente y poner información en los jLabel del estado de la cueta (saldo)
         int filaSelect = this.jTablePagos.getSelectedRow();
-        int idCliente;
+        int idPago;
         if(filaSelect != -1){
                 //Acá deberán consultarse los métodos para calcular el saldo del cliente, activas los labels y cargarlo con la información
                 // que se obtenga
-                idCliente = Integer.valueOf((String)this.jTablePagos.getValueAt(filaSelect, 2));
-              //  this.cargarTablaPlanillas(idCliente);
-              //  this.cargarEstadoCliente(idCliente);
+                idPago = Integer.valueOf((String)this.jTablePagos.getValueAt(filaSelect, 0));
+                this.cargarPlanilla(idPago);
         }
         else{
             JLabelAriel label = new JLabelAriel("Debe seleccionar una fila de la tabla: ");
@@ -747,7 +748,8 @@ public class PanelAdPagos extends JPanelCustom {
     @Override
     public void onFocus() {
         //Cosas a cargar cuando esta vista toma el foco. Ver que conviene:
-        // .Debería cargar de nuevo las dos tablas
+        String query = this.decidirQuery();
+        this.cargarTablaPagos(query);
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
