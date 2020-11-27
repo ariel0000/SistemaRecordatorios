@@ -37,4 +37,9 @@ public class ComboItem {
         this.value = valor;
     }
 
+    public boolean equals(int id){
+        String idCI = String.valueOf(id);
+        return idCI.equals(this.key);
+    }
+    
 }

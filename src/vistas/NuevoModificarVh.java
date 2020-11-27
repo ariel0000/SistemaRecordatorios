@@ -7,6 +7,7 @@ package vistas;
 
 import controladores.ControladorPrincipal;
 import java.awt.Font;
+import java.awt.event.ItemListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -81,7 +82,7 @@ public class NuevoModificarVh extends JPanelCustom {
 
     private void cargarDatos(){
         //Carga los datos a la vista según lo necesario para un Vehículo nuevo
-        cargarClientes();
+        cargarClientes();  //cargar el JComboBox de clientes
        
         
         cargarChoferes(); //Carga el JComboBox de choferes para agregarlos
@@ -102,7 +103,7 @@ public class NuevoModificarVh extends JPanelCustom {
                 this.jComboBoxMarcasVh.setSelectedItem(rs.getString(2)); //Capaz que explota - O selecciona bien la marca
                 this.jTextFieldPatente.setText(rs.getString(3));
                 this.jComboBoxAnioModelo.setSelectedItem(rs.getString(4)); //Capaz que explota
-                this.seleccionarCliente(rs.getInt(5)); //Los clientes ya están cargados - paso idcliente
+                this.seleccionarCliente(rs.getInt(5)); //Los clientes ya están cargados-paso idcliente para mostar sus datos en el JLabelCli
             }
         } catch (SQLException ex) {
             JLabelAriel label = new JLabelAriel("Error: "+ex.getMessage());
@@ -172,16 +173,39 @@ public class NuevoModificarVh extends JPanelCustom {
         }
     } */
     
+    private void jComboBoxClienteItemStateChanged(java.awt.event.ItemEvent evt){
+        //ActionPerformed creado por mi para administar el cambio de un cliente o la selección de uno nuevo desde el jComboBoxCliente
+        //debería Actualizar el cliente y ponerlo en el JLabelCli
+        int idcli;
+        if(this.jComboBoxCliente.getSelectedIndex() != -1 && this.jComboBoxCliente.getSelectedIndex() != 0){
+            ComboItem cIt = (ComboItem) this.jComboBoxCliente.getSelectedItem();
+            idcli = Integer.valueOf(cIt.getKey()); //obtengo el idcli
+            //Si el Vh es nuevo el cliente se guardará al momento de clickear guardar - mientras lo muestro como seleccionado
+            this.seleccionarCliente(idcli);
+            
+            
+        }
+    }
+    
     private void seleccionarCliente(int idcliente){
-    // Método que sirve para seleccionar el cliente del JComboBoxCli para Vh a modificar
-        //El Combo Item del COmboBox cliente tiene nombre + ' ' + apellido + cuil/cuit como valor y idcliente como clave
-        //Los clientes ya están cargados
-        String idcli = String.valueOf(idcliente);
-        for(int i = 0; i<this.jComboBoxCliente.getItemCount(); i++){
-            if(this.jComboBoxCliente.getItemAt(i).getKey().equals(idcli)){ //Encontré el cliente
-                this.jComboBoxCliente.setSelectedIndex(i);
-                break; //Salgo del for
+        // Método que sirve para indicar en el JLabelCli el cliente que es dueño del vehículo
+        String queryCli = "SELECT p.nombre, p.apellido, c.cuil FROM persona AS p INNER JOIN cliente AS c ON p.idpersona = c.idpersona "
+                + "WHERE c.idcliente = '"+idcliente+"' ";
+        String nombre, apellido;
+        long cuil;
+        try{
+            Statement st = this.controlador.obtenerConexion().createStatement();
+            ResultSet rs = st.executeQuery(queryCli);
+            while(rs.next()){
+                nombre = rs.getString(1); //Nombre
+                apellido = rs.getString(2); //Apellido
+                cuil = rs.getLong(3);  //cuil
+                this.jLabelCli.setText(nombre+" "+apellido+". Cuil: "+cuil);
             }
+            
+        }catch(SQLException ex){
+            JLabelAriel label = new JLabelAriel("Error al cargar datos del Cliente "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
         }
     }
     
@@ -190,6 +214,8 @@ public class NuevoModificarVh extends JPanelCustom {
         String apellido, nombre;
         long cuil;
         ComboItem cmItem;
+        cmItem = new ComboItem("0" ,"--Desde acá puede seleccionar el Dueño del Camión--");
+        this.jComboBoxCliente.addItem(cmItem);
         String query = "SELECT c.cuil, p.nombre, p.apellido, c.idcliente FROM cliente AS c INNER JOIN persona AS p ON "
                 + "p.idpersona = c.idpersona ORDER BY p.nombre";
         try {
@@ -199,7 +225,7 @@ public class NuevoModificarVh extends JPanelCustom {
                 nombre = rs.getString(2);
                 apellido = rs.getString(3);
                 cuil = rs.getLong(1);
-                cmItem = new ComboItem(""+rs.getString(4), nombre+" "+apellido+" cuit/cuil: "+cuil); 
+                cmItem = new ComboItem(""+rs.getInt(4), nombre+" "+apellido+" cuit/cuil: "+cuil); 
                                         //el idPersona y el nombre, apellido y apodo
                 this.jComboBoxCliente.addItem(cmItem);
             }
@@ -207,8 +233,7 @@ public class NuevoModificarVh extends JPanelCustom {
         } catch (SQLException ex) {
             JLabelAriel label = new JLabelAriel("Error al cargar los choferes "+ex.getMessage());
             JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
-        }
-        
+        } 
     }
     
     private void cargarChoferes(){
@@ -282,6 +307,7 @@ public class NuevoModificarVh extends JPanelCustom {
         this.jTableChoferes.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
         this.controlador = ControladorPrincipal.getInstancia();
         this.cargarJComboBoxAnioModelo();
+        agregarItemStateChange();  //Agrega un evento de ItemStateChange al JComboBox de Clientes
     }
     
     private void cargarJComboBoxAnioModelo() {
@@ -303,6 +329,16 @@ public class NuevoModificarVh extends JPanelCustom {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jFrameInfo = new javax.swing.JFrame();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jButtonAceptar = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JSeparator();
+        jLabel19 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -333,6 +369,98 @@ public class NuevoModificarVh extends JPanelCustom {
         jLabel11 = new javax.swing.JLabel();
         jButtonSalir = new javax.swing.JButton();
         jButtonBorrarCh = new javax.swing.JButton();
+        jLabelCli = new javax.swing.JLabel();
+        jButtonInfo = new javax.swing.JButton();
+
+        jFrameInfo.setAlwaysOnTop(true);
+        jFrameInfo.setFocusable(false);
+        jFrameInfo.setLocationByPlatform(true);
+        jFrameInfo.setPreferredSize(new java.awt.Dimension(745, 432));
+        jFrameInfo.setSize(new java.awt.Dimension(745, 435));
+        jFrameInfo.setType(java.awt.Window.Type.POPUP);
+
+        jLabel18.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel18.setText(" . Dueño");
+
+        jLabel16.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel16.setText(" . Año de Fabricación");
+
+        jLabel15.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel15.setText(" . Marca y modelo ");
+
+        jLabel14.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel14.setText("Esta vista sirve para administrar siguiente información referida a un Vehículo");
+
+        jButtonAceptar.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jButtonAceptar.setText("Aceptar");
+        jButtonAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAceptarActionPerformed(evt);
+            }
+        });
+
+        jLabel19.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel19.setForeground(new java.awt.Color(204, 0, 0));
+        jLabel19.setText(" . Cuando se agrega un vehículo nuevo solo se puede agregar chofer después");
+
+        jLabel20.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel20.setText(" . Choferes del mismo. Si el Vh es nuevo primero se debe guardar para agregar Chofer");
+        jLabel20.setMaximumSize(new java.awt.Dimension(730, 24));
+        jLabel20.setMinimumSize(new java.awt.Dimension(730, 24));
+        jLabel20.setPreferredSize(new java.awt.Dimension(725, 24));
+
+        jLabel21.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel21.setForeground(new java.awt.Color(204, 0, 0));
+        jLabel21.setText(" de hacer click en \"Guardar\"");
+
+        javax.swing.GroupLayout jFrameInfoLayout = new javax.swing.GroupLayout(jFrameInfo.getContentPane());
+        jFrameInfo.getContentPane().setLayout(jFrameInfoLayout);
+        jFrameInfoLayout.setHorizontalGroup(
+            jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFrameInfoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jFrameInfoLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButtonAceptar)
+                        .addContainerGap())
+                    .addGroup(jFrameInfoLayout.createSequentialGroup()
+                        .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel14)
+                            .addComponent(jLabel15)
+                            .addComponent(jLabel16)
+                            .addComponent(jLabel19)
+                            .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jFrameInfoLayout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jLabel21))
+                            .addComponent(jLabel18))
+                        .addGap(0, 0, Short.MAX_VALUE))))
+            .addComponent(jSeparator2)
+        );
+        jFrameInfoLayout.setVerticalGroup(
+            jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFrameInfoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel14)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel15)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel16)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel19)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel21)
+                .addGap(28, 28, 28)
+                .addComponent(jButtonAceptar)
+                .addContainerGap())
+        );
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabel1.setText("Marca:");
@@ -379,7 +507,7 @@ public class NuevoModificarVh extends JPanelCustom {
         jLabelCh.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabelCh.setText("Chofer:");
 
-        jTableChoferes.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        jTableChoferes.setFont(new java.awt.Font("SansSerif", 0, 17)); // NOI18N
         jTableChoferes.setModel(choferesModel);
         jScrollPane2.setViewportView(jTableChoferes);
 
@@ -446,6 +574,16 @@ public class NuevoModificarVh extends JPanelCustom {
             }
         });
 
+        jLabelCli.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+
+        jButtonInfo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/info-icon2.png"))); // NOI18N
+        jButtonInfo.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/info-icon2.png"))); // NOI18N
+        jButtonInfo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonInfoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -460,7 +598,9 @@ public class NuevoModificarVh extends JPanelCustom {
                             .addComponent(jButtonFiltrarCli)
                             .addComponent(jTextFieldFNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap()
+                        .addComponent(jButtonInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(16, 16, 16)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
@@ -481,12 +621,13 @@ public class NuevoModificarVh extends JPanelCustom {
                                             .addComponent(jTextFieldModelo, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel7)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jComboBoxCliente, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addGroup(layout.createSequentialGroup()
                                                 .addComponent(jLabelAtencionCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(0, 0, Short.MAX_VALUE))
-                                            .addComponent(jComboBoxCliente, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                            .addComponent(jLabelCli, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                                 .addGap(111, 111, 111)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -499,34 +640,31 @@ public class NuevoModificarVh extends JPanelCustom {
                                         .addComponent(jTextFieldPatente, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addComponent(jSeparator1)
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelCh)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabelChofer)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(jScrollPane2)
-                                            .addGap(159, 159, 159))
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(jLabelCh)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jLabelAtencionCh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(jComboBoxChofer, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                .addGroup(layout.createSequentialGroup()
-                                                    .addComponent(jButtonAgregarCh)
-                                                    .addGap(201, 201, 201))
-                                                .addComponent(jLabel11)
-                                                .addGroup(layout.createSequentialGroup()
-                                                    .addComponent(jTextFieldFPersona)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                    .addComponent(jButtonFiltrarChofer)))))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jButtonQuitarCh)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabelAtencionCh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jComboBoxChofer, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButtonBorrarCh)))
-                                .addGap(0, 0, Short.MAX_VALUE)))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jButtonAgregarCh)
+                                                .addGap(201, 201, 201))
+                                            .addComponent(jLabel11)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jTextFieldFPersona, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(jButtonFiltrarChofer))))
+                                    .addComponent(jLabelChofer)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(jButtonQuitarCh)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jButtonBorrarCh))
+                                    .addComponent(jScrollPane2))
+                                .addGap(78, 78, 78)))))
+                .addGap(21, 21, 21))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -560,7 +698,9 @@ public class NuevoModificarVh extends JPanelCustom {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonFiltrarCli)
                     .addComponent(jLabelAtencionCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabelCli, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -576,19 +716,23 @@ public class NuevoModificarVh extends JPanelCustom {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jTextFieldFPersona, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButtonFiltrarChofer))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabelChofer)
                 .addGap(4, 4, 4)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonQuitarCh)
                     .addComponent(jButtonBorrarCh))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonGuardar)
                     .addComponent(jButtonCancelar)
                     .addComponent(jButtonSalir)))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButtonInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jComboBoxMarcasVh.getAccessibleContext().setAccessibleName("");
@@ -683,6 +827,16 @@ public class NuevoModificarVh extends JPanelCustom {
             JOptionPane.showMessageDialog(null, label3, "¡Atención!", JOptionPane.WARNING_MESSAGE); 
         }
     }//GEN-LAST:event_jButtonBorrarChActionPerformed
+
+    private void jButtonInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInfoActionPerformed
+        // Abre el Frame de JFrameInfo para mostrar info de la vista (Para que sirve para que no sirve).
+        this.jFrameInfo.setVisible(true);
+    }//GEN-LAST:event_jButtonInfoActionPerformed
+
+    private void jButtonAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAceptarActionPerformed
+        //Cierra el jFrameInfo
+        this.jFrameInfo.dispose();
+    }//GEN-LAST:event_jButtonAceptarActionPerformed
 
     private void borrarChofer(String idmaneja){
       
@@ -835,22 +989,42 @@ public class NuevoModificarVh extends JPanelCustom {
         this.cargarChoferesActuales(idVh);
     }
     
+    private void agregarItemStateChange(){
+        ItemListener cli = new ItemListener() {
+            @Override
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBoxClienteItemStateChanged(evt);
+            }
+        };
+
+        this.jComboBoxCliente.addItemListener(cli);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonAceptar;
     private javax.swing.JButton jButtonAgregarCh;
     private javax.swing.JButton jButtonBorrarCh;
     private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButtonFiltrarChofer;
     private javax.swing.JButton jButtonFiltrarCli;
     private javax.swing.JButton jButtonGuardar;
+    private javax.swing.JButton jButtonInfo;
     private javax.swing.JButton jButtonQuitarCh;
     private javax.swing.JButton jButtonSalir;
     private javax.swing.JComboBox<String> jComboBoxAnioModelo;
     private javax.swing.JComboBox<ComboItem> jComboBoxChofer;
     private javax.swing.JComboBox<ComboItem> jComboBoxCliente;
     private javax.swing.JComboBox<String> jComboBoxMarcasVh;
+    private javax.swing.JFrame jFrameInfo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -859,8 +1033,10 @@ public class NuevoModificarVh extends JPanelCustom {
     private javax.swing.JLabel jLabelAtencionCli;
     private javax.swing.JLabel jLabelCh;
     private javax.swing.JLabel jLabelChofer;
+    private javax.swing.JLabel jLabelCli;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTable jTableChoferes;
     private javax.swing.JTextField jTextFieldFNombre;
     private javax.swing.JTextField jTextFieldFPersona;
@@ -876,7 +1052,11 @@ public class NuevoModificarVh extends JPanelCustom {
 
     @Override
     public void onFocus() {
-        //Tendría que recargar los jComboBox y las tablas
+        //Tendría que recargar los jComboBox y nada más
+        this.jComboBoxChofer.removeAllItems();
+        this.jComboBoxCliente.removeAllItems();
+        cargarClientes();
+        cargarChoferes();
         
     }
 }
