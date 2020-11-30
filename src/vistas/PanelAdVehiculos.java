@@ -78,10 +78,10 @@ public class PanelAdVehiculos extends JPanelCustom {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        jCheckBoxPatente = new javax.swing.JCheckBox();
+        jCheckBoxMarca = new javax.swing.JCheckBox();
+        jTextFieldPatente = new javax.swing.JTextField();
+        jTextFieldMarca = new javax.swing.JTextField();
         jCheckBoxCli = new javax.swing.JCheckBox();
         jComboBoxCli = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -95,7 +95,7 @@ public class PanelAdVehiculos extends JPanelCustom {
         jTablePlanilla = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jButton6 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        jButtonFiltrar = new javax.swing.JButton();
         jButtonVerMantenimiento = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(32767, 520));
@@ -103,17 +103,17 @@ public class PanelAdVehiculos extends JPanelCustom {
         setRequestFocusEnabled(false);
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel1.setText("Filtro:");
+        jLabel1.setText("Filtros:");
 
-        jCheckBox1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jCheckBox1.setText("Patente:");
+        jCheckBoxPatente.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jCheckBoxPatente.setText("Patente:");
 
-        jCheckBox2.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jCheckBox2.setText("Marca:");
+        jCheckBoxMarca.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jCheckBoxMarca.setText("Marca:");
 
-        jTextField1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jTextFieldPatente.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
 
-        jTextField2.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jTextFieldMarca.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
 
         jCheckBoxCli.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jCheckBoxCli.setText("Cliente:");
@@ -174,11 +174,11 @@ public class PanelAdVehiculos extends JPanelCustom {
         jButton6.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jButton6.setText("Ver planilla");
 
-        jButton1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jButton1.setText("Filtrar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonFiltrar.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jButtonFiltrar.setText("Filtrar");
+        jButtonFiltrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonFiltrarActionPerformed(evt);
             }
         });
 
@@ -201,19 +201,19 @@ public class PanelAdVehiculos extends JPanelCustom {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jCheckBox1)
+                        .addComponent(jCheckBoxPatente)
                         .addGap(20, 20, 20)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextFieldPatente, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jCheckBox2)
+                        .addComponent(jCheckBoxMarca)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextFieldMarca, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(17, 17, 17)
                         .addComponent(jCheckBoxCli)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jComboBoxCli, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jButtonFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton6))
@@ -242,13 +242,13 @@ public class PanelAdVehiculos extends JPanelCustom {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jCheckBox1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCheckBox2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCheckBoxPatente)
+                    .addComponent(jTextFieldPatente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCheckBoxMarca)
+                    .addComponent(jTextFieldMarca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jCheckBoxCli)
                     .addComponent(jComboBoxCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(jButtonFiltrar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -416,9 +416,37 @@ public class PanelAdVehiculos extends JPanelCustom {
         
     }//GEN-LAST:event_jButtonVerMantenimientoActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // Filtros para ver los camiones
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void jButtonFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFiltrarActionPerformed
+        // AP del botón filtrar. 1)Borrar tabla, 2) Armar query, 3) llamar al método que carga la tabla
+        DefaultTableModel dtm = (DefaultTableModel) this.jTableVh.getModel();  //1)
+        dtm.setRowCount(0);
+        int contador = 0;
+        String marca = this.jTextFieldMarca.getText().toLowerCase();  // ¿Qué pasa si marca es nulo?
+        String patente = this.jTextFieldPatente.getText().toLowerCase();
+        String query = "SELECT v.patente, v.marca, v.modelo, p.nombre, p.apellido FROM vehiculo AS v inner join cliente AS c ON "
+                + "v.idduenio = c.idcliente INNER JOIN persona AS p ON p.idpersona = c.idpersona ";
+        if(this.jCheckBoxMarca.isSelected()){
+            query = query.concat("WHERE lower(v.marca) LIKE '"+marca+"%' ");
+            contador++;  //ya no se usará el WHERE y es necesario el AND
+        }
+        if(this.jCheckBoxPatente.isSelected()){
+            if(contador > 0)
+                query = query.concat("AND lower(v.patente) LIKE '"+patente+"%' ");
+            else
+                query = query.concat("WHERE lower(v.patente) LIKE '"+patente+"%' ");
+            contador++;
+        }
+        if(this.jCheckBoxCli.isSelected()){
+            if(contador > 0){
+                query = query.concat("AND c.idcliente = '"+((ComboItem) this.jComboBoxCli.getSelectedItem()).getKey()+"' ");
+            }
+            else
+                query = query.concat("WHERE c.idcliente = '"+((ComboItem) this.jComboBoxCli.getSelectedItem()).getKey()+"' ");;
+        }
+        
+        query = query.concat("ORDER BY p.nombre");
+        this.cargarVh(query);
+    }//GEN-LAST:event_jButtonFiltrarActionPerformed
 
     private void cargarTablaMantenimientos(int filaSelect){
         //Carga la tabla de las reparaciones tipo mantenimiento que puede tener un vehículo
@@ -578,17 +606,17 @@ public class PanelAdVehiculos extends JPanelCustom {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButtonBorrarVh;
+    private javax.swing.JButton jButtonFiltrar;
     private javax.swing.JButton jButtonModificarVh;
     private javax.swing.JButton jButtonNuevoVh;
     private javax.swing.JButton jButtonVerMantenimiento;
     private javax.swing.JButton jButtonVerPlanillas;
     private javax.swing.JButton jButtonVerRep;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBoxCli;
+    private javax.swing.JCheckBox jCheckBoxMarca;
+    private javax.swing.JCheckBox jCheckBoxPatente;
     private javax.swing.JComboBox<ComboItem> jComboBoxCli;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -596,8 +624,8 @@ public class PanelAdVehiculos extends JPanelCustom {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTablePlanilla;
     private javax.swing.JTable jTableVh;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextFieldMarca;
+    private javax.swing.JTextField jTextFieldPatente;
     // End of variables declaration//GEN-END:variables
     
     @Override
