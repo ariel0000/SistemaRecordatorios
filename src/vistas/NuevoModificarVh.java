@@ -36,6 +36,7 @@ public class NuevoModificarVh extends JPanelCustom {
     String[] listaMarcas;
     ControladorPrincipal controlador;
     private int idVh = 0; //Será diferente de 0 solo si es Vh a modificar
+    private int idCliente = 0;
     
     public NuevoModificarVh() {
         //Constructor para un vehículo nuevo
@@ -58,7 +59,7 @@ public class NuevoModificarVh extends JPanelCustom {
     
     public NuevoModificarVh(int idVh) {
         //Constructor para un vehículo a modificar
-        this.idVh = idVh;
+        
         choferesModel = new DefaultTableModel(null, getColumnas()){
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -67,10 +68,12 @@ public class NuevoModificarVh extends JPanelCustom {
             } 
         };
         initComponents();
+        this.idVh = idVh;
         inicializarCamposEnComun();
         this.jButtonGuardar.setText("Actualizar");
         this.jTextFieldPatente.setEnabled(false); //No se puede volver a modificar la patente
         cargarDatos(idVh); //Paso el id del vehículo para que se carguen los datos correctos
+        this.cargarChoferesActuales(idVh);
     }
 
     private String[] getColumnas() {
@@ -86,7 +89,8 @@ public class NuevoModificarVh extends JPanelCustom {
                 + "p.idpersona = c.idpersona ORDER BY p.nombre");  //cargar el JComboBox de clientes
        
         
-        cargarChoferes(); //Carga el JComboBox de choferes para agregarlos
+        cargarChoferes("SELECT c.apodo, p.nombre, p.apellido, c.idchofer FROM chofer AS c INNER JOIN persona AS p ON "
+                + "p.idpersona = c.idpersona ORDER BY p.nombre ");  //Carga el JComboBox de choferes para agregarlos"
       //  cargarChoferesActuales(); No se usa en Vehículo nuevo
     }
     
@@ -105,6 +109,7 @@ public class NuevoModificarVh extends JPanelCustom {
                 this.jComboBoxMarcasVh.setSelectedItem(rs.getString(2)); //Capaz que explota - O selecciona bien la marca
                 this.jTextFieldPatente.setText(rs.getString(3));
                 this.jComboBoxAnioModelo.setSelectedItem(rs.getString(4)); //Capaz que explota
+                this.idCliente = rs.getInt(5);  //Cargo el id del Cliente en la variable, solo se puede modificar si llamo al método específico
                 this.seleccionarCliente(rs.getInt(5)); //Los clientes ya están cargados-paso idcliente para mostar sus datos en el JLabelCli
             }
         } catch (SQLException ex) {
@@ -112,7 +117,8 @@ public class NuevoModificarVh extends JPanelCustom {
             JOptionPane.showMessageDialog(null, label, "ATENCIÓN", JOptionPane.WARNING_MESSAGE);   
         }
         cargarChoferesActuales(idVh); //Carga los choferes del vehículo en la tabla
-        cargarChoferes(); //Carga el jComboBox de choferes
+        cargarChoferes("SELECT c.apodo, p.nombre, p.apellido, c.idchofer FROM chofer AS c INNER JOIN persona AS p ON "
+                + "p.idpersona = c.idpersona ORDER BY p.nombre"); //Carga el jComboBox de choferes
     }
     
     private void habilitarCasillas(boolean valor){
@@ -178,12 +184,11 @@ public class NuevoModificarVh extends JPanelCustom {
     private void jComboBoxClienteItemStateChanged(java.awt.event.ItemEvent evt){
         //ActionPerformed creado por mi para administar el cambio de un cliente o la selección de uno nuevo desde el jComboBoxCliente
         //debería Actualizar el cliente y ponerlo en el JLabelCli
-        int idcli;
         if(this.jComboBoxCliente.getSelectedIndex() != -1 && this.jComboBoxCliente.getSelectedIndex() != 0){
             ComboItem cIt = (ComboItem) this.jComboBoxCliente.getSelectedItem();
-            idcli = Integer.valueOf(cIt.getKey()); //obtengo el idcli
+            this.idCliente = Integer.valueOf(cIt.getKey()); //obtengo el idcli
             //Si el Vh es nuevo el cliente se guardará al momento de clickear guardar - mientras lo muestro como seleccionado
-            this.seleccionarCliente(idcli);
+            this.seleccionarCliente(this.idCliente);
             
             
         }
@@ -238,15 +243,14 @@ public class NuevoModificarVh extends JPanelCustom {
         } 
     }
     
-    private void cargarChoferes(){
+    private void cargarChoferes(String query){
         //Carga el JComboBox de choferes para agregarlos 
+        // Borro las filas actuales para asegurarme de no cargarlas dos veces
         String apellido, nombre;
         String apodo;
         ComboItem cmItem;
         cmItem = new ComboItem("0", "--En este lugar se puede seleccionar un chofer--");
         this.jComboBoxChofer.addItem(cmItem);
-        String query = "SELECT c.apodo, p.nombre, p.apellido, c.idchofer FROM chofer AS c INNER JOIN persona AS p ON "
-                + "p.idpersona = c.idpersona ORDER BY p.nombre";
         try {
             Statement st = this.controlador.obtenerConexion().createStatement();
             ResultSet rs = st.executeQuery(query);
@@ -255,7 +259,7 @@ public class NuevoModificarVh extends JPanelCustom {
                 apellido = rs.getString(3);
                 apodo = rs.getString(1);
                 cmItem = new ComboItem(""+rs.getInt(4), nombre+" "+apellido+" con Apodo: "+apodo); 
-                                        //el idPersona y el nombre, apellido y cuit/cuil
+                                        //el idPersona y el nombre, apellido y Apodo
                 this.jComboBoxChofer.addItem(cmItem);
             }
             
@@ -293,7 +297,7 @@ public class NuevoModificarVh extends JPanelCustom {
                 registro[4] = ""+rs.getInt(1); //el idmaneja al final - no hay columnas suficientes (4) para mostrar este dato "escondido"
                 this.choferesModel.addRow(registro); //Se agrega al final el idmaneja. Columna número: 4 contando desde 0;
             }
-        } catch (SQLException ex) {
+        } catch (SQLException ex) { 
             JLabelAriel label = new JLabelAriel("Error al cargar los clientes "+ex.getMessage());
             JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);   
         }
@@ -541,6 +545,11 @@ public class NuevoModificarVh extends JPanelCustom {
 
         jButtonFiltrarChofer.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jButtonFiltrarChofer.setText("Filtrar");
+        jButtonFiltrarChofer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonFiltrarChoferActionPerformed(evt);
+            }
+        });
 
         jButtonQuitarCh.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jButtonQuitarCh.setText("Desmarcar Chofér");
@@ -858,6 +867,16 @@ public class NuevoModificarVh extends JPanelCustom {
         this.cargarClientes(query);
     }//GEN-LAST:event_jButtonFiltrarCliActionPerformed
 
+    private void jButtonFiltrarChoferActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFiltrarChoferActionPerformed
+        // Filtro choferes. En el JComboBoxChoferes hay Combo Items de la forma: //el idPersona y el nombre, apellido y Apodo
+        this.jComboBoxChofer.removeAllItems();
+        String filtroCh = this.jTextFieldFPersona.getText().toLowerCase();
+        String query = "SELECT c.apodo, p.nombre, p.apellido, c.idchofer FROM chofer AS c INNER JOIN persona AS p ON "
+                + "p.idpersona = c.idpersona WHERE lower(p.nombre) LIKE '%"+filtroCh+"%'  OR lower(apodo) LIKE '%"+filtroCh+"%' ORDER BY p.nombre";
+        this.cargarChoferes(query);
+        
+    }//GEN-LAST:event_jButtonFiltrarChoferActionPerformed
+
     private void borrarChofer(String idmaneja){
       
         //Borra el chofer del Vh de la entidad maneja. Al chofer se lo busca por nombre y apellido en una subconsulta
@@ -880,18 +899,26 @@ public class NuevoModificarVh extends JPanelCustom {
     private boolean guardarVh(){
         //Guarda el nuevo Vh y devuelve "true" en caso de éxito. O lo actualiza en caso de que sea para actualizar
         boolean valor = false;
+        JLabelAriel label3 = null;
         //Guardar el nuevo Vehículo --> Debe verificar que estén los datos necesarios
         //La Marca, el modeloAnio y el Cliente siempre tienen algún dato
+
         if(!(this.jTextFieldPatente.getText().equals("") || this.jTextFieldModelo.getText().equals(""))){ //Si no están vacíos
-            if(this.idVh == 0) //Me pregunto si es un Vehículo nuevo
-                valor = guardarNuevoVh(); //Lo que debería hacer siendo un vehículo nuevo
+            if(this.idVh == 0) //Me pregunto si es un Vehículo nuevo    
+                if(this.idCliente != 0)  //Si elegí Dueño puedo guardar, sino tendré que dar aviso
+                    valor = guardarNuevoVh(this.idCliente); //Lo que debería hacer siendo un vehículo nuevo
+                else{
+                    label3 = new JLabelAriel("Debe elegir un dueño para el Vehículo");  //Carga el JLabel para dar aviso
+                    JOptionPane.showMessageDialog(null, label3, "ATENCIÓN", JOptionPane.WARNING_MESSAGE); 
+                }
             else
                 valor = actualizarVh(); //Lo que debería hacer siendo un Vehículo a modificar
         }
         else{
-            JLabelAriel label3 = new JLabelAriel("Verifique si los campos de PATENTE y MODELO tienen datos");
+            label3 = new JLabelAriel("Verifique si los campos de PATENTE y MODELO tienen datos");
             JOptionPane.showMessageDialog(null, label3, "ATENCIÓN", JOptionPane.WARNING_MESSAGE); 
         }
+        
         return valor;
     }
     
@@ -902,8 +929,7 @@ public class NuevoModificarVh extends JPanelCustom {
         String model = this.jTextFieldModelo.getText();
       //  String patente = this.jTextFieldPatente.getText();
         int modeloAnio = Integer.valueOf(this.jComboBoxAnioModelo.getSelectedItem().toString());
-        ComboItem cmItem = (ComboItem) (this.jComboBoxCliente.getSelectedItem());
-        int idCli = Integer.valueOf(cmItem.getKey());
+      //  ComboItem cmItem = (ComboItem) (this.jComboBoxCliente.getSelectedItem());  
         Connection conexion = this.controlador.obtenerConexion();
         try {
             //Guarda un nuevo Vh
@@ -913,7 +939,7 @@ public class NuevoModificarVh extends JPanelCustom {
             ps.setString(1, model);
             ps.setString(2, marca);
             ps.setInt(3, modeloAnio);
-            ps.setInt(4, idCli);
+            ps.setInt(4, this.idCliente);
             ps.executeUpdate();
             
             conexion.commit();
@@ -939,7 +965,7 @@ public class NuevoModificarVh extends JPanelCustom {
         return valor;
     }
     
-    private boolean guardarNuevoVh(){
+    private boolean guardarNuevoVh(int idCli){
         // Método para guardar un vehículo nuevo
         //Tendría que capturar el idVh para poder agregar los choferes dsps
         boolean valor = false;
@@ -947,8 +973,6 @@ public class NuevoModificarVh extends JPanelCustom {
         String model = this.jTextFieldModelo.getText();
         String patente = this.jTextFieldPatente.getText();
         int modeloAnio = Integer.valueOf(this.jComboBoxAnioModelo.getSelectedItem().toString());
-        ComboItem cmItem = (ComboItem) (this.jComboBoxCliente.getSelectedItem());
-        int idCli = Integer.valueOf(cmItem.getKey());
         int idvh = 0;
         Connection conexion = this.controlador.obtenerConexion();
         try {
@@ -1077,7 +1101,9 @@ public class NuevoModificarVh extends JPanelCustom {
         this.jComboBoxCliente.removeAllItems();
         cargarClientes("SELECT c.cuil, p.nombre, p.apellido, c.idcliente FROM cliente AS c INNER JOIN persona AS p ON "
                 + "p.idpersona = c.idpersona ORDER BY p.nombre");
-        cargarChoferes();
-        
+        cargarChoferes("SELECT c.apodo, p.nombre, p.apellido, c.idchofer FROM chofer AS c INNER JOIN persona AS p ON "
+                + "p.idpersona = c.idpersona ORDER BY p.nombre ");
+        if(this.idVh != 0)
+            this.cargarChoferesActuales(this.idVh);
     }
 }
