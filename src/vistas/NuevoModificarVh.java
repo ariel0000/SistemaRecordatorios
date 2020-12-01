@@ -82,7 +82,8 @@ public class NuevoModificarVh extends JPanelCustom {
 
     private void cargarDatos(){
         //Carga los datos a la vista según lo necesario para un Vehículo nuevo
-        cargarClientes();  //cargar el JComboBox de clientes
+        cargarClientes("SELECT c.cuil, p.nombre, p.apellido, c.idcliente FROM cliente AS c INNER JOIN persona AS p ON "
+                + "p.idpersona = c.idpersona ORDER BY p.nombre");  //cargar el JComboBox de clientes
        
         
         cargarChoferes(); //Carga el JComboBox de choferes para agregarlos
@@ -91,7 +92,8 @@ public class NuevoModificarVh extends JPanelCustom {
     
     private void cargarDatos(int idVh){
     //Carga los datos a la vista para un vehículo a modificar
-        cargarClientes(); //Cargo todos los clientes, dsps tendré que seleccionar el que va (JComboBoxCli es de tipo ComboItem)
+        cargarClientes("SELECT c.cuil, p.nombre, p.apellido, c.idcliente FROM cliente AS c INNER JOIN persona AS p ON "
+                + "p.idpersona = c.idpersona ORDER BY p.nombre"); //Cargo todos los clientes, dsps tendré que seleccionar el que va (JComboBoxCli es de tipo ComboItem)
         String query = "SELECT v.modelo, v.marca, v.patente, v.modeloanio, c.idcliente FROM vehiculo AS v INNER JOIN cliente as c "
                 + "ON v.idduenio = c.idcliente WHERE v.idvehiculo = '"+idVh+"' ";
         try {
@@ -209,15 +211,15 @@ public class NuevoModificarVh extends JPanelCustom {
         }
     }
     
-    private void cargarClientes(){
+    private void cargarClientes(String query){
         //Método para cargar los Clientes en el ComboBox - Para vista: "Nuevo Vh" --> los carga a todos
+        this.jComboBoxCliente.removeAllItems();
         String apellido, nombre;
         long cuil;
         ComboItem cmItem;
         cmItem = new ComboItem("0" ,"--Desde acá puede seleccionar el Dueño del Camión--");
         this.jComboBoxCliente.addItem(cmItem);
-        String query = "SELECT c.cuil, p.nombre, p.apellido, c.idcliente FROM cliente AS c INNER JOIN persona AS p ON "
-                + "p.idpersona = c.idpersona ORDER BY p.nombre";
+        
         try {
             Statement st = this.controlador.obtenerConexion().createStatement();
             ResultSet rs = st.executeQuery(query);
@@ -375,7 +377,6 @@ public class NuevoModificarVh extends JPanelCustom {
         jFrameInfo.setAlwaysOnTop(true);
         jFrameInfo.setFocusable(false);
         jFrameInfo.setLocationByPlatform(true);
-        jFrameInfo.setPreferredSize(new java.awt.Dimension(745, 432));
         jFrameInfo.setSize(new java.awt.Dimension(745, 435));
         jFrameInfo.setType(java.awt.Window.Type.POPUP);
 
@@ -513,6 +514,11 @@ public class NuevoModificarVh extends JPanelCustom {
 
         jButtonFiltrarCli.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jButtonFiltrarCli.setText("Filtrar");
+        jButtonFiltrarCli.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonFiltrarCliActionPerformed(evt);
+            }
+        });
 
         jComboBoxMarcasVh.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jComboBoxMarcasVh.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Otra Marca" }));
@@ -553,7 +559,7 @@ public class NuevoModificarVh extends JPanelCustom {
         jLabelAtencionCli.setText("<html>\nLa persona tiene que estar anotada como cliente <br>\npara que aparezca en este listado\n<html>");
 
         jLabel4.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel4.setText("Filtrar por Nombre:");
+        jLabel4.setText("Filtrar por Nombre o Apellido:");
 
         jLabel11.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabel11.setText("Filtrar personas por nombre o apodo:");
@@ -589,81 +595,82 @@ public class NuevoModificarVh extends JPanelCustom {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addContainerGap()
+                .addComponent(jButtonInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(16, 16, 16)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(515, 515, 515)
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButtonFiltrarCli)
-                            .addComponent(jTextFieldFNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jButtonInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(16, 16, 16)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel1))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jComboBoxMarcasVh, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextFieldModelo, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabelCli, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabelAtencionCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jComboBoxCliente, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGap(74, 74, 74)))))
+                        .addGap(111, 111, 111)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jComboBoxAnioModelo, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextFieldPatente, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(jSeparator1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabelCh)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabelAtencionCh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jComboBoxChofer, 0, 417, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jButtonAgregarCh)
+                                        .addGap(201, 201, 201))
+                                    .addComponent(jLabel11)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jTextFieldFPersona, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jButtonFiltrarChofer)))
+                                .addGap(49, 49, 49))
+                            .addComponent(jLabelChofer)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jButtonQuitarCh)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButtonBorrarCh))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 769, Short.MAX_VALUE))
+                        .addGap(78, 78, 78))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jButtonCancelar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButtonGuardar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButtonSalir))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel2)
-                                            .addComponent(jLabel1))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jComboBoxMarcasVh, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jTextFieldModelo, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel7)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jComboBoxCliente, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabelAtencionCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(0, 0, Short.MAX_VALUE))
-                                            .addComponent(jLabelCli, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                                .addGap(111, 111, 111)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jComboBoxAnioModelo, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jLabel5)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jTextFieldPatente, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addComponent(jSeparator1)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabelCh)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabelAtencionCh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jComboBoxChofer, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jButtonAgregarCh)
-                                                .addGap(201, 201, 201))
-                                            .addComponent(jLabel11)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jTextFieldFPersona, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(jButtonFiltrarChofer))))
-                                    .addComponent(jLabelChofer)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jButtonQuitarCh)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jButtonBorrarCh))
-                                    .addComponent(jScrollPane2))
-                                .addGap(78, 78, 78)))))
+                                    .addComponent(jButtonFiltrarCli)
+                                    .addComponent(jTextFieldFNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addGap(21, 21, 21))
         );
         layout.setVerticalGroup(
@@ -837,6 +844,19 @@ public class NuevoModificarVh extends JPanelCustom {
         //Cierra el jFrameInfo
         this.jFrameInfo.dispose();
     }//GEN-LAST:event_jButtonAceptarActionPerformed
+
+    private void jButtonFiltrarCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFiltrarCliActionPerformed
+        //..AP de Filtrar Clientes - tendría que crear el query y enviarlo al método de cargar clientes para cargar lo correspondiente
+        String query = "SELECT c.cuil, p.nombre, p.apellido, c.idcliente FROM cliente AS c INNER JOIN persona AS p ON "
+                + "p.idpersona = c.idpersona ORDER BY p.nombre";
+        if(!this.jTextFieldFNombre.getText().equals("")){
+            query = "SELECT c.cuil, p.nombre, p.apellido, c.idcliente FROM cliente AS c INNER JOIN persona AS p ON "
+                    + "p.idpersona = c.idpersona WHERE lower(p.nombre) LIKE '"+(this.jTextFieldFNombre.getText()).toLowerCase()+"' "
+                    + "OR lower(p.apellido) LIKE '"+(this.jTextFieldFNombre.getText().toLowerCase())+"'  ORDER BY p.nombre";    
+        }
+        
+        this.cargarClientes(query);
+    }//GEN-LAST:event_jButtonFiltrarCliActionPerformed
 
     private void borrarChofer(String idmaneja){
       
@@ -1055,7 +1075,8 @@ public class NuevoModificarVh extends JPanelCustom {
         //Tendría que recargar los jComboBox y nada más
         this.jComboBoxChofer.removeAllItems();
         this.jComboBoxCliente.removeAllItems();
-        cargarClientes();
+        cargarClientes("SELECT c.cuil, p.nombre, p.apellido, c.idcliente FROM cliente AS c INNER JOIN persona AS p ON "
+                + "p.idpersona = c.idpersona ORDER BY p.nombre");
         cargarChoferes();
         
     }
