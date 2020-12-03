@@ -94,7 +94,7 @@ public class PanelAdVehiculos extends JPanelCustom {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTablePlanilla = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
-        jButton6 = new javax.swing.JButton();
+        jButtonVerPlanilla = new javax.swing.JButton();
         jButtonFiltrar = new javax.swing.JButton();
         jButtonVerMantenimiento = new javax.swing.JButton();
 
@@ -171,8 +171,13 @@ public class PanelAdVehiculos extends JPanelCustom {
         jLabel2.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabel2.setText("Planillas o Reparaciones:");
 
-        jButton6.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jButton6.setText("Ver planilla");
+        jButtonVerPlanilla.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jButtonVerPlanilla.setText("Ver planilla");
+        jButtonVerPlanilla.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonVerPlanillaActionPerformed(evt);
+            }
+        });
 
         jButtonFiltrar.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jButtonFiltrar.setText("Filtrar");
@@ -216,7 +221,7 @@ public class PanelAdVehiculos extends JPanelCustom {
                         .addComponent(jButtonFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton6))
+                        .addComponent(jButtonVerPlanilla))
                     .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -264,7 +269,7 @@ public class PanelAdVehiculos extends JPanelCustom {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton6))
+                .addComponent(jButtonVerPlanilla))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -448,6 +453,20 @@ public class PanelAdVehiculos extends JPanelCustom {
         this.cargarVh(query);
     }//GEN-LAST:event_jButtonFiltrarActionPerformed
 
+    private void jButtonVerPlanillaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVerPlanillaActionPerformed
+        // AP de Ver Planilla.
+        int filaSeleccionada;
+        filaSeleccionada = this.jTablePlanilla.getSelectedRow();
+        if(filaSeleccionada != -1){
+            int nPlanilla = Integer.valueOf(this.modeloPlanilla.getValueAt(filaSeleccionada, 0)+""); //paso el número de planilla
+            PanelPlanillaNueva p1 = new PanelPlanillaNueva(nPlanilla); //Acá va el número de planilla
+            this.controlador.cambiarDePanel(p1, "Ver/Modificar Planilla");
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Error: debe seleccionar una planilla ");
+        }
+    }//GEN-LAST:event_jButtonVerPlanillaActionPerformed
+
     private void cargarTablaMantenimientos(int filaSelect){
         //Carga la tabla de las reparaciones tipo mantenimiento que puede tener un vehículo
         //Columnas: "Numero Planilla", "tipo", "periodo", "Fecha de Salida", "Descripción"
@@ -606,12 +625,12 @@ public class PanelAdVehiculos extends JPanelCustom {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton6;
     private javax.swing.JButton jButtonBorrarVh;
     private javax.swing.JButton jButtonFiltrar;
     private javax.swing.JButton jButtonModificarVh;
     private javax.swing.JButton jButtonNuevoVh;
     private javax.swing.JButton jButtonVerMantenimiento;
+    private javax.swing.JButton jButtonVerPlanilla;
     private javax.swing.JButton jButtonVerPlanillas;
     private javax.swing.JButton jButtonVerRep;
     private javax.swing.JCheckBox jCheckBoxCli;

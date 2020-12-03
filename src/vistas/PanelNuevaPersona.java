@@ -1163,10 +1163,34 @@ public class PanelNuevaPersona extends JPanelCustom {
             }
 
         } else {  //Tengo que desactivar los campos referidos a  Cliente
-            activarDesactivarCasillasDueño(false); //Estoy desactivando una persona que era chofer pero ahora no lo sería
-            //Acá habría que borrar el Cliente y los vehículos¿? ¿y las Planillas asociadas?
+        //Acá habría que borrar el Cliente y los vehículos¿? ¿y las Planillas asociadas?. No se puede borrar un Cliente con Vh asociados
+        //La respuesta anterior responde las 2 preguntas            
+            if(this.jComboBoxCli.getItemCount() == 0){  //Se puede borrar la persona como Cliente. Entiendo que no interfiere en las planillas
+                if(borrarCliente())
+                    activarDesactivarCasillasDueño(false); //Estoy desactivando una persona que era cliente pero ahora deja de serlo   
+            }
+            else{
+                JLabel label = new JLabelAriel("No se puede borrar un Cliente con Vehículos asociados.");
+                JOptionPane.showMessageDialog(null, label, "INFO", JOptionPane.INFORMATION_MESSAGE);
+                this.jCheckBoxCliente.setSelected(true);
+            }
         }
     }//GEN-LAST:event_jCheckBoxClienteActionPerformed
+    
+    private boolean borrarCliente(){
+        // Borro el cliente asociado a la persona
+        boolean valor = false;
+        String query = "DELETE FROM cliente WHERE c.idpersona = '"+this.idPersona+"' ";
+        try{
+            PreparedStatement st = this.controlador.obtenerConexion().prepareStatement(query);
+            st.executeUpdate();
+            valor = true;
+        }catch(SQLException ex){
+            JLabel label = new JLabelAriel("Error al borrar Cliente: "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+        return valor;
+    }
     
     private void jButtonGuardarChoferActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarChoferActionPerformed
         //Action Performed de Guardar Chofer. //Comtempla que el mismo ya exista y halla que actualizar los datos
@@ -1209,7 +1233,7 @@ public class PanelNuevaPersona extends JPanelCustom {
             this.jFrameChofer.dispose();
         } else { //En el lugar del apodo no hay nada y es un dato requerido
             JLabel label = new JLabelAriel("Error al guardar Chofer, el dato APODO es obligatorio");
-            JOptionPane.showMessageDialog(this.jFrameChofer, label, "ATENCIÓN", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this.jFrameChofer, label, "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
     

@@ -135,7 +135,7 @@ public class PanelAdPagos extends JPanelCustom {
         int actual;
         int estadoCC = 0; //Podría usarse en base a días desde que una planilla está impaga. 
         String consulta = "SELECT MIN(pl.fecha_de_salida) FROM planilla as pl INNER JOIN cliente AS c ON c.idcliente = pl.idcliente "
-                + "WHERE pl.entregado = true AND pl.pagado = false AND c.idcliente = '"+idCliente+"' ";
+                + "WHERE pl.facturado = true AND pl.pagado = false AND c.idcliente = '"+idCliente+"' ";
         Connection co = this.controlador.obtenerConexion();
 
         Statement st = co.createStatement();
@@ -656,7 +656,7 @@ public class PanelAdPagos extends JPanelCustom {
                     + "INNER JOIN persona AS per ON per.idpersona = c.idpersona WHERE fdp.tipo = '" + tipo + "' ";
             if (this.jRadioButtonChVencidos.isSelected()) {
                 query += " AND (DATE_PART('day', now()::timestamp - ch.fecha_emision::timestamp) > 30 "
-                        + "OR DATE_PART('day', now()::timestamp - ch.fecha_cobro::timestamp) > 30)";
+                        + "OR DATE_PART('day', now()::timestamp - ch.fecha_cobro::timestamp) > 30) AND ch.cobrado = 'false' ";
             }
         } else {
             query = "SELECT ch.id" + tipo + ", fdp.tipo, ch.monto, per.nombre, per.apellido, ch."+fecha+" FROM forma_de_pago AS fdp "
@@ -750,6 +750,7 @@ public class PanelAdPagos extends JPanelCustom {
         //Cosas a cargar cuando esta vista toma el foco. Ver que conviene:
         String query = this.decidirQuery();
         this.cargarTablaPagos(query);
+        this.cargarLabelCC();
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

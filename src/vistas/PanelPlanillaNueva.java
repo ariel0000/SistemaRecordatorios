@@ -1060,7 +1060,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         Connection co = this.controlador.obtenerConexion();
         //Datos a consultar
         consulta = "SELECT per.nombre, per.apellido, v.marca, v.modelo, v.patente, p.fecha_de_entrada,"
-                + " p.fecha_de_salida, p.pagado, p.descripcion FROM planilla AS p INNER JOIN cliente AS c ON "
+                + " p.fecha_de_salida, p.pagado, p.descripcion, p.entregado FROM planilla AS p INNER JOIN cliente AS c ON "
                 + " p.idcliente = c.idcliente INNER JOIN persona AS per ON per.idpersona = c.idpersona "
                 + "INNER JOIN vehiculo AS v ON v.idvehiculo = p.idvehiculo "
                 + " WHERE p.idplanilla = '" + numero + "'"; //Esta consulta se puede optimizar
@@ -1073,10 +1073,11 @@ public class PanelPlanillaNueva extends JPanelCustom {
                 this.jCheckBoxPagado.setSelected(rs.getBoolean(8));
                 //String fechaHoyArg = new SimpleDateFormat("dd/MM/YYYY", Locale.FRANCE).format(rs.getDate(6));
                 this.jDateChooserEntrada.setDate(rs.getDate(6));
-                this.jDateChooserSalida.setDate(rs.getDate(7)); //Fecha de salida - puede fallar por ser nula?
+                this.jDateChooserSalida.setDate(rs.getDate(7)); //Fecha de salida - puede fallar por ser nula? -NO
                 if(this.jDateChooserSalida.getDate() != null)
-                    this.jCheckBoxFacturado.setSelected(true);
-                this.jTextFieldDescripcion.setText(rs.getString(9));
+                    this.jCheckBoxFacturado.setSelected(true);  //Facturado
+                this.jTextFieldDescripcion.setText(rs.getString(9));  //Descripcion
+                this.jCheckBoxEntregado.setSelected(rs.getBoolean(10)); //Entregado
                 this.jTextFieldDueñoCliente.setText("Cliente: " + nombreApellido);
                 this.jLabelVh.setText(" ,Camión: " + marcaModeloPat);
             }
@@ -1746,6 +1747,8 @@ public class PanelPlanillaNueva extends JPanelCustom {
         // Cuando selecciono facturado pongo la fecha de hoy en "fecha_salida" aunque en realidad es fecha de facturado
         if(this.jCheckBoxFacturado.isSelected())
             this.jDateChooserSalida.setDate(new Date());
+        else
+            this.jDateChooserSalida.setDate(null);
     }//GEN-LAST:event_jCheckBoxFacturadoActionPerformed
 
     /**/

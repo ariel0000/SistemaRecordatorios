@@ -219,6 +219,11 @@ public class PanelReparaciones extends JPanelCustom {
 
         jButtonPlanilla.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jButtonPlanilla.setText("Ver Planilla");
+        jButtonPlanilla.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPlanillaActionPerformed(evt);
+            }
+        });
 
         buttonGroupRep.add(jRadioButtonReparacion);
         jRadioButtonReparacion.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
@@ -405,6 +410,20 @@ public class PanelReparaciones extends JPanelCustom {
         //AP del botón Filtrar. Hay que comprobar cuales de los checkBox de filtros están activados
         filtrarReparaciones();
     }//GEN-LAST:event_jButtonFiltrarActionPerformed
+
+    private void jButtonPlanillaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPlanillaActionPerformed
+        //AP de Ver Planilla
+        int filaSeleccionada;
+        filaSeleccionada = this.jTableVh.getSelectedRow();
+        if(filaSeleccionada != -1){
+          //  int nPlanilla =  //paso el número de planilla
+          //  PanelPlanillaNueva p1 = new PanelPlanillaNueva(nPlanilla); //Acá va el número de planilla
+         //   this.controlador.cambiarDePanel(p1, "Ver/Modificar Planilla");
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Error: debe seleccionar una planilla ");
+        }
+    }//GEN-LAST:event_jButtonPlanillaActionPerformed
 
     public void filtrarReparaciones(){
         //Método que permite "usarse desde afuera" para filtrar las reparaciones o vehículos correspondientes

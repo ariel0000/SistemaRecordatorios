@@ -334,6 +334,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Ver Planilla"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonPlanillaActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JRadioButton" name="jRadioButtonReparacion">
       <Properties>
