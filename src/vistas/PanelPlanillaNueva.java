@@ -303,8 +303,9 @@ public class PanelPlanillaNueva extends JPanelCustom {
                 .addContainerGap())
         );
 
+        jFrameCheque.setPreferredSize(new java.awt.Dimension(578, 467));
         jFrameCheque.setResizable(false);
-        jFrameCheque.setSize(new java.awt.Dimension(555, 480));
+        jFrameCheque.setSize(new java.awt.Dimension(575, 467));
         jFrameCheque.setType(java.awt.Window.Type.POPUP);
 
         jLabel8.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
@@ -414,7 +415,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
                                 .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 384, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jCheckBoxNotificarCh)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 9, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jFrameChequeLayout.setVerticalGroup(
@@ -449,7 +450,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
                 .addGroup(jFrameChequeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCheckBoxNotificarCh)
                     .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, Short.MAX_VALUE)
+                .addGap(18, 32, Short.MAX_VALUE)
                 .addGroup(jFrameChequeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonAgregarCheque)
                     .addComponent(jButtonCancelarCheque))
