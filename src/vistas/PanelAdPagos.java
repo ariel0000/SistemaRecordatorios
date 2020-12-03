@@ -33,7 +33,6 @@ public class PanelAdPagos extends JPanelCustom {
     private ControladorPrincipal controlador;
     
     public PanelAdPagos() {
-        this.controlador = ControladorPrincipal.getInstancia();
         modeloCli = new DefaultTableModel(null, this.getColumnasPagos()) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -42,62 +41,112 @@ public class PanelAdPagos extends JPanelCustom {
             }
         };
         initComponents();
-        this.jTablePagos.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
-  //      this.jTablePlanillas.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
+        iniciarCosasEnComun();
         this.cargarCli("");  //Cargo los Clientes del JComboBox
         this.jRadioButtonCheque.setSelected(true);  //Por defecto muestro los cheques
         this.jTextFieldCC.setEditable(false); 
         String query = this.decidirQuery();
+        
         this.cargarTablaPagos(query);
     }
     
     private String[] getColumnasPagos(){
-        String columnas[] = new String[]{"ID", "Tipo", "Monto",  "Notificar", "Nombre Cliente", "Fecha Emisión/Pago"};
+        String columnas[] = new String[]{"ID", "Cobrado", "Monto", "Fecha Emisión", "Fecha Cobro", "Notificar", "Nombre del Cliente"};
         
         return columnas;
+    }
+    
+    private void iniciarCosasEnComun(){
+        //Método que carga datos e info común a todos los constructores de la vista (Por ahora tenemos solo 1)
+        this.controlador = ControladorPrincipal.getInstancia();
+        this.jTablePagos.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
+  //      this.jTablePlanillas.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
+        this.jTablePagos.getColumnModel().getColumn(0).setMinWidth(80);
+        this.jTablePagos.getColumnModel().getColumn(0).setMaxWidth(100);
+        this.jTablePagos.getColumnModel().getColumn(1).setMinWidth(80);  //La descripción
+        this.jTablePagos.getColumnModel().getColumn(1).setMaxWidth(110);  //La descripción
+        this.jTablePagos.getColumnModel().getColumn(2).setMaxWidth(130);
+        this.jTablePagos.getColumnModel().getColumn(2).setMinWidth(100);
+        this.jTablePagos.getColumnModel().getColumn(5).setMaxWidth(160);
+        this.jTablePagos.getColumnModel().getColumn(5).setMinWidth(120);
+        this.jTablePagos.getColumnModel().getColumn(6).setMinWidth(350);
+  //      this.jTablePagos.getColumnModel().getColumn(6).setMaxWidth(480);
+        
     }
     
     private void cargarTablaPagos(String query){
         // Carga la tabla de pagos según query
         DefaultTableModel dtm = (DefaultTableModel) this.jTablePagos.getModel();
         dtm.setRowCount(0);  //Magicamente anduvo y sirve para eliminar las filas de la tabla
-        Object [] datos = new String[6];
-        int i = 0, y = 0;  //La i para el Array de Objetos y la 'y' para el consultar el query
+
+        if(this.jRadioButtonCheque.isSelected())
+            cargarTablaConCheques(query);
+        else
+            cargarTablaConContado(query);  //Carga la tabla con pagos al contado
+      
+        this.jTablePagos.updateUI();
+    }
+    
+    private void cargarTablaConCheques(String query){
+        //Método que carga la tabla con cheques - Debe cambiar las columnas de la misma (la tabla).
+        //ID", "Cobrado", "Monto", "Fecha Emisión", "Fecha Cobro", "Notificar", "Nombre del Cliente
+        
+        Object [] datos = new String[7];
         try {
             //Método para cargar la tabla de pagos cuando se carga la vista o cuando se filtra. Solo elije el query correspondiente
             Statement st = this.controlador.obtenerConexion().createStatement();
             ResultSet rs = st.executeQuery(query);
             while(rs.next()){
-                i = 0;
-                y = 0;
-                datos[i] = ""+rs.getInt(y+1);  //id
-                i++; y++;
-                datos[i] = rs.getString(y+1);  //tipo
-                i++; y++;
-                datos[i] = ""+rs.getLong(y+1);  //monto
-                i++; y++;
-                if(!this.jRadioButtonContado.isSelected()){  //No es un query de contado, hay consulta de notificar
-                    if(rs.getBoolean(y+1))  //notificar (buleano)
-                        datos[i] = "Sí";
-                    else
-                        datos[i] = "No";
-                    i++; y++;            
-                }
-                else{
-                    datos[i] = "No se usa";
-                    i++;
-                }
-                datos[i] = rs.getString(y+1)+" "+rs.getString(y+2);  //Nombre y apellido
-                i++; y = y + 2;
-                datos[i] = ""+rs.getDate(y+1);  //El y+1 termina siendo una unidad menor al i cuando la consulta es de pagos al contado
+                datos[0] = ""+rs.getInt(1);
+                if(rs.getBoolean(2))  //Cobrado
+                    datos[1] = "SI";
+                else
+                    datos[1] = "NO";
+                datos[2] = ""+rs.getLong(3);   //Monto
+                datos[3] = ""+rs.getDate(4);  //Fecha Emisión
+                datos[4] = ""+rs.getDate(5);  //Fecha Cobro
+                if(rs.getBoolean(6))  //Notificar
+                    datos[5] = "SI";
+                else
+                    datos[5] = "NO";
+                datos[6] = rs.getString(7)+" "+rs.getString(8);  //Nombre y Apellido
+                
                 this.modeloCli.addRow(datos);
             }
         } catch (SQLException ex) {
             JLabel label = new JLabelAriel("Error al cargar Pagos en la Tabla: " + ex.getMessage());
             JOptionPane.showMessageDialog(null, label, "ERROR!", JOptionPane.WARNING_MESSAGE);  
         }
-        this.jTablePagos.updateUI();
     }
+    
+    private void cargarTablaConContado(String query){
+        //Método que carga la tabla con pagos al contado - Debe cambiar las columnas de la misma(la Tabla).
+        //Método que carga la tabla con cheques - Debe cambiar las columnas de la misma (la tabla).
+        //ID", "Cobrado", "Monto", "Fecha Emisión", "Fecha Cobro", "Notificar", "Nombre del Cliente
+        Object [] datos = new String[7];
+        try {
+            //Método para cargar la tabla de pagos cuando se carga la vista o cuando se filtra. Solo elije el query correspondiente
+            Statement st = this.controlador.obtenerConexion().createStatement();
+            ResultSet rs = st.executeQuery(query);
+            //ch.id, ch.monto, ch."+fecha+", per.nombre, per.apellido
+            while(rs.next()){
+                datos[0] = ""+rs.getInt(1); //ID
+                datos[1] = "SI";  //Cobrado - Siempre sí para contado
+                datos[2] = ""+rs.getLong(2);   //Monto
+                datos[3] = "-"; //Fecha Emisión
+                datos[4] = ""+rs.getDate(3);  //Fecha Cobro
+                datos[5] = "No se usa";
+                datos[6] = rs.getString(4)+" "+rs.getString(5);  //Nombre y Apellido
+                
+                this.modeloCli.addRow(datos);
+            }
+        } catch (SQLException ex) {
+            JLabel label = new JLabelAriel("Error al cargar Pagos en la Tabla: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR!", JOptionPane.WARNING_MESSAGE);  
+        }
+        
+    }
+    
    /* 
     private void cargarTablaPago(String query){
         // Método que carga en la tabla el/los Clientes desde la Base de datos.
@@ -649,8 +698,9 @@ public class PanelAdPagos extends JPanelCustom {
         {
             tipo = "cheque";
             fecha = "fecha_emision";
-            //tipo puede ser contado o cheque
-            query = "SELECT ch.id" + tipo + ", fdp.tipo, ch.monto, ch.notificar, per.nombre, per.apellido, ch."+fecha+" "
+            //ID", "Cobrado", "Monto", "Fecha Emisión", "Fecha Cobro", "Notificar", "Nombre del Cliente
+            //tipo puede ser contado o cheque - soy un tontinio, acá siempre es cheque - igual queda
+            query = "SELECT ch.id" + tipo + ", ch.cobrado, ch.monto, ch."+fecha+", ch.fecha_cobro, ch.notificar, per.nombre, per.apellido "
                     + "FROM forma_de_pago AS fdp INNER JOIN " + tipo + " AS ch ON ch.idforma_de_pago = fdp.idforma_de_pago INNER JOIN "
                     + "planilla AS p ON fdp.idplanilla = p.idplanilla INNER JOIN cliente AS c ON p.idcliente = c.idcliente "
                     + "INNER JOIN persona AS per ON per.idpersona = c.idpersona WHERE fdp.tipo = '" + tipo + "' ";
@@ -658,8 +708,8 @@ public class PanelAdPagos extends JPanelCustom {
                 query += " AND (DATE_PART('day', now()::timestamp - ch.fecha_emision::timestamp) > 30 "
                         + "OR DATE_PART('day', now()::timestamp - ch.fecha_cobro::timestamp) > 30) AND ch.cobrado = 'false' ";
             }
-        } else {
-            query = "SELECT ch.id" + tipo + ", fdp.tipo, ch.monto, per.nombre, per.apellido, ch."+fecha+" FROM forma_de_pago AS fdp "
+        } else { ////ID", "Cobrado", "Monto", "Fecha Emisión", "Fecha Cobro", "Notificar", "Nombre del Cliente
+            query = "SELECT ch.id" + tipo + ", ch.monto, ch."+fecha+", per.nombre, per.apellido FROM forma_de_pago AS fdp "
                     + "INNER JOIN " + tipo + " AS ch ON ch.idforma_de_pago = fdp.idforma_de_pago INNER JOIN planilla AS p ON "
                     + "fdp.idplanilla = p.idplanilla INNER JOIN cliente AS c ON p.idcliente = c.idcliente INNER JOIN persona AS per "
                     + "ON per.idpersona = c.idpersona WHERE (fdp.tipo = '" + tipo + "') ";
