@@ -59,7 +59,7 @@ public class PanelReparaciones extends JPanelCustom {
     }
     
     private String[] getColumnas() { 
-        String columna[] = new String[]{"Marca y Modelo", "Descripción de Reparación", "completada", "tipo", "periodo (Meses)", "Fecha Terminado"};
+        String columna[] = new String[]{"Marca y Modelo", "Descripción de Reparación", "completada", "tipo", "periodo (Meses)", "Fecha Terminado", "idPlanilla"};
         return columna;
     }
     /**
@@ -364,8 +364,9 @@ public class PanelReparaciones extends JPanelCustom {
         this.jTableVh.getColumnModel().getColumn(4).setMinWidth(130);
         this.jTableVh.getColumnModel().getColumn(5).setMinWidth(230);        
         //..
-        String query = "SELECT v.marca, v.modelo, r.descripcion, r.completada, r.tipo, r.fecha_terminado, r.periodo FROM reparacion AS r "
-                + " INNER JOIN planilla AS p ON p.idplanilla = r.idplanilla INNER JOIN vehiculo AS v ON v.idvehiculo = p.idvehiculo";
+        String query = "SELECT v.marca, v.modelo, r.descripcion, r.completada, r.tipo, r.fecha_terminado, r.periodo, p.idplanilla"
+                + " FROM reparacion AS r INNER JOIN planilla AS p ON p.idplanilla = r.idplanilla INNER JOIN vehiculo AS v "
+                + "ON v.idvehiculo = p.idvehiculo";
         this.cargarReparaciones(query);
         this.cargarVh("");
         this.jLabelVh.setVisible(false);  //No muestro el Label del Vh.
@@ -379,13 +380,14 @@ public class PanelReparaciones extends JPanelCustom {
         // Método que se llama desde un constructor especial para un vehículo específico y con mantención
         this.jCheckBoxVh.setSelected(true);
         this.jRadioButtonMantenimiento.setSelected(true);
+        this.jCheckBoxTipoRep.setSelected(true);
         for(int i = 0; i < this.jComboBoxVh.getItemCount(); i++){
             if(this.jComboBoxVh.getItemAt(i).getKey().equals(""+idCamion)){
                 this.jComboBoxVh.setSelectedIndex(i);
                 break;
             }
         }
-        String query = "SELECT v.marca, v.modelo, r.descripcion, r.completada, r.tipo, r.fecha_terminado, r.periodo FROM reparacion AS r "
+        String query = "SELECT v.marca, v.modelo, r.descripcion, r.completada, r.tipo, r.fecha_terminado, r.periodo, p.idplanilla FROM reparacion AS r "
                 + " INNER JOIN planilla AS p ON p.idplanilla = r.idplanilla INNER JOIN vehiculo AS v ON v.idvehiculo = p.idvehiculo"
                 + " WHERE p.idvehiculo = '"+idCamion+"' AND r.tipo = 'mantenimiento' ";
         this.cargarReparaciones(query);
@@ -416,9 +418,9 @@ public class PanelReparaciones extends JPanelCustom {
         int filaSeleccionada;
         filaSeleccionada = this.jTableVh.getSelectedRow();
         if(filaSeleccionada != -1){
-          //  int nPlanilla =  //paso el número de planilla
-          //  PanelPlanillaNueva p1 = new PanelPlanillaNueva(nPlanilla); //Acá va el número de planilla
-         //   this.controlador.cambiarDePanel(p1, "Ver/Modificar Planilla");
+            int nPlanilla = Integer.valueOf(this.modelo.getValueAt(filaSeleccionada, 6)+"");
+            PanelPlanillaNueva p1 = new PanelPlanillaNueva(nPlanilla); //Acá va el número de planilla
+            this.controlador.cambiarDePanel(p1, "Ver/Modificar Planilla");
         }
         else{
             JOptionPane.showMessageDialog(null, "Error: debe seleccionar una planilla ");
@@ -427,7 +429,7 @@ public class PanelReparaciones extends JPanelCustom {
 
     public void filtrarReparaciones(){
         //Método que permite "usarse desde afuera" para filtrar las reparaciones o vehículos correspondientes
-    String query = "SELECT v.marca, v.modelo, r.descripcion, r.completada, r.tipo, r.fecha_terminado, r.periodo FROM vehiculo AS v INNER JOIN planilla AS p "
+    String query = "SELECT v.marca, v.modelo, r.descripcion, r.completada, r.tipo, r.fecha_terminado, r.periodo, p.idplanilla FROM vehiculo AS v INNER JOIN planilla AS p "
                 + "ON p.idvehiculo = v.idvehiculo INNER JOIN reparacion AS r ON r.idplanilla = p.idplanilla ";
         int i = 0;
         if(this.jCheckBoxTipoRep.isSelected()){
@@ -466,7 +468,7 @@ public class PanelReparaciones extends JPanelCustom {
         //Descripción de Reparación", "completada", "tipo", "periodo", "Fecha Terminada
         DefaultTableModel dtm = (DefaultTableModel) this.jTableVh.getModel();
         dtm.setRowCount(0);  //Magicamente anduvo y sirve para eliminar las filas de la tabla
-        Object datos[] = new String[6];
+        Object datos[] = new String[7];
         datos[1] = "No";
         try {
             Statement st = this.controlador.obtenerConexion().createStatement();
@@ -489,9 +491,12 @@ public class PanelReparaciones extends JPanelCustom {
                     datos[4] = "-";  //No hay periódo para una reparación común
                 else
                     datos[4] = "" + rs.getInt(7);  //Periodo
+                datos[6] = ""+rs.getInt(8);
                 this.modelo.addRow(datos);
                 this.jTableVh.updateUI();
             }
+            this.jTableVh.removeColumn(this.jTableVh.getColumnModel().getColumn(6));  //Borro de la vista la columna "idPlanilla" peeero
+            // se puede obtener su dato dsps
         } catch (SQLException ex) {
             JLabel label = new JLabelAriel("Error al cargar Reparaciones en la Tabla: " + ex.getMessage());
             JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);      

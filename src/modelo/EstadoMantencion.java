@@ -17,7 +17,7 @@ public class EstadoMantencion extends Estado{
     public void cargarNotifificaciones() {
         super.getControlador().getPanelPrincipal().borrarTabla();
         ArrayList mantenciones = super.getControlador().getPanelPrincipal().cargarMantenciones(); //
-        super.getControlador().getPanelPrincipal().cargarNotificadoresATabla(mantenciones); 
+        super.getControlador().getPanelPrincipal().cargarNotificadores(mantenciones); 
     }
     
 }

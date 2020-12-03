@@ -17,7 +17,7 @@ public class EstadoPlanilla extends Estado{
     public void cargarNotifificaciones() {
         super.getControlador().getPanelPrincipal().borrarTabla();
         ArrayList planillas = super.getControlador().getPanelPrincipal().cargarPlanillasImpagas(); //
-        super.getControlador().getPanelPrincipal().cargarNotificadoresATabla(planillas);
+        super.getControlador().getPanelPrincipal().cargarNotificadores(planillas);
     }
     
 }

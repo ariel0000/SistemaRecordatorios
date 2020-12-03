@@ -17,7 +17,7 @@ public class EstadoReparacion extends Estado{
     public void cargarNotifificaciones() {
         super.getControlador().getPanelPrincipal().borrarTabla();
         ArrayList reparaciones = super.getControlador().getPanelPrincipal().cargarReparaciones(); //
-        super.getControlador().getPanelPrincipal().cargarNotificadoresATabla(reparaciones);        
+        super.getControlador().getPanelPrincipal().cargarNotificadores(reparaciones);        
     }
     
 }

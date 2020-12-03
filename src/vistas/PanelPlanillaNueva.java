@@ -144,13 +144,10 @@ public class PanelPlanillaNueva extends JPanelCustom {
         jButtonAceptarDeudas = new javax.swing.JButton();
         jLabel19 = new javax.swing.JLabel();
         jTextFieldMontoPagado = new javax.swing.JTextField();
-        jLabel20 = new javax.swing.JLabel();
-        jDateChooserFEntrega = new com.toedter.calendar.JDateChooser();
-        jLabel17 = new javax.swing.JLabel();
-        jLabel21 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
         jTextFieldACobrar = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         buttonGroupNPago = new javax.swing.ButtonGroup();
         jFrameInfo = new javax.swing.JFrame();
         jLabel24 = new javax.swing.JLabel();
@@ -303,7 +300,6 @@ public class PanelPlanillaNueva extends JPanelCustom {
                 .addContainerGap())
         );
 
-        jFrameCheque.setPreferredSize(new java.awt.Dimension(578, 467));
         jFrameCheque.setResizable(false);
         jFrameCheque.setSize(new java.awt.Dimension(575, 467));
         jFrameCheque.setType(java.awt.Window.Type.POPUP);
@@ -490,26 +486,16 @@ public class PanelPlanillaNueva extends JPanelCustom {
 
         jTextFieldMontoPagado.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
 
-        jLabel20.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel20.setText("Fecha de Entrega:");
-
-        jDateChooserFEntrega.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
-        jDateChooserFEntrega.setMinimumSize(new java.awt.Dimension(155, 27));
-
-        jLabel17.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel17.setText("Estado de Cuenta Corriente:");
-
-        jLabel21.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel21.setForeground(new java.awt.Color(255, 0, 0));
-        jLabel21.setText("45 días sin pagar");
-
         jLabel22.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel22.setText("Monto a Cobrar (Cheques):");
 
         jTextFieldACobrar.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel1.setText("*El \"Total Recibido\" incluye los cheques que aún no fueron cobrados");
+        jLabel1.setText("Información acerca de los importes y pagos");
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel3.setText("*El \"Total Recibido\" incluye los cheques que aún no fueron cobrados");
 
         javax.swing.GroupLayout jFrameEstadoPagosLayout = new javax.swing.GroupLayout(jFrameEstadoPagos.getContentPane());
         jFrameEstadoPagos.getContentPane().setLayout(jFrameEstadoPagosLayout);
@@ -522,15 +508,9 @@ public class PanelPlanillaNueva extends JPanelCustom {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButtonAceptarDeudas))
                     .addGroup(jFrameEstadoPagosLayout.createSequentialGroup()
-                        .addGroup(jFrameEstadoPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel20))
+                        .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jFrameEstadoPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldImporteTotal)
-                            .addGroup(jFrameEstadoPagosLayout.createSequentialGroup()
-                                .addComponent(jDateChooserFEntrega, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                        .addComponent(jTextFieldImporteTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE))
                     .addGroup(jFrameEstadoPagosLayout.createSequentialGroup()
                         .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(123, 123, 123)
@@ -544,24 +524,22 @@ public class PanelPlanillaNueva extends JPanelCustom {
                         .addGap(18, 18, 18)
                         .addComponent(jTextFieldACobrar)))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrameEstadoPagosLayout.createSequentialGroup()
-                .addContainerGap(25, Short.MAX_VALUE)
-                .addGroup(jFrameEstadoPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addGroup(jFrameEstadoPagosLayout.createSequentialGroup()
-                        .addComponent(jLabel17)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel21)))
-                .addGap(172, 172, 172))
+            .addGroup(jFrameEstadoPagosLayout.createSequentialGroup()
+                .addGap(189, 189, 189)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jFrameEstadoPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jFrameEstadoPagosLayout.createSequentialGroup()
+                    .addGap(33, 33, 33)
+                    .addComponent(jLabel3)
+                    .addContainerGap(164, Short.MAX_VALUE)))
         );
         jFrameEstadoPagosLayout.setVerticalGroup(
             jFrameEstadoPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jFrameEstadoPagosLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jFrameEstadoPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel20)
-                    .addComponent(jDateChooserFEntrega, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel1)
+                .addGap(24, 24, 24)
                 .addGroup(jFrameEstadoPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextFieldImporteTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -577,15 +555,14 @@ public class PanelPlanillaNueva extends JPanelCustom {
                 .addGroup(jFrameEstadoPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel22)
                     .addComponent(jTextFieldACobrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(13, 13, 13)
-                .addGroup(jFrameEstadoPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel21)
-                    .addComponent(jLabel17))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
                 .addComponent(jButtonAceptarDeudas)
                 .addContainerGap())
+            .addGroup(jFrameEstadoPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrameEstadoPagosLayout.createSequentialGroup()
+                    .addContainerGap(278, Short.MAX_VALUE)
+                    .addComponent(jLabel3)
+                    .addGap(58, 58, 58)))
         );
 
         jFrameInfo.setAlwaysOnTop(true);
@@ -796,7 +773,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         });
 
         jFrameDeudaPlanilla.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jFrameDeudaPlanilla.setText("Ver Estado de CC");
+        jFrameDeudaPlanilla.setText("Balance de la Planilla");
         jFrameDeudaPlanilla.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jFrameDeudaPlanillaActionPerformed(evt);
@@ -924,7 +901,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
                         .addComponent(jButtonPagoCheque)
                         .addGap(10, 10, 10)
                         .addComponent(jFrameDeudaPlanilla)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
                         .addComponent(jButtonCancel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButtonGuardar))
@@ -2013,7 +1990,6 @@ public class PanelPlanillaNueva extends JPanelCustom {
     private com.toedter.calendar.JDateChooser jDateChooserChEmision;
     private com.toedter.calendar.JDateChooser jDateChooserContado;
     private com.toedter.calendar.JDateChooser jDateChooserEntrada;
-    private com.toedter.calendar.JDateChooser jDateChooserFEntrega;
     private com.toedter.calendar.JDateChooser jDateChooserSalida;
     private javax.swing.JFrame jFrameCheque;
     private javax.swing.JFrame jFrameContado;
@@ -2028,12 +2004,9 @@ public class PanelPlanillaNueva extends JPanelCustom {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
@@ -2042,6 +2015,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

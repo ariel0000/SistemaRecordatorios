@@ -439,6 +439,13 @@ public class PanelPrincipal extends JPanelCustom {
         cargarNotificadoresATabla(this.notificaciones);
     }
 
+    public void cargarNotificadores(ArrayList<Notificador> arrai){
+        //Sobrecarga en el método. Este es llamado desde los estados para filtrar las notifcaciones y pasar a tabla las que el estado indique
+        this.notificaciones = new ArrayList<>(); //Primero borro todas las notificaciones actuales.
+        this.notificaciones = arrai;
+        cargarNotificadoresATabla(this.notificaciones);
+    }
+    
     public ArrayList cargarCheques() {
         // Carga los cheques que están listos para cobrar, los que tienen menos días para cobrar tienen más prioridad
         ArrayList<Notificador> chequesComunes, chequesDiferidos, todosLosCheques;
@@ -455,6 +462,7 @@ public class PanelPrincipal extends JPanelCustom {
         LocalDate fechaHoy = LocalDate.now();
         ArrayList<Notificador> chequesComunes = new ArrayList<>();
         LocalDate fechaEmision;
+        String variable = "";
         String nombre, apellido;
         int prioridad;
         //Query para cargar los cheques sin fecha de cobro. Estos se pueden cobrar 30 días después de emitidos
@@ -470,12 +478,16 @@ public class PanelPrincipal extends JPanelCustom {
                 Date fecha = new Date(rs.getDate(2).getTime());
                 fechaEmision = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); //Si lo pasaba directamente explota
                 prioridad = (int) DAYS.between(fechaEmision, fechaHoy); //Mas días --> más prioridad
-                if(prioridad > 30)
+                if(prioridad > 30){
                     prioridad = 30;
+                    variable = "Vencido";
+                }
+                else
+                    variable = "a cobrar";
                 nombre = rs.getString(4);
                 apellido = rs.getString(5);
                 Cheque cheque = new Cheque(rs.getInt(1), prioridad, rs.getLong(3), "cheque",
-                        "Cheque Pago inmediato sin cobrar. monto: "+rs.getLong(6), nombre, apellido); //idcheque, prioridad, numeroDeCheque
+                        "Cheque Pago inmediato "+variable+". monto: "+rs.getLong(6), nombre, apellido); //idcheque, prioridad, numeroDeCheque
                 chequesComunes.add(cheque);  //Se cargan primero los que tienen más prioridad
             }
         } catch (SQLException ex) {
@@ -491,8 +503,9 @@ public class PanelPrincipal extends JPanelCustom {
         String nombre, apellido;
         ArrayList<Notificador> chequesComunes = new ArrayList<>();
         LocalDate fechaCobro;
+        String variable = "";
         int prioridad;
-        //Query para cargar los cheques sin fecha de cobro. Estos se pueden cobrar 30 días después de emitidos
+        //Este cheque se puede cobrar dentro de los 30 días posteriores a la fecha de cobro indicada
         String query = "SELECT k.idcheque, k.fecha_cobro, k.numerocheque, p.nombre, p.apellido, k.monto FROM cheque AS k NATURAL JOIN "
                 + "forma_de_pago AS f INNER JOIN planilla AS pl ON pl.idplanilla = f.idplanilla INNER JOIN cliente AS c ON "
                 + "pl.idcliente = c.idcliente INNER JOIN persona as p ON c.idpersona = p.idpersona WHERE cobrado = false AND "
@@ -505,12 +518,16 @@ public class PanelPrincipal extends JPanelCustom {
                 Date fecha = new Date(rs.getDate(2).getTime());
                 fechaCobro = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 prioridad = (int) DAYS.between(fechaCobro, fechaHoy);
-                if(prioridad > 30)
+                if(prioridad > 30){
                     prioridad = 30;
+                    variable = "Vencido";
+                }
+                else
+                    variable = "sin cobrar";
                 nombre = rs.getString(4);
                 apellido = rs.getString(5);
                 Cheque cheque = new Cheque(rs.getInt(1), prioridad, rs.getLong(3), "cheque",
-                        "Cheque Pago Diferido sin Cobrar. monto:"+rs.getLong(6), nombre, apellido);
+                        "Cheque Pago Diferido "+variable+". monto:"+rs.getLong(6), nombre, apellido);
                 chequesComunes.add(cheque);  //Se cargan primero los que tienen más prioridad
             }
         } catch (SQLException ex) {
@@ -678,6 +695,7 @@ public class PanelPrincipal extends JPanelCustom {
     
     private void jButtonFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFiltrarActionPerformed
         // Action Performed de Filtrar Planillas. Debería cargar las planillas con respecto al jRadioButton Seleccionado
+        this.notificaciones = new ArrayList<>();
         this.estado.cargarNotifificaciones(); 
     }//GEN-LAST:event_jButtonFiltrarActionPerformed
 
@@ -711,7 +729,7 @@ public class PanelPrincipal extends JPanelCustom {
         int filaSelect = this.jTableNotificaciones.getSelectedRow();
         if (filaSelect != -1) {
             Notificador notif;
-            notif = this.notificaciones.get(filaSelect);  //Obtengo la notificacion seleccionada
+            notif = this.notificaciones.get(filaSelect);  //Obtengo la notificacion en base a la indexación del Array equivalente con la fila
             //idNotif = Integer.valueOf((String) this.jTableNotificaciones.getValueAt(filaSelect, 0)); //El id de la notificación
             notif.verNotificacion(); //No importa el tipo de notificación la misma es llamada mediante la clase padre abstracta
         }

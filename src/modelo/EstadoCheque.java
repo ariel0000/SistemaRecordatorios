@@ -17,7 +17,7 @@ public class EstadoCheque extends Estado{
     public void cargarNotifificaciones() {
         super.getControlador().getPanelPrincipal().borrarTabla();
         ArrayList cheques = super.getControlador().getPanelPrincipal().cargarCheques(); //
-        super.getControlador().getPanelPrincipal().cargarNotificadoresATabla(cheques);
+        super.getControlador().getPanelPrincipal().cargarNotificadores(cheques);
     }
     
 }
