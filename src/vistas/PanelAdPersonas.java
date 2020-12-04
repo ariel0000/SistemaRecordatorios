@@ -59,7 +59,7 @@ public class PanelAdPersonas extends JPanelCustom {
         dtm.setRowCount(0);  //Magicamente anduvo y sirve para eliminar las filas de la tabla
         String datos[] = new String[7];  //Tipo, Descripción, Patente
         String consulta = "SELECT p.idpersona, p.nombre, p.apellido, c.idchofer, cl.idcliente, cl.cuil FROM persona AS p "
-                + "left join chofer AS c on p.idpersona = c.idpersona left join cliente AS cl ON cl.idpersona = p.idpersona";
+              + "left join chofer AS c on p.idpersona = c.idpersona left join cliente AS cl ON cl.idpersona = p.idpersona ORDER BY p.nombre";
         //Con esta consulta estoy mostrando todas las personas y si son clientes y/o choferes
         try {
             Statement st = this.controlador.obtenerConexion().createStatement();
@@ -168,7 +168,7 @@ public class PanelAdPersonas extends JPanelCustom {
         jTextField1.setAutoscrolls(false);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel1.setText("* Las planillas impagas son las que después de la entrega del vehículo se está esperando que sean saldadas por el Cliente");
+        jLabel1.setText("* Las planillas impagas son las que después de facturada la misma se está esperando que sean saldadas por el Cliente");
 
         jButtonEliminarPer.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jButtonEliminarPer.setText("Eliminar");

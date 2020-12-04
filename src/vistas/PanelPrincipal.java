@@ -827,7 +827,7 @@ public class PanelPrincipal extends JPanelCustom {
     @Override
     public void onFocus() {
         //¿Tendrían que cargarse las notificaciones de la Tabla? - Someday
-        this.borrarTabla();  //Es para probar el método
-        this.cargarNotificadores();  //Si cambio algún notificador se podrá notar por esta recarga y el borrado anterior de la tabla
+        this.notificaciones = new ArrayList<>();
+        this.estado.cargarNotifificaciones(); 
     }
 }

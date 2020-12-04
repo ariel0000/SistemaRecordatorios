@@ -60,7 +60,7 @@ public class PanelVerPlanillas extends JPanelCustom {
     }
     
     private String[] getColumnas() { 
-        String columna[] = new String[]{"N°", "F. Entrada", "Impaga", "Facturado", " Cliente ", "  Vehículo  ", "    Descripcion    "};
+        String columna[] = new String[]{"N°", "Fecha de Entrada", "Impaga", "Facturado", " Cliente ", "  Vehículo  ", "      Descripcion     "};
         return columna;
     }
 
@@ -443,10 +443,17 @@ public class PanelVerPlanillas extends JPanelCustom {
         this.jTablePlanillas.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
         modelo.setColumnIdentifiers(getColumnas());
         this.controlador = ControladorPrincipal.getInstancia();
-        this.jTablePlanillas.getColumnModel().getColumn(0).setPreferredWidth(2);
-        this.jTablePlanillas.getColumnModel().getColumn(1).setPreferredWidth(40);
-        this.jTablePlanillas.getColumnModel().getColumn(2).setPreferredWidth(20);
-        this.jTablePlanillas.getColumnModel().getColumn(6).setPreferredWidth(600); //La descrición
+        this.jTablePlanillas.getColumnModel().getColumn(0).setMinWidth(40);
+        this.jTablePlanillas.getColumnModel().getColumn(0).setMaxWidth(80);
+        this.jTablePlanillas.getColumnModel().getColumn(1).setMinWidth(130);
+        this.jTablePlanillas.getColumnModel().getColumn(1).setMaxWidth(230);
+        this.jTablePlanillas.getColumnModel().getColumn(2).setMinWidth(65);
+        this.jTablePlanillas.getColumnModel().getColumn(2).setMaxWidth(90);
+        this.jTablePlanillas.getColumnModel().getColumn(3).setMinWidth(130);
+        this.jTablePlanillas.getColumnModel().getColumn(3).setMaxWidth(230);
+        this.jTablePlanillas.getColumnModel().getColumn(4).setMinWidth(150);
+        this.jTablePlanillas.getColumnModel().getColumn(5).setMinWidth(250);
+        this.jTablePlanillas.getColumnModel().getColumn(6).setMinWidth(620); //La descrición
         cargarClientes(); //Cargo los clientes en el ComboBox
         cargarCamiones();
         //La fecha no se puede modificar a mano - configuración en la línea de abajo

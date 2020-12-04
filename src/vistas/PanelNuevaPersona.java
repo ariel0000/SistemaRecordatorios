@@ -1180,7 +1180,7 @@ public class PanelNuevaPersona extends JPanelCustom {
     private boolean borrarCliente(){
         // Borro el cliente asociado a la persona
         boolean valor = false;
-        String query = "DELETE FROM cliente WHERE c.idpersona = '"+this.idPersona+"' ";
+        String query = "DELETE FROM cliente AS c WHERE c.idpersona = '"+this.idPersona+"' ";
         try{
             PreparedStatement st = this.controlador.obtenerConexion().prepareStatement(query);
             st.executeUpdate();

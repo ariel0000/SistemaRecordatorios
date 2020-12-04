@@ -356,13 +356,7 @@ public class PanelReparaciones extends JPanelCustom {
     private void iniciarCosasEnComun(){
         // Junta funcionalidad común a los diferentes contructores que pueda haber
         this.controlador = ControladorPrincipal.getInstancia();
-        this.jTableVh.getColumnModel().getColumn(0).setMinWidth(220);
-        this.jTableVh.getColumnModel().getColumn(1).setMinWidth(520);  //La descripción
-        this.jTableVh.getColumnModel().getColumn(2).setMaxWidth(140);
-        this.jTableVh.getColumnModel().getColumn(2).setMinWidth(95);
-        this.jTableVh.getColumnModel().getColumn(3).setMinWidth(140);
-        this.jTableVh.getColumnModel().getColumn(4).setMinWidth(130);
-        this.jTableVh.getColumnModel().getColumn(5).setMinWidth(230);        
+        this.ajustarColumnasDeTabla();
         //..
         String query = "SELECT v.marca, v.modelo, r.descripcion, r.completada, r.tipo, r.fecha_terminado, r.periodo, p.idplanilla"
                 + " FROM reparacion AS r INNER JOIN planilla AS p ON p.idplanilla = r.idplanilla INNER JOIN vehiculo AS v "
@@ -463,6 +457,19 @@ public class PanelReparaciones extends JPanelCustom {
         return " v.idvehiculo = '"+idVh+"' ";
     }
         
+    private void ajustarColumnasDeTabla(){
+        //Ajusta los tamaños de las columnas de la tabla
+        this.jTableVh.getColumnModel().getColumn(0).setMinWidth(220);
+        this.jTableVh.getColumnModel().getColumn(1).setMinWidth(520);  //La descripción
+        this.jTableVh.getColumnModel().getColumn(2).setMaxWidth(140);
+        this.jTableVh.getColumnModel().getColumn(2).setMinWidth(95);
+        this.jTableVh.getColumnModel().getColumn(3).setMinWidth(140);
+        this.jTableVh.getColumnModel().getColumn(4).setMinWidth(130);
+        this.jTableVh.getColumnModel().getColumn(5).setMinWidth(230);
+        this.jTableVh.removeColumn(this.jTableVh.getColumnModel().getColumn(6));  //Borro de la vista la columna "idPlanilla" peeero
+        //se puede consultar la misma desde el modelo. Esto se ejecuta una sola vez (es la idea).
+    }
+    
     private void cargarReparaciones(String query){
         //Carga las reparaciones segun el query pasado por parámetro
         //Descripción de Reparación", "completada", "tipo", "periodo", "Fecha Terminada
@@ -495,8 +502,7 @@ public class PanelReparaciones extends JPanelCustom {
                 this.modelo.addRow(datos);
                 this.jTableVh.updateUI();
             }
-            this.jTableVh.removeColumn(this.jTableVh.getColumnModel().getColumn(6));  //Borro de la vista la columna "idPlanilla" peeero
-            // se puede obtener su dato dsps
+            // se puede obtener su dato dsps. Surge el error de borrarse aparentemente 2 veces.
         } catch (SQLException ex) {
             JLabel label = new JLabelAriel("Error al cargar Reparaciones en la Tabla: " + ex.getMessage());
             JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);      
