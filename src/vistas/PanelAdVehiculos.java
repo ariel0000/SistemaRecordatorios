@@ -463,7 +463,8 @@ public class PanelAdVehiculos extends JPanelCustom {
             this.controlador.cambiarDePanel(p1, "Ver/Modificar Planilla");
         }
         else{
-            JOptionPane.showMessageDialog(null, "Error: debe seleccionar una planilla ");
+            JLabelAriel label2 = new JLabelAriel("Debe seleccionar una fila de la Tabla");
+            JOptionPane.showMessageDialog(null, label2, "ERROR", JOptionPane.WARNING_MESSAGE);  
         }
     }//GEN-LAST:event_jButtonVerPlanillaActionPerformed
 

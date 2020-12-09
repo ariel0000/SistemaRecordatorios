@@ -1425,7 +1425,8 @@ public class PanelPlanillaNueva extends JPanelCustom {
             ps.setBoolean(11, this.jCheckBoxNotificar.isSelected());  //Notificar
             int executeUpdate = ps.executeUpdate();
             co.commit(); //Ahora si se acepta que anduvo bien
-            JOptionPane.showMessageDialog(null, "Guardado con éxito");
+            JLabel label = new JLabelAriel("Guardado con éxito");
+            JOptionPane.showMessageDialog(null, label, "INFO", JOptionPane.INFORMATION_MESSAGE);
             this.jButtonGuardar.setText("Actualizar");
         } catch (SQLException ex) {
             try {
@@ -1466,14 +1467,17 @@ public class PanelPlanillaNueva extends JPanelCustom {
             ps.setBoolean(7, this.jCheckBoxNotificarCh.isSelected()); //Notificar
             int executeUpdate = ps.executeUpdate();
             co.commit(); //Ahora si se acepta que anduvo bien
-            JOptionPane.showMessageDialog(null, "Actualizado con éxito");
+            JLabel label = new JLabelAriel("Actualizado con éxito");
+            JOptionPane.showMessageDialog(null, label, "INFO", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException ex) {
             try {
                 co.rollback();
             } catch (SQLException ex1) {
-                JOptionPane.showMessageDialog(null, "Error al deshacer guardado fallido: " + ex1.getMessage());
+                JLabel label = new JLabelAriel("Error al deshacer guardado fallido: "+ ex1.getMessage());
+                JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
             }
-            JOptionPane.showMessageDialog(null, "Error al guardar/actualizar: " + ex.getMessage());
+            JLabel label = new JLabelAriel("Error al guardar/actualizar: "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -1489,7 +1493,8 @@ public class PanelPlanillaNueva extends JPanelCustom {
         if (!filtroPersona.equals("")) {//Si el filtro de Persona no está vacío
             this.cargarPersonasBdD(consulta);
         } else {
-            JOptionPane.showMessageDialog(null, "Debe ingresar un Nombre o un Apodo para poder filtrar ");
+            JLabel label = new JLabelAriel("Debe ingresar un Nombre o un Apodo para poder filtrar");
+            JOptionPane.showMessageDialog(null, label, "INFO", JOptionPane.INFORMATION_MESSAGE);
         }
 
         this.agregarListenersJComboBox();

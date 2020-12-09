@@ -373,7 +373,6 @@ public class NuevoModificarVh extends JPanelCustom {
         jLabelAtencionCli = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        jButtonSalir = new javax.swing.JButton();
         jButtonBorrarCh = new javax.swing.JButton();
         jLabelCli = new javax.swing.JLabel();
         jButtonInfo = new javax.swing.JButton();
@@ -573,14 +572,6 @@ public class NuevoModificarVh extends JPanelCustom {
         jLabel11.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabel11.setText("Filtrar personas por nombre o apodo:");
 
-        jButtonSalir.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jButtonSalir.setText("Salir");
-        jButtonSalir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonSalirActionPerformed(evt);
-            }
-        });
-
         jButtonBorrarCh.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jButtonBorrarCh.setText("Borrar Chofér");
         jButtonBorrarCh.addActionListener(new java.awt.event.ActionListener() {
@@ -672,8 +663,7 @@ public class NuevoModificarVh extends JPanelCustom {
                                 .addComponent(jButtonCancelar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButtonGuardar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButtonSalir))
+                                .addGap(76, 76, 76))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -743,8 +733,7 @@ public class NuevoModificarVh extends JPanelCustom {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonGuardar)
-                    .addComponent(jButtonCancelar)
-                    .addComponent(jButtonSalir)))
+                    .addComponent(jButtonCancelar)))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButtonInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -757,19 +746,6 @@ public class NuevoModificarVh extends JPanelCustom {
 
     
     
-    private void jButtonSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalirActionPerformed
-        // Debería salir del sistema preguntando, en caso de que no esté guardado en el sistema, si se desea seguir
-        if(this.idVh == 0){ //Es un vehículo nuevo y no se guardo nada aún
-            JLabelAriel label = new JLabelAriel("Los cambios realizados no se guardarán, ¿Desea Salir?");
-            if(JOptionPane.showConfirmDialog(null, label, "ATENCIÓN!", JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION)//Se Aceptó
-                this.controlador.cerrarPanelSeleccionado(); //Cierro este panel - No hay Vh guardado
-            else //No se acepta cerrar --> Se sigue editando
-                ; //Nada que hacer
-        }else{ //El idVh ya está editado --> El vehículo ya se guardó o es Vh a modificar
-            this.controlador.cerrarPanelSeleccionado();
-        }
-    }//GEN-LAST:event_jButtonSalirActionPerformed
-
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
         //Se cancela la edición --> No se pregunta si se debe guardar algo
         this.controlador.cerrarPanelSeleccionado();
@@ -1053,7 +1029,6 @@ public class NuevoModificarVh extends JPanelCustom {
     private javax.swing.JButton jButtonGuardar;
     private javax.swing.JButton jButtonInfo;
     private javax.swing.JButton jButtonQuitarCh;
-    private javax.swing.JButton jButtonSalir;
     private javax.swing.JComboBox<String> jComboBoxAnioModelo;
     private javax.swing.JComboBox<ComboItem> jComboBoxChofer;
     private javax.swing.JComboBox<ComboItem> jComboBoxCliente;

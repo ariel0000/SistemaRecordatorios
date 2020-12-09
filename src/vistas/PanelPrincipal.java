@@ -628,7 +628,8 @@ public class PanelPrincipal extends JPanelCustom {
                 Date fecha = new Date(rs.getDate(7).getTime());  //Fecha de mantención finalizada.
                 fechaSalida = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 int mesesDiferencia = (int) ChronoUnit.MONTHS.between(fechaSalida.withDayOfMonth(1), fechaHoy.withDayOfMonth(1));
-                if((mesesDiferencia-rs.getInt(8)) <= 2){ // Si la diferencia de meses anterior "coincide" con el periodo agregamos la noti.
+                if(mesesDiferencia-rs.getInt(8) >= -2 && (mesesDiferencia-rs.getInt(8) <= 2)){ 
+                    // Si la diferencia de meses anterior "coincide" con el periodo agregamos la noti.
                     if(mesesDiferencia-rs.getInt(8) < 2)                                      // 0 a 2
                         prioridad = 25;  //Aumento la prioridad porque es una mantención para realizar pronto
                     Mantenimiento mantenimiento = new Mantenimiento(idRep, prioridad, "Service por realizar", descripcion, 
