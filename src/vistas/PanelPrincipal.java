@@ -575,7 +575,7 @@ public class PanelPrincipal extends JPanelCustom {
     
     public ArrayList<Notificador> cargarReparaciones(){
         //Método que devuelve las reparaciones o mantenciones incompletas
-        String nombre, apellido, descripcion, incompleto = "incompleta";
+        String nombre, apellido, descripcion, incompleto;
         int prioridad, idRep;
         String tipoRep;
         ArrayList<Notificador> reparacioness = new ArrayList();
@@ -594,6 +594,8 @@ public class PanelPrincipal extends JPanelCustom {
                 tipoRep = rs.getString(5); 
                 if("mantenimiento".equals(tipoRep))
                     incompleto = "incompleto";
+                else
+                    incompleto = "incompleta";
                 Reparacion reparacion = new Reparacion(idRep, prioridad, tipoRep+" "+incompleto, descripcion, nombre, apellido);
                 reparacioness.add(reparacion);
             }

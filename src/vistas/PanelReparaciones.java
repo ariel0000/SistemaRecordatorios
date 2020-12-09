@@ -417,7 +417,8 @@ public class PanelReparaciones extends JPanelCustom {
             this.controlador.cambiarDePanel(p1, "Ver/Modificar Planilla");
         }
         else{
-            JOptionPane.showMessageDialog(null, "Error: debe seleccionar una planilla ");
+            JLabel label = new JLabelAriel("Error: debe seleccionar una planilla");
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_jButtonPlanillaActionPerformed
 
@@ -626,5 +627,6 @@ public class PanelReparaciones extends JPanelCustom {
     @Override
     public void onFocus() {
         //
+        filtrarReparaciones();
     }
 }

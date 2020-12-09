@@ -1060,7 +1060,8 @@ public class PanelPlanillaNueva extends JPanelCustom {
                 this.jLabelVh.setText(" ,Camión: " + marcaModeloPat);
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error al obtener datos: " + ex.getMessage());
+            JLabel label = new JLabelAriel("Error al obtener datos: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.INFORMATION_MESSAGE);
             this.controlador.cerrarPanelSeleccionado();
         }
     }
@@ -1105,7 +1106,8 @@ public class PanelPlanillaNueva extends JPanelCustom {
             }
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error al obtener datos: " + ex.getMessage());
+            JLabel label = new JLabelAriel("Error al obtener datos: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
         }
         this.jTablePagos.updateUI();
     }
@@ -1432,9 +1434,11 @@ public class PanelPlanillaNueva extends JPanelCustom {
             try {
                 co.rollback();
             } catch (SQLException ex1) {
-                JOptionPane.showMessageDialog(null, "Error: " + ex1.getMessage());
+                JLabel label = new JLabelAriel("Error: " + ex1.getMessage());
+                JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
             }
-            JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+            JLabel label = new JLabelAriel("Error: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null,label, "ERROR", JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -2201,7 +2205,8 @@ public class PanelPlanillaNueva extends JPanelCustom {
         String consulta = "";
         if (idvh.equals("")) //No hay idVh, se cargan todos los clientes
         {  //Cambiado el "0" por ""
-            JOptionPane.showMessageDialog(this, "Debe ingresar una patente "); //this hace referencia al Frame
+            JLabel label = new JLabelAriel("Debe ingresar una patente ");
+            JOptionPane.showMessageDialog(this, label, "INFO", JOptionPane.INFORMATION_MESSAGE); //this hace referencia al Frame
         } else //Hay una patente --> se carga el cliente específico de ese camión seleccionado
         {
             consulta = "SELECT c.idcliente, p.nombre, p.apellido FROM cliente AS c INNER JOIN persona AS p ON c.idpersona = p.idpersona"

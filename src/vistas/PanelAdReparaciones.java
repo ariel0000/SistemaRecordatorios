@@ -460,7 +460,7 @@ public class PanelAdReparaciones extends JPanelCustom {
                 guardarReparacion(this.numPlanilla);
         else{ //La reparación está marcada como completada --> se deberá corroborar si está seteada la fecha de finalizada
             if(this.jDateChooserFinalizado.getDate() == null)
-                JOptionPane.showMessageDialog(null, label, "¡ATENCIÓN!", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, label, "¡INFO!", JOptionPane.WARNING_MESSAGE);
             else{ //
                 if(this.idReparacion != 0) // True si estamos modificando una reparación
                     actualizarReparacion();
@@ -570,7 +570,7 @@ public class PanelAdReparaciones extends JPanelCustom {
                 ps.setBoolean(7, this.jCheckBoxNotificar.isSelected()); //Atributo Notificar
                 ps.executeUpdate();
                 JLabel label = new JLabelAriel("Reparación actualizada");
-                JOptionPane.showMessageDialog(null, label, "¡ATENCIÓN!", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, label, "¡ATENCIÓN!", JOptionPane.INFORMATION_MESSAGE);
             }catch(SQLException ex){
                 JLabel label = new JLabelAriel("No se pudo actualizar la reparación: "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
@@ -615,7 +615,7 @@ public class PanelAdReparaciones extends JPanelCustom {
                 int resultado = ps.executeUpdate();
                 this.controlador.obtenerConexion().commit(); //Todo bien si pasa esta línea - falta hacerle el catch al commit()
                 JLabel labelOk = new JLabelAriel(" Reparacion agregada con exito ");
-                JOptionPane.showMessageDialog(null, labelOk, " TODO BIEN ", JOptionPane.YES_NO_OPTION);
+                JOptionPane.showMessageDialog(null, labelOk, " TODO BIEN ", JOptionPane.INFORMATION_MESSAGE);
             } catch (SQLException ex) {
                 JLabel label = new JLabelAriel("Error al guardar Reparación " + ex.getMessage());
                 JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
