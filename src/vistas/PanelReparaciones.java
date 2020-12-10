@@ -59,7 +59,7 @@ public class PanelReparaciones extends JPanelCustom {
     }
     
     private String[] getColumnas() { 
-        String columna[] = new String[]{"Marca y Modelo", "Descripción de Reparación", "completada", "tipo", "periodo (Meses)", "Fecha Terminado", "idPlanilla"};
+        String columna[] = new String[]{"ID", "Marca y Modelo", "Descripción de Reparación", "completada", "tipo", "periodo (Meses)", "Fecha Terminado"};
         return columna;
     }
     /**
@@ -313,9 +313,9 @@ public class PanelReparaciones extends JPanelCustom {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButtonFiltrar, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jButtonInfo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane)
                     .addComponent(jButtonPlanilla, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
+            .addComponent(jScrollPane, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -358,9 +358,8 @@ public class PanelReparaciones extends JPanelCustom {
         this.controlador = ControladorPrincipal.getInstancia();
         this.ajustarColumnasDeTabla();
         //..
-        String query = "SELECT v.marca, v.modelo, r.descripcion, r.completada, r.tipo, r.fecha_terminado, r.periodo, p.idplanilla"
-                + " FROM reparacion AS r INNER JOIN planilla AS p ON p.idplanilla = r.idplanilla INNER JOIN vehiculo AS v "
-                + "ON v.idvehiculo = p.idvehiculo";
+        String query = "SELECT r.idreparacion, v.marca, v.modelo, r.descripcion, r.completada, r.tipo, r.fecha_terminado, r.periodo FROM "
+                + "reparacion AS r INNER JOIN planilla AS p ON p.idplanilla = r.idplanilla INNER JOIN vehiculo AS v ON v.idvehiculo = p.idvehiculo";
         this.cargarReparaciones(query);
         this.cargarVh("");
         this.jLabelVh.setVisible(false);  //No muestro el Label del Vh.
@@ -381,8 +380,8 @@ public class PanelReparaciones extends JPanelCustom {
                 break;
             }
         }
-        String query = "SELECT v.marca, v.modelo, r.descripcion, r.completada, r.tipo, r.fecha_terminado, r.periodo, p.idplanilla FROM reparacion AS r "
-                + " INNER JOIN planilla AS p ON p.idplanilla = r.idplanilla INNER JOIN vehiculo AS v ON v.idvehiculo = p.idvehiculo"
+        String query = "SELECT r.idreparacion, v.marca, v.modelo, r.descripcion, r.completada, r.tipo, r.fecha_terminado, r.periodo FROM "
+                + "reparacion AS r INNER JOIN planilla AS p ON p.idplanilla = r.idplanilla INNER JOIN vehiculo AS v ON v.idvehiculo = p.idvehiculo"
                 + " WHERE p.idvehiculo = '"+idCamion+"' AND r.tipo = 'mantenimiento' ";
         this.cargarReparaciones(query);
     }
@@ -412,8 +411,9 @@ public class PanelReparaciones extends JPanelCustom {
         int filaSeleccionada;
         filaSeleccionada = this.jTableVh.getSelectedRow();
         if(filaSeleccionada != -1){
-            int nPlanilla = Integer.valueOf(this.modelo.getValueAt(filaSeleccionada, 6)+"");
-            PanelPlanillaNueva p1 = new PanelPlanillaNueva(nPlanilla); //Acá va el número de planilla
+            int idRep = Integer.valueOf(this.modelo.getValueAt(filaSeleccionada, 0)+"");
+            int idPlanilla = obtenerIdPlanillaConIDRep(idRep);
+            PanelPlanillaNueva p1 = new PanelPlanillaNueva(idPlanilla); //Acá va el número de planilla
             this.controlador.cambiarDePanel(p1, "Ver/Modificar Planilla");
         }
         else{
@@ -422,10 +422,31 @@ public class PanelReparaciones extends JPanelCustom {
         }
     }//GEN-LAST:event_jButtonPlanillaActionPerformed
 
+    private int obtenerIdPlanillaConIDRep(int idRep){
+        // Retorna el id de la planilla a la cuál pertenece la reparación con el ID "idRep"
+        int nPlanilla = 0;
+        String query = "SELECT p.idplanilla FROM planilla AS p INNER JOIN reparacion AS r ON p.idplanilla = r.idplanilla "
+                + "WHERE r.idreparacion = "+idRep+" ";
+        try {
+            Statement st = this.controlador.obtenerConexion().createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while(rs.next()){
+                nPlanilla = rs.getInt(1);  //El id de la planilla asociada a la reparación con id: "idRep"
+            }
+            
+        } catch (SQLException ex) {
+            JLabel label = new JLabelAriel("Error al consultar el ID de la planillla asociada a la reparación: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);   
+        }
+        
+        
+        return nPlanilla;
+    }
+    
     public void filtrarReparaciones(){
         //Método que permite "usarse desde afuera" para filtrar las reparaciones o vehículos correspondientes
-    String query = "SELECT v.marca, v.modelo, r.descripcion, r.completada, r.tipo, r.fecha_terminado, r.periodo, p.idplanilla FROM vehiculo AS v INNER JOIN planilla AS p "
-                + "ON p.idvehiculo = v.idvehiculo INNER JOIN reparacion AS r ON r.idplanilla = p.idplanilla ";
+    String query = "SELECT r.idreparacion, v.marca, v.modelo, r.descripcion, r.completada, r.tipo, r.fecha_terminado, r.periodo FROM "
+            + "vehiculo AS v INNER JOIN planilla AS p ON p.idvehiculo = v.idvehiculo INNER JOIN reparacion AS r ON r.idplanilla = p.idplanilla ";
         int i = 0;
         if(this.jCheckBoxTipoRep.isSelected()){
             query += " WHERE "+queryPorTipoRep();
@@ -460,13 +481,15 @@ public class PanelReparaciones extends JPanelCustom {
         
     private void ajustarColumnasDeTabla(){
         //Ajusta los tamaños de las columnas de la tabla
-        this.jTableVh.getColumnModel().getColumn(0).setMinWidth(220);
-        this.jTableVh.getColumnModel().getColumn(1).setMinWidth(520);  //La descripción
-        this.jTableVh.getColumnModel().getColumn(2).setMaxWidth(140);
-        this.jTableVh.getColumnModel().getColumn(2).setMinWidth(95);
+        this.jTableVh.getColumnModel().getColumn(0).setMaxWidth(75);
+        this.jTableVh.getColumnModel().getColumn(0).setMinWidth(55);
+        this.jTableVh.getColumnModel().getColumn(1).setMinWidth(220);
+        this.jTableVh.getColumnModel().getColumn(2).setMinWidth(520);  //La descripción
         this.jTableVh.getColumnModel().getColumn(3).setMinWidth(140);
-        this.jTableVh.getColumnModel().getColumn(4).setMinWidth(130);
-        this.jTableVh.getColumnModel().getColumn(5).setMinWidth(230);
+        this.jTableVh.getColumnModel().getColumn(4).setMinWidth(95);
+        this.jTableVh.getColumnModel().getColumn(4).setMinWidth(140);
+        this.jTableVh.getColumnModel().getColumn(5).setMinWidth(130);
+        this.jTableVh.getColumnModel().getColumn(6).setMinWidth(230);
         this.jTableVh.removeColumn(this.jTableVh.getColumnModel().getColumn(6));  //Borro de la vista la columna "idPlanilla" peeero
         //se puede consultar la misma desde el modelo. Esto se ejecuta una sola vez (es la idea).
     }
@@ -482,24 +505,24 @@ public class PanelReparaciones extends JPanelCustom {
             Statement st = this.controlador.obtenerConexion().createStatement();
             ResultSet rs = st.executeQuery(query);
             while (rs.next()) {
-                datos[0] = rs.getString(1)+" "+rs.getString(2);  //Marca y modelo
-                datos[1] = rs.getString(3);  //La descripción de la reparación
-                if (rs.getBoolean(4)) //Completada
-                    datos[2] = "Sí";
+                datos[0] = ""+rs.getInt(1);  //ID de la reparación
+                datos[1] = rs.getString(2)+" "+rs.getString(3);  //Marca y modelo
+                datos[2] = rs.getString(4);  //La descripción de la reparación
+                if (rs.getBoolean(5)) //Completada
+                    datos[3] = "Sí";
                 else
-                    datos[2] = "No";
+                    datos[3] = "No";
                
-                datos[3] = rs.getString(5);  //Tipo
-                if (rs.getDate(6) == null)
-                    datos[5] = "Sin Fecha";
+                datos[4] = rs.getString(6);  //Tipo
+                if (rs.getDate(7) == null)
+                    datos[6] = "Sin Fecha";
                 else
-                    datos[5] = rs.getDate(6) + "";  // Fecha Terminado
+                    datos[6] = rs.getDate(7) + "";  // Fecha Terminado
  //Marca y Modelo", "Descripción de Reparación", "completada", "tipo", "periodo (Meses)", "Fecha Terminada"
-                if(rs.getString(5).equals("reparacion"))
-                    datos[4] = "-";  //No hay periódo para una reparación común
+                if(rs.getString(6).equals("reparacion"))
+                    datos[5] = "-";  //No hay periódo para una reparación común
                 else
-                    datos[4] = "" + rs.getInt(7);  //Periodo
-                datos[6] = ""+rs.getInt(8);
+                    datos[5] = "" + rs.getInt(8);  //Periodo
                 this.modelo.addRow(datos);
                 this.jTableVh.updateUI();
             }

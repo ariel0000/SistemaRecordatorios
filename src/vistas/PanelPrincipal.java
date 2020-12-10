@@ -567,7 +567,6 @@ public class PanelPrincipal extends JPanelCustom {
             JLabel label = new JLabelAriel("Error al obtener planillas impagas: " + ex.getMessage());
             JOptionPane.showMessageDialog(null, label, "¡¡ATENCIÓN!!", JOptionPane.WARNING_MESSAGE);  
         }
-        
         return planillasImpagass;
     }
     
