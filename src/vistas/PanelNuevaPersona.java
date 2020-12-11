@@ -580,7 +580,7 @@ public class PanelNuevaPersona extends JPanelCustom {
 
         jLabelInfoVh.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabelInfoVh.setForeground(new java.awt.Color(204, 0, 51));
-        jLabelInfoVh.setText("<html><p>En esta Vista no se pueden quitar ni agregar vehículos de los cuales la persona puede ser el chofer o el dueño. <br>Para realizar estas acciones dirijase a la opci&oacute;n de Administrar Veh&iacute;culos en el Panel Principal</p></html>");
+        jLabelInfoVh.setText("<html><p>En esta Vista no se pueden quitar ni agregar vehículos de los cuales la persona puede ser el chofer o el dueño. <br>Para realizar estas acciones dirijase a la opci&oacute;n de Administrar Camiones en el Panel Principal</p></html>");
 
         jButtonAceptar.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jButtonAceptar.setText("Aceptar");
@@ -1231,6 +1231,7 @@ public class PanelNuevaPersona extends JPanelCustom {
                 JOptionPane.showMessageDialog(this.jFrameChofer, label, "ATENCIÓN", JOptionPane.ERROR_MESSAGE);
             }
             this.jFrameChofer.dispose();
+            this.cargarCamionesChofer();  //Para que se actualize el apodo en el JComboBox del Chofer
         } else { //En el lugar del apodo no hay nada y es un dato requerido
             JLabel label = new JLabelAriel("Error al guardar Chofer, el dato APODO es obligatorio");
             JOptionPane.showMessageDialog(this.jFrameChofer, label, "ERROR", JOptionPane.ERROR_MESSAGE);
@@ -1309,6 +1310,7 @@ public class PanelNuevaPersona extends JPanelCustom {
                 JOptionPane.showMessageDialog(this.jFrameCliente, label, "ATENCIÓN", JOptionPane.ERROR_MESSAGE);
             }
             this.jFrameCliente.dispose();
+            this.cargarCamionesDueño();  //Para que se actualize la info del cliente en el JComboBoxCli del mismo
         } else { //En el lugar del cuil no hay nada y es un dato requerido
             JLabel label = new JLabelAriel("Error al guardar Cliente, el dato CUIL|CUIT es obligatorio");
             JOptionPane.showMessageDialog(this.jFrameCliente, label, "ATENCIÓN", JOptionPane.ERROR_MESSAGE);

@@ -215,6 +215,7 @@ public class PanelReparaciones extends JPanelCustom {
         jTableVh.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         jTableVh.setModel(modelo);
         jTableVh.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jTableVh.setRowHeight(20);
         jScrollPane.setViewportView(jTableVh);
 
         jButtonPlanilla.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N

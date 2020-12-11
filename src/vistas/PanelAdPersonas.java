@@ -129,6 +129,7 @@ public class PanelAdPersonas extends JPanelCustom {
 
         jTablePersonas.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
         jTablePersonas.setModel(modelo);
+        jTablePersonas.setRowHeight(20);
         jScrollPane1.setViewportView(jTablePersonas);
 
         jButtonAgregarPer.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N

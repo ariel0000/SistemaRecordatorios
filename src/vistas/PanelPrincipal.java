@@ -116,6 +116,7 @@ public class PanelPrincipal extends JPanelCustom {
         this.estado = new EstadoNotifHoy();  //Por defecto tengo el estado de Notificaciones de Hoy
         this.cargarNotificadores();
         this.controlador.setPanelPrincipal(this);
+     //   this.jTableNotificaciones.
     }
 
     @SuppressWarnings("unchecked")
@@ -277,6 +278,7 @@ public class PanelPrincipal extends JPanelCustom {
 
         jTableNotificaciones.setFont(new java.awt.Font("Microsoft YaHei UI Light", 1, 16)); // NOI18N
         jTableNotificaciones.setModel(tablaNotificaciones);
+        jTableNotificaciones.setRowHeight(22);
         jScrollPane1.setViewportView(jTableNotificaciones);
 
         jButtonAdPagos.setFont(new java.awt.Font("SansSerif", 0, 24)); // NOI18N
@@ -384,7 +386,7 @@ public class PanelPrincipal extends JPanelCustom {
                         .addComponent(jRadioButtonMantencion)
                         .addGap(18, 18, 18)
                         .addComponent(jRadioButtonNotifHoy)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 153, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonFiltrar))
                     .addComponent(jScrollPane1))
                 .addContainerGap())

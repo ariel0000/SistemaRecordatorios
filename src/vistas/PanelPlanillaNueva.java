@@ -653,6 +653,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         jTableReparaciones.setAutoCreateRowSorter(true);
         jTableReparaciones.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         jTableReparaciones.setModel(tablaReparaciones);
+        jTableReparaciones.setRowHeight(20);
         jScrollPane1.setViewportView(jTableReparaciones);
 
         jLabel2.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
@@ -753,6 +754,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
 
         jTablePagos.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
         jTablePagos.setModel(modeloPagos);
+        jTablePagos.setRowHeight(20);
         jScrollPane2.setViewportView(jTablePagos);
 
         jCheckBoxFacturado.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
@@ -1362,17 +1364,20 @@ public class PanelPlanillaNueva extends JPanelCustom {
     }//GEN-LAST:event_jButtonGuardarActionPerformed
 
     private void guardarPlanilla() { //Datos: idplanilla, fecha in, fecha out, pagado, desc, idCliente, idPersona, idVh, facturado
+        ComboItem chofer = (ComboItem) this.jComboBoxPersona.getSelectedItem(); //chofer.getKey() = id de la persona
+        ComboItem vh = (ComboItem) this.jComboBoxVh.getSelectedItem(); // vh.getKey() = id del vehículo
         Object fSalida = this.jDateChooserSalida.getDate();
         Object fEntrada = this.jDateChooserEntrada.getDate();
-        if (fEntrada != null) {   //Fijarse si falta algo
+        if (!(fEntrada == null) || (chofer.getKey().equals("0")) || (chofer.getKey().equals("-1")) || (vh.getKey().equals("0"))) { 
+        //El if pregunta si (por la key obtenida) no se seleccionó Vh o chofer o no se ingresó fecha de entrada
             if (fSalida == null) {
                 guardarEnBdD(false);
             } else {
                 guardarEnBdD(true); //La fecha de salida esta seteada
             }
         } else {
-            //No se puede guardar porque los campos "tal y tal" están vacíos (ponele). 
-            //La fecha de entrada no se puede poner como nula. El jDateChooser no lo permite.
+            JLabel label = new JLabelAriel(" Datos incompletos - Vehículo, chofer y descripción obligatorios ");
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
         }
 
     }

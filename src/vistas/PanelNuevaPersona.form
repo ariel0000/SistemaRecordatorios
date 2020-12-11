@@ -587,7 +587,7 @@
               <Color blue="33" green="0" red="cc" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="&quot;&lt;html&gt;&lt;p&gt;En esta Vista no se pueden quitar ni agregar veh&#xed;culos de los cuales la persona puede ser el chofer o el due&#xf1;o. &lt;br&gt;Para realizar estas acciones dirijase a la opci&amp;oacute;n de Administrar Veh&amp;iacute;culos en el Panel Principal&lt;/p&gt;&lt;/html&gt;&quot;" type="code"/>
+              <Connection code="&quot;&lt;html&gt;&lt;p&gt;En esta Vista no se pueden quitar ni agregar veh&#xed;culos de los cuales la persona puede ser el chofer o el due&#xf1;o. &lt;br&gt;Para realizar estas acciones dirijase a la opci&amp;oacute;n de Administrar Camiones en el Panel Principal&lt;/p&gt;&lt;/html&gt;&quot;" type="code"/>
             </Property>
           </Properties>
         </Component>

@@ -481,6 +481,7 @@ public class PanelAdPagos extends JPanelCustom {
 
         jTablePagos.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
         jTablePagos.setModel(modeloCli);
+        jTablePagos.setRowHeight(20);
         jScrollPane2.setViewportView(jTablePagos);
 
         jButtonSelectPago.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N

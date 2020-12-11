@@ -143,8 +143,11 @@ public class PanelVerPlanillas extends JPanelCustom {
         jCheckBoxVh.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jCheckBoxVh.setText("Camión:");
 
+        jScrollPane1.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+
         jTablePlanillas.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         jTablePlanillas.setModel(modelo);
+        jTablePlanillas.setRowHeight(20);
         jScrollPane1.setViewportView(jTablePlanillas);
 
         jButtonAdPlanilla.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
