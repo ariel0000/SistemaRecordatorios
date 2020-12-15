@@ -36,12 +36,12 @@ public class PanelAdPersonas extends JPanelCustom {
             } 
         };
         initComponents();
-        this.jTablePersonas.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
+        this.jTablePersonas.getTableHeader().setFont(new Font("SansSerif", Font.PLAIN, 18));
         cargarDatos();
     }
 
     private void cargarDatos(){
-        this.jTablePersonas.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
+        this.jTablePersonas.getTableHeader().setFont(new Font("SansSerif", Font.PLAIN, 18));
         this.modelo.setColumnIdentifiers(getColumnas());
         this.controlador = ControladorPrincipal.getInstancia();
         cargarPersonas();
@@ -127,9 +127,9 @@ public class PanelAdPersonas extends JPanelCustom {
 
         jScrollPane1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        jTablePersonas.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
+        jTablePersonas.setFont(new java.awt.Font("Microsoft YaHei UI Light", 1, 16)); // NOI18N
         jTablePersonas.setModel(modelo);
-        jTablePersonas.setRowHeight(20);
+        jTablePersonas.setRowHeight(22);
         jScrollPane1.setViewportView(jTablePersonas);
 
         jButtonAgregarPer.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N

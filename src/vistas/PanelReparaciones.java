@@ -32,7 +32,7 @@ public class PanelReparaciones extends JPanelCustom {
         modeloTablas();
         initComponents();
         iniciarCosasEnComun();
-        this.jTableVh.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
+        this.jTableVh.getTableHeader().setFont(new Font("SansSerif", Font.PLAIN, 18));
     }
 
     public PanelReparaciones(int idReparacion, int idCamion, String tipo_rep){  //Constructor para mantenimiento
@@ -112,7 +112,7 @@ public class PanelReparaciones extends JPanelCustom {
         jLabel24.setText("Esta vista permite ver las Reparaciones o Mantenciones de todos los Vehículos o de uno en particular");
 
         jLabel25.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel25.setText("  * Filtro por Vehículo - Con la posibilidad de buscar el Vh por Marca.");
+        jLabel25.setText("  * Filtro por Vehículo - Con la posibilidad de buscar el Vehículo por Marca.");
 
         jLabel26.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabel26.setText("Para filtrar las reparaciones se pueden usar 2 filtros:");
@@ -212,10 +212,10 @@ public class PanelReparaciones extends JPanelCustom {
             }
         });
 
-        jTableVh.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        jTableVh.setFont(new java.awt.Font("Microsoft YaHei UI Light", 1, 16)); // NOI18N
         jTableVh.setModel(modelo);
         jTableVh.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jTableVh.setRowHeight(20);
+        jTableVh.setRowHeight(22);
         jScrollPane.setViewportView(jTableVh);
 
         jButtonPlanilla.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N

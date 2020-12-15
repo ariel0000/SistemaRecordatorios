@@ -59,7 +59,7 @@ public class PanelAdPagos extends JPanelCustom {
     private void iniciarCosasEnComun(){
         //Método que carga datos e info común a todos los constructores de la vista (Por ahora tenemos solo 1)
         this.controlador = ControladorPrincipal.getInstancia();
-        this.jTablePagos.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
+        this.jTablePagos.getTableHeader().setFont(new Font("SansSerif", Font.PLAIN, 18));
   //      this.jTablePlanillas.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
         this.jTablePagos.getColumnModel().getColumn(0).setMinWidth(80);
         this.jTablePagos.getColumnModel().getColumn(0).setMaxWidth(100);
@@ -479,9 +479,9 @@ public class PanelAdPagos extends JPanelCustom {
 
         setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
 
-        jTablePagos.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
+        jTablePagos.setFont(new java.awt.Font("Microsoft YaHei UI Light", 1, 16)); // NOI18N
         jTablePagos.setModel(modeloCli);
-        jTablePagos.setRowHeight(20);
+        jTablePagos.setRowHeight(22);
         jScrollPane2.setViewportView(jTablePagos);
 
         jButtonSelectPago.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N

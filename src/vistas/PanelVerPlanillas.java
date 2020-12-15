@@ -145,9 +145,9 @@ public class PanelVerPlanillas extends JPanelCustom {
 
         jScrollPane1.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
 
-        jTablePlanillas.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        jTablePlanillas.setFont(new java.awt.Font("Microsoft YaHei UI Light", 1, 16)); // NOI18N
         jTablePlanillas.setModel(modelo);
-        jTablePlanillas.setRowHeight(20);
+        jTablePlanillas.setRowHeight(22);
         jScrollPane1.setViewportView(jTablePlanillas);
 
         jButtonAdPlanilla.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
@@ -443,7 +443,7 @@ public class PanelVerPlanillas extends JPanelCustom {
     }
     
     private void cosasParaIniciarEnComun(){
-        this.jTablePlanillas.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
+        this.jTablePlanillas.getTableHeader().setFont(new Font("SansSerif", Font.PLAIN, 18));
         modelo.setColumnIdentifiers(getColumnas());
         this.controlador = ControladorPrincipal.getInstancia();
         this.jTablePlanillas.getColumnModel().getColumn(0).setMinWidth(40);

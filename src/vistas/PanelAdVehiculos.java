@@ -41,8 +41,8 @@ public class PanelAdVehiculos extends JPanelCustom {
             } 
         };
         initComponents();
-        this.jTableVh.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
-        this.jTablePlanilla.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
+        this.jTableVh.getTableHeader().setFont(new Font("SansSerif", Font.PLAIN, 18));
+        this.jTablePlanilla.getTableHeader().setFont(new Font("SansSerif", Font.PLAIN, 18));
         controlador = ControladorPrincipal.getInstancia(); //La única instancia de este controlador
         cargarTablas();
         cargarClientesCombo();
@@ -120,8 +120,9 @@ public class PanelAdVehiculos extends JPanelCustom {
 
         jComboBoxCli.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
 
-        jTableVh.setFont(new java.awt.Font("Microsoft JhengHei Light", 1, 16)); // NOI18N
+        jTableVh.setFont(new java.awt.Font("Microsoft YaHei UI Light", 1, 16)); // NOI18N
         jTableVh.setModel(modeloVh);
+        jTableVh.setRowHeight(22);
         jScrollPane1.setViewportView(jTableVh);
 
         jButtonNuevoVh.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
@@ -164,8 +165,9 @@ public class PanelAdVehiculos extends JPanelCustom {
             }
         });
 
-        jTablePlanilla.setFont(new java.awt.Font("Microsoft JhengHei Light", 1, 16)); // NOI18N
+        jTablePlanilla.setFont(new java.awt.Font("Microsoft YaHei UI Light", 1, 16)); // NOI18N
         jTablePlanilla.setModel(this.modeloPlanilla);
+        jTablePlanilla.setRowHeight(22);
         jScrollPane2.setViewportView(jTablePlanilla);
 
         jLabel2.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
@@ -555,7 +557,11 @@ public class PanelAdVehiculos extends JPanelCustom {
                     Datos[2] = ""+rs.getDate(3); //Fecha de salida - puede ser nula
                 else
                     Datos[2] = "Sin Fecha";
-                Datos[3] = String.valueOf(rs.getBoolean(4)); //Pagado
+                if(rs.getBoolean(4)) //Pagado
+                    Datos[3] = "Sí"; 
+                else
+                    Datos[3] = "No";
+                            
                 this.modeloPlanilla.addRow(Datos);
             }
             this.jTablePlanilla.updateUI();

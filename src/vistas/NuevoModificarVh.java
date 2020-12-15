@@ -310,7 +310,7 @@ public class NuevoModificarVh extends JPanelCustom {
         //Los campos en común para iniciar, sea vehículo nuevo o a modificar
      //   jComboBoxMarcasVh.setModel(new javax.swing.DefaultComboBoxModel(leerArchivoMarcas())); utilizo la línea de abajo
         cargarMarcas(); //Cargo todas las marcas posibles
-        this.jTableChoferes.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
+        this.jTableChoferes.getTableHeader().setFont(new Font("SansSerif", Font.PLAIN, 18));
         this.controlador = ControladorPrincipal.getInstancia();
         this.cargarJComboBoxAnioModelo();
         agregarItemStateChange();  //Agrega un evento de ItemStateChange al JComboBox de Clientes
@@ -408,7 +408,7 @@ public class NuevoModificarVh extends JPanelCustom {
         jLabel19.setText(" . Cuando se agrega un vehículo nuevo solo se puede agregar chofer después");
 
         jLabel20.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel20.setText(" . Choferes del mismo. Si el Vh es nuevo primero se debe guardar para agregar Chofer");
+        jLabel20.setText(" . Choferes: Si el Vehículo es nuevo primero se debe guardar para agregar Chofer");
         jLabel20.setMaximumSize(new java.awt.Dimension(730, 24));
         jLabel20.setMinimumSize(new java.awt.Dimension(730, 24));
         jLabel20.setPreferredSize(new java.awt.Dimension(725, 24));
@@ -511,8 +511,9 @@ public class NuevoModificarVh extends JPanelCustom {
         jLabelCh.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabelCh.setText("Chofer:");
 
-        jTableChoferes.setFont(new java.awt.Font("SansSerif", 0, 17)); // NOI18N
+        jTableChoferes.setFont(new java.awt.Font("Microsoft YaHei UI Light", 1, 16)); // NOI18N
         jTableChoferes.setModel(choferesModel);
+        jTableChoferes.setRowHeight(22);
         jScrollPane2.setViewportView(jTableChoferes);
 
         jButtonFiltrarCli.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N

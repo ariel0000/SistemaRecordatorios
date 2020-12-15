@@ -78,6 +78,8 @@ public class PanelPlanillaNueva extends JPanelCustom {
         this.jTableReparaciones.getColumnModel().getColumn(2).setMaxWidth(175);
         this.jTableReparaciones.getColumnModel().getColumn(3).setMinWidth(100);
         this.jTableReparaciones.getColumnModel().getColumn(3).setMaxWidth(175);
+        //----------------
+        this.jTablePagos.getTableHeader().setFont(new Font("SansSerif", Font.PLAIN, 18));
     }
 
     private void desactivoEdicionTextFieldDeDateChooser() {
@@ -465,7 +467,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         jLabel15.setMinimumSize(new java.awt.Dimension(224, 250));
 
         jLabel16.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel16.setText("Cantidad que falta pagar:");
+        jLabel16.setText("Cantidad que debe el Cliente:");
 
         jTextFieldImporteTotal.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
 
@@ -504,35 +506,31 @@ public class PanelPlanillaNueva extends JPanelCustom {
             .addGroup(jFrameEstadoPagosLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jFrameEstadoPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrameEstadoPagosLayout.createSequentialGroup()
+                    .addGroup(jFrameEstadoPagosLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButtonAceptarDeudas))
                     .addGroup(jFrameEstadoPagosLayout.createSequentialGroup()
-                        .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextFieldImporteTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE))
-                    .addGroup(jFrameEstadoPagosLayout.createSequentialGroup()
-                        .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(123, 123, 123)
-                        .addComponent(jTextFieldMontoPagado))
-                    .addGroup(jFrameEstadoPagosLayout.createSequentialGroup()
-                        .addComponent(jLabel16)
+                        .addGroup(jFrameEstadoPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel16)
+                            .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel22))
                         .addGap(36, 36, 36)
-                        .addComponent(jTextFieldCC))
-                    .addGroup(jFrameEstadoPagosLayout.createSequentialGroup()
-                        .addComponent(jLabel22)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextFieldACobrar)))
+                        .addGroup(jFrameEstadoPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextFieldACobrar)
+                            .addComponent(jTextFieldImporteTotal)
+                            .addComponent(jTextFieldMontoPagado)
+                            .addComponent(jTextFieldCC))))
                 .addContainerGap())
             .addGroup(jFrameEstadoPagosLayout.createSequentialGroup()
                 .addGap(189, 189, 189)
                 .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(249, Short.MAX_VALUE))
             .addGroup(jFrameEstadoPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jFrameEstadoPagosLayout.createSequentialGroup()
                     .addGap(33, 33, 33)
                     .addComponent(jLabel3)
-                    .addContainerGap(164, Short.MAX_VALUE)))
+                    .addContainerGap(206, Short.MAX_VALUE)))
         );
         jFrameEstadoPagosLayout.setVerticalGroup(
             jFrameEstadoPagosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -651,9 +649,9 @@ public class PanelPlanillaNueva extends JPanelCustom {
         jScrollPane1.setPreferredSize(new java.awt.Dimension(0, 0));
 
         jTableReparaciones.setAutoCreateRowSorter(true);
-        jTableReparaciones.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        jTableReparaciones.setFont(new java.awt.Font("Microsoft YaHei UI Light", 1, 16)); // NOI18N
         jTableReparaciones.setModel(tablaReparaciones);
-        jTableReparaciones.setRowHeight(20);
+        jTableReparaciones.setRowHeight(22);
         jScrollPane1.setViewportView(jTableReparaciones);
 
         jLabel2.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
@@ -752,9 +750,9 @@ public class PanelPlanillaNueva extends JPanelCustom {
 
         jScrollPane2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        jTablePagos.setFont(new java.awt.Font("SansSerif", 0, 16)); // NOI18N
+        jTablePagos.setFont(new java.awt.Font("Microsoft YaHei UI Light", 1, 16)); // NOI18N
         jTablePagos.setModel(modeloPagos);
-        jTablePagos.setRowHeight(20);
+        jTablePagos.setRowHeight(22);
         jScrollPane2.setViewportView(jTablePagos);
 
         jCheckBoxFacturado.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
@@ -1093,7 +1091,10 @@ public class PanelPlanillaNueva extends JPanelCustom {
                 Registro[0] = rs.getInt(1); // idCheque
                 Registro[1] = "Cheque";
                 Registro[2] = rs.getLong(5);
-                Registro[3] = rs.getBoolean(7); // cobrado. Según orden de la consulta anterior
+                if(rs.getBoolean(7))  //Columna de cobrado
+                    Registro[3] = "Sí";
+                else
+                    Registro[3] = "No";
                 this.modeloPagos.addRow(Registro);
             }
             //idforma_de_pago, idcontado, monto
@@ -2392,7 +2393,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         this.cargarImporte();
         cargarTablaPagos(numero);
         cargarTablaReparaciones(numero); //Cargo las reparaciones con el numero de planillas
-        this.jTableReparaciones.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
+        this.jTableReparaciones.getTableHeader().setFont(new Font("SansSerif", Font.PLAIN, 18));
         cargarPersonas("-1"); //Si es nueva planilla va un -1 que carga --> todas los choferes
         this.jLabelNombreApodo.setText(this.nombre+" "+this.apellido+" 'alias' "+this.apodo); //Sí o sí dsps de la anterior línea
         if (this.jComboBoxPersona.getItemCount() > 1) {

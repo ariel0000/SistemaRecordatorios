@@ -65,7 +65,7 @@ public class PanelPrincipal extends JPanelCustom {
         };
 
         initComponents();
-        this.jTableNotificaciones.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
+        this.jTableNotificaciones.getTableHeader().setFont(new Font("SansSerif", Font.PLAIN, 18));
         this.jTableNotificaciones.getColumnModel().getColumn(0).setMinWidth(30);
         this.jTableNotificaciones.getColumnModel().getColumn(0).setMaxWidth(50);
         this.jTableNotificaciones.getColumnModel().getColumn(1).setMinWidth(195);
