@@ -104,7 +104,10 @@ public class PanelAdPagos extends JPanelCustom {
                     datos[1] = "NO";
                 datos[2] = ""+rs.getLong(3);   //Monto
                 datos[3] = ""+rs.getDate(4);  //Fecha Emisión
-                datos[4] = ""+rs.getDate(5);  //Fecha Cobro
+                if(rs.getDate(5) == null)
+                    datos[4] = " --";
+                else
+                    datos[4] = ""+rs.getDate(5);  //Fecha Cobro;
                 if(rs.getBoolean(6))  //Notificar
                     datos[5] = "SI";
                 else
@@ -133,7 +136,7 @@ public class PanelAdPagos extends JPanelCustom {
                 datos[0] = ""+rs.getInt(1); //ID
                 datos[1] = "SI";  //Cobrado - Siempre sí para contado
                 datos[2] = ""+rs.getLong(2);   //Monto
-                datos[3] = "-"; //Fecha Emisión
+                datos[3] = " --"; //Fecha Emisión
                 datos[4] = ""+rs.getDate(3);  //Fecha Cobro
                 datos[5] = "No se usa";
                 datos[6] = rs.getString(4)+" "+rs.getString(5);  //Nombre y Apellido

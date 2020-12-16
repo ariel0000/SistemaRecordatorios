@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.Date;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import modelo.Cheque;
 import modelo.Estado;
@@ -117,6 +118,8 @@ public class PanelPrincipal extends JPanelCustom {
         this.cargarNotificadores();
         this.controlador.setPanelPrincipal(this);
      //   this.jTableNotificaciones.
+        Font fuente = new Font("Sans Serif", Font.PLAIN, 18);  //Dos líneas que sirven para acomodar el tamaño de letra de los botones de
+        UIManager.put("OptionPane.buttonFont", fuente);  // los JOptionPane...
     }
 
     @SuppressWarnings("unchecked")

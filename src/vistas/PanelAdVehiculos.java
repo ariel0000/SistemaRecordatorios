@@ -413,7 +413,7 @@ public class PanelAdVehiculos extends JPanelCustom {
             dtm.setRowCount(0);  //Magicamente anduvo y sirve para eliminar las filas de la tabla
             //---
             this.modeloPlanilla.setColumnIdentifiers(this.getColumnasMantenimiento());
-            this.jTablePlanilla.getColumnModel().getColumn(4).setPreferredWidth(650);
+            this.jTablePlanilla.getColumnModel().getColumn(4).setPreferredWidth(550);
             this.cargarTablaMantenimientos(filaSelect);
         }
         else{ //No se seleccionó ninguna fila
@@ -485,8 +485,12 @@ public class PanelAdVehiculos extends JPanelCustom {
             while(rs.next()){
                 datos[0] = ""+rs.getInt(1);  //idplanilla
                 datos[1] = ""+rs.getString(2);  //tipo de reparación (Enum)
-                datos[2] = ""+rs.getInt(3); //tipo de periodo
-                datos[3] = ""+rs.getDate(4); //fecha de salida
+                datos[2] = "        "+rs.getInt(3); //periodo
+                if(rs.getDate(4)== null)
+                    datos[3] = " --";
+                else
+                    datos[3] = ""+rs.getDate(4); //Fecha de salida
+              //  datos[3] = ""+rs.getDate(4); //fecha de salida
                 datos[4] = rs.getString(5); //descripción
                 this.modeloPlanilla.addRow(datos);
                 contadorMant++;
@@ -522,7 +526,11 @@ public class PanelAdVehiculos extends JPanelCustom {
             while(rs.next()){
                 Datos[0] = ""+rs.getInt(1); //El idplanilla
                 Datos[1] = "Reparación";
-                Datos[2] = ""+rs.getDate(2); //fecha de salida
+                if(rs.getDate(2) == null)
+                    Datos[2] = " --"; //fecha de salida;
+                else
+                    Datos[2] = ""+rs.getDate(2); //fecha de salida;
+               // Datos[2] = ""+rs.getDate(2); //fecha de salida
                 Datos[3] = ""+rs.getString(3); //Descripción
                 contadorRep++;
                 this.modeloPlanilla.addRow(Datos);
