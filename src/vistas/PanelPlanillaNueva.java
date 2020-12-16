@@ -80,6 +80,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         this.jTableReparaciones.getColumnModel().getColumn(3).setMaxWidth(175);
         //----------------
         this.jTablePagos.getTableHeader().setFont(new Font("SansSerif", Font.PLAIN, 18));
+        this.jTableReparaciones.getTableHeader().setFont(new Font("SansSerif", Font.PLAIN, 18));
     }
 
     private void desactivoEdicionTextFieldDeDateChooser() {
@@ -2393,7 +2394,6 @@ public class PanelPlanillaNueva extends JPanelCustom {
         this.cargarImporte();
         cargarTablaPagos(numero);
         cargarTablaReparaciones(numero); //Cargo las reparaciones con el numero de planillas
-        this.jTableReparaciones.getTableHeader().setFont(new Font("SansSerif", Font.PLAIN, 18));
         cargarPersonas("-1"); //Si es nueva planilla va un -1 que carga --> todas los choferes
         this.jLabelNombreApodo.setText(this.nombre+" "+this.apellido+" 'alias' "+this.apodo); //Sí o sí dsps de la anterior línea
         if (this.jComboBoxPersona.getItemCount() > 1) {
