@@ -68,15 +68,15 @@ public class PanelPrincipal extends JPanelCustom {
         initComponents();
         this.jTableNotificaciones.getTableHeader().setFont(new Font("SansSerif", Font.PLAIN, 18));
         this.jTableNotificaciones.getColumnModel().getColumn(0).setMinWidth(30);
-        this.jTableNotificaciones.getColumnModel().getColumn(0).setMaxWidth(50);
-        this.jTableNotificaciones.getColumnModel().getColumn(1).setMinWidth(195);
-        this.jTableNotificaciones.getColumnModel().getColumn(1).setMaxWidth(235);
-        this.jTableNotificaciones.getColumnModel().getColumn(2).setMaxWidth(850);
-        this.jTableNotificaciones.getColumnModel().getColumn(2).setMinWidth(300);
-        this.jTableNotificaciones.getColumnModel().getColumn(3).setMinWidth(90);
-        this.jTableNotificaciones.getColumnModel().getColumn(3).setMaxWidth(150);
-        this.jTableNotificaciones.getColumnModel().getColumn(4).setMinWidth(160);
-        this.jTableNotificaciones.getColumnModel().getColumn(4).setMaxWidth(350);
+        this.jTableNotificaciones.getColumnModel().getColumn(0).setMaxWidth(55);
+        this.jTableNotificaciones.getColumnModel().getColumn(1).setMinWidth(240);
+        this.jTableNotificaciones.getColumnModel().getColumn(1).setMaxWidth(390);
+        this.jTableNotificaciones.getColumnModel().getColumn(2).setMaxWidth(900);
+        this.jTableNotificaciones.getColumnModel().getColumn(2).setMinWidth(390);
+        this.jTableNotificaciones.getColumnModel().getColumn(3).setMinWidth(85);
+        this.jTableNotificaciones.getColumnModel().getColumn(3).setMaxWidth(130);
+        this.jTableNotificaciones.getColumnModel().getColumn(4).setMinWidth(180);
+        this.jTableNotificaciones.getColumnModel().getColumn(4).setMaxWidth(270);
         controlador = ControladorPrincipal.getInstancia(); //De esta manera uso solo un controlador
         //Creando todos los paneles - al momento de pasarlos al controlador siempre es la misma instancia
         // --> Podemos controlar que no aparezcan más de una vez la misma instancia

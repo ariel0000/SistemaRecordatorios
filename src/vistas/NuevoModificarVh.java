@@ -560,12 +560,12 @@ public class NuevoModificarVh extends JPanelCustom {
             }
         });
 
-        jLabelAtencionCh.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        jLabelAtencionCh.setForeground(new java.awt.Color(255, 0, 51));
+        jLabelAtencionCh.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabelAtencionCh.setForeground(new java.awt.Color(204, 0, 0));
         jLabelAtencionCh.setText("<html>\nLa persona tiene que estar anotada como chofer<br> para que aparezca en este listado\n<html>");
 
-        jLabelAtencionCli.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        jLabelAtencionCli.setForeground(new java.awt.Color(255, 0, 51));
+        jLabelAtencionCli.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabelAtencionCli.setForeground(new java.awt.Color(204, 0, 0));
         jLabelAtencionCli.setText("<html>\nLa persona tiene que estar anotada como cliente <br>\npara que aparezca en este listado\n<html>");
 
         jLabel4.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
@@ -639,7 +639,7 @@ public class NuevoModificarVh extends JPanelCustom {
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabelAtencionCh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jComboBoxChofer, 0, 417, Short.MAX_VALUE))
+                                    .addComponent(jComboBoxChofer, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addGroup(layout.createSequentialGroup()
@@ -656,7 +656,7 @@ public class NuevoModificarVh extends JPanelCustom {
                                 .addComponent(jButtonQuitarCh)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jButtonBorrarCh))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 769, Short.MAX_VALUE))
+                            .addComponent(jScrollPane2))
                         .addGap(78, 78, 78))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)

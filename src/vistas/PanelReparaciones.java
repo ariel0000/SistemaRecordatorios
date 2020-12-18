@@ -59,7 +59,7 @@ public class PanelReparaciones extends JPanelCustom {
     }
     
     private String[] getColumnas() { 
-        String columna[] = new String[]{"ID", "Marca y Modelo", "Descripción de Reparación", "completada", "tipo", "periodo (Meses)", "Fecha Terminado"};
+        String columna[] = new String[]{"ID", "Marca y Modelo", "Descripción de Reparación", "completada", "tipo", "periodo (Meses)", "Fecha Fin"};
         return columna;
     }
     /**
@@ -482,17 +482,16 @@ public class PanelReparaciones extends JPanelCustom {
         
     private void ajustarColumnasDeTabla(){
         //Ajusta los tamaños de las columnas de la tabla
-        this.jTableVh.getColumnModel().getColumn(0).setMaxWidth(75);
-        this.jTableVh.getColumnModel().getColumn(0).setMinWidth(55);
-        this.jTableVh.getColumnModel().getColumn(1).setMinWidth(220);
-        this.jTableVh.getColumnModel().getColumn(2).setMinWidth(520);  //La descripción
-        this.jTableVh.getColumnModel().getColumn(3).setMinWidth(140);
+        this.jTableVh.getColumnModel().getColumn(0).setMaxWidth(60);
+        this.jTableVh.getColumnModel().getColumn(0).setMinWidth(40);
+        this.jTableVh.getColumnModel().getColumn(1).setMinWidth(215);
+        this.jTableVh.getColumnModel().getColumn(2).setMinWidth(490);  //La descripción
+        this.jTableVh.getColumnModel().getColumn(3).setMinWidth(105);
         this.jTableVh.getColumnModel().getColumn(4).setMinWidth(95);
         this.jTableVh.getColumnModel().getColumn(4).setMinWidth(140);
-        this.jTableVh.getColumnModel().getColumn(5).setMinWidth(130);
+        this.jTableVh.getColumnModel().getColumn(5).setMinWidth(140);
         this.jTableVh.getColumnModel().getColumn(6).setMinWidth(230);
-        this.jTableVh.removeColumn(this.jTableVh.getColumnModel().getColumn(6));  //Borro de la vista la columna "idPlanilla" peeero
-        //se puede consultar la misma desde el modelo. Esto se ejecuta una sola vez (es la idea).
+    //    this.jTableVh.removeColumn(this.jTableVh.getColumnModel().getColumn(6));  //No se usa más
     }
     
     private void cargarReparaciones(String query){
@@ -510,9 +509,9 @@ public class PanelReparaciones extends JPanelCustom {
                 datos[1] = rs.getString(2)+" "+rs.getString(3);  //Marca y modelo
                 datos[2] = rs.getString(4);  //La descripción de la reparación
                 if (rs.getBoolean(5)) //Completada
-                    datos[3] = "Sí";
+                    datos[3] = "      Sí";
                 else
-                    datos[3] = "No";
+                    datos[3] = "      No";
                
                 datos[4] = rs.getString(6);  //Tipo
                 if (rs.getDate(7) == null)
@@ -523,7 +522,7 @@ public class PanelReparaciones extends JPanelCustom {
                 if(rs.getString(6).equals("reparacion"))
                     datos[5] = "-";  //No hay periódo para una reparación común
                 else
-                    datos[5] = "" + rs.getInt(8);  //Periodo
+                    datos[5] = "        " + rs.getInt(8);  //Periodo
                 this.modelo.addRow(datos);
                 this.jTableVh.updateUI();
             }

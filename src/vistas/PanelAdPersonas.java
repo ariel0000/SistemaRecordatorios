@@ -102,6 +102,24 @@ public class PanelAdPersonas extends JPanelCustom {
         return valor;
     }
     
+    private boolean tienePlanillasAsociadas(int idper){
+        //Método que retorna true si tiene planillas asociadas la persona pasado por parámetro
+        boolean valor = false;
+        String query = "SELECT p.idplanilla FROM planilla AS p INNER JOIN cliente AS c ON p.idcliente = c.idcliente "
+                + "WHERE c.idpersona = '"+idper+"' OR  p.idpersona = '"+idper+"' ";
+        try{
+            Statement st = this.controlador.obtenerConexion().createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while(rs.next()){
+                valor = true;
+            }
+        }catch(SQLException ex){
+            JLabel label = new JLabelAriel("Error al consultar planillas asociadas a la persona " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);  
+        }
+        return valor;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -268,17 +286,24 @@ public class PanelAdPersonas extends JPanelCustom {
     
     private void borrarPersona(int idPer){
         //borra la persona con el id: idPer
+        JLabel label1, label2;
         JLabel label = new JLabelAriel("Persona eliminada del sistema");
-        try {
-            PreparedStatement ps = this.controlador.obtenerConexion().prepareStatement("DELETE FROM persona WHERE idpersona = ? ");
-            ps.setInt(1, idPer);
-            ps.executeUpdate();
-            JOptionPane.showMessageDialog(null, label, "ATENCIÓN", JOptionPane.WARNING_MESSAGE);
-        } catch (SQLException ex) {
-            JLabel label2 = new JLabelAriel("Error al borrar Persona: " + ex.getMessage());
-            JOptionPane.showMessageDialog(null, label2, "ERROR", JOptionPane.WARNING_MESSAGE);
+        if(!this.tienePlanillasAsociadas(idPer)){  //Si no tiene planillas asociadas
+            try {
+                PreparedStatement ps = this.controlador.obtenerConexion().prepareStatement("DELETE FROM persona WHERE idpersona = ? ");
+                ps.setInt(1, idPer);
+                ps.executeUpdate();
+                JOptionPane.showMessageDialog(null, label, "ATENCIÓN", JOptionPane.WARNING_MESSAGE);
+            } catch (SQLException ex) {
+                label2 = new JLabelAriel("Error al borrar Persona: " + ex.getMessage());
+                JOptionPane.showMessageDialog(null, label2, "ERROR", JOptionPane.WARNING_MESSAGE);
+            }
+            this.cargarPersonas(); //Recargo al tabla
+            }
+        else{
+            label1 = new JLabelAriel("La persona tiene planillas asociadas");
+            JOptionPane.showMessageDialog(null, label1, "ERROR", JOptionPane.WARNING_MESSAGE);
         }
-        this.cargarPersonas(); //Recargo al tabla
     }
 
 

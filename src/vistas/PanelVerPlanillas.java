@@ -440,7 +440,7 @@ public class PanelVerPlanillas extends JPanelCustom {
                 }
             }
         }
-        obtenerPlanillas(consulta + " ORDER BY per.nombre, per.apellido");
+        obtenerPlanillas(consulta + " ORDER BY p.fecha_de_entrada DESC");
     }
     
     private void cosasParaIniciarEnComun(){
@@ -448,14 +448,15 @@ public class PanelVerPlanillas extends JPanelCustom {
         modelo.setColumnIdentifiers(getColumnas());
         this.controlador = ControladorPrincipal.getInstancia();
         this.jTablePlanillas.getColumnModel().getColumn(0).setMinWidth(40);
-        this.jTablePlanillas.getColumnModel().getColumn(0).setMaxWidth(80);
+        this.jTablePlanillas.getColumnModel().getColumn(0).setMaxWidth(50);
         this.jTablePlanillas.getColumnModel().getColumn(1).setMinWidth(130);
-        this.jTablePlanillas.getColumnModel().getColumn(1).setMaxWidth(230);
-        this.jTablePlanillas.getColumnModel().getColumn(2).setMinWidth(65);
-        this.jTablePlanillas.getColumnModel().getColumn(2).setMaxWidth(90);
+        this.jTablePlanillas.getColumnModel().getColumn(1).setMaxWidth(240);
+        this.jTablePlanillas.getColumnModel().getColumn(2).setMinWidth(75);
+        this.jTablePlanillas.getColumnModel().getColumn(2).setMaxWidth(95);
         this.jTablePlanillas.getColumnModel().getColumn(3).setMinWidth(130);
         this.jTablePlanillas.getColumnModel().getColumn(3).setMaxWidth(230);
         this.jTablePlanillas.getColumnModel().getColumn(4).setMinWidth(150);
+        this.jTablePlanillas.getColumnModel().getColumn(4).setMaxWidth(200);
         this.jTablePlanillas.getColumnModel().getColumn(5).setMinWidth(250);
         this.jTablePlanillas.getColumnModel().getColumn(6).setMinWidth(620); //La descrición
         cargarClientes(); //Cargo los clientes en el ComboBox
