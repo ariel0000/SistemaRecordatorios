@@ -474,7 +474,7 @@ public class PanelPrincipal extends JPanelCustom {
         String query = "SELECT k.idcheque, k.fecha_emision, k.numerocheque, p.nombre, p.apellido, k.monto FROM cheque AS k "
                 + "NATURAL JOIN forma_de_pago AS f INNER JOIN planilla AS pl ON pl.idplanilla = f.idplanilla INNER JOIN cliente AS c "
                 + "ON pl.idcliente = c.idcliente INNER JOIN persona as p ON c.idpersona = p.idpersona WHERE cobrado = false AND "
-                + "fecha_cobro is null ORDER BY k.fecha_emision";
+                + "fecha_cobro is null AND k.notificar = true ORDER BY k.fecha_emision";
         try {
             Statement st = this.controlador.obtenerConexion().createStatement();
             ResultSet rs = st.executeQuery(query);
@@ -514,7 +514,7 @@ public class PanelPrincipal extends JPanelCustom {
         String query = "SELECT k.idcheque, k.fecha_cobro, k.numerocheque, p.nombre, p.apellido, k.monto FROM cheque AS k NATURAL JOIN "
                 + "forma_de_pago AS f INNER JOIN planilla AS pl ON pl.idplanilla = f.idplanilla INNER JOIN cliente AS c ON "
                 + "pl.idcliente = c.idcliente INNER JOIN persona as p ON c.idpersona = p.idpersona WHERE cobrado = false AND "
-                + "fecha_cobro is not null ORDER BY k.fecha_cobro";
+                + "fecha_cobro is not null AND k.notificar = true ORDER BY k.fecha_cobro";
         try {
             Statement st = this.controlador.obtenerConexion().createStatement();
             ResultSet rs = st.executeQuery(query);

@@ -1036,7 +1036,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         Connection co = this.controlador.obtenerConexion();
         //Datos a consultar
         consulta = "SELECT per.nombre, per.apellido, v.marca, v.modelo, v.patente, p.fecha_de_entrada,"
-                + " p.fecha_de_salida, p.pagado, p.descripcion, p.entregado FROM planilla AS p INNER JOIN cliente AS c ON "
+                + " p.fecha_de_salida, p.pagado, p.descripcion, p.entregado, p.notificar FROM planilla AS p INNER JOIN cliente AS c ON "
                 + " p.idcliente = c.idcliente INNER JOIN persona AS per ON per.idpersona = c.idpersona "
                 + "INNER JOIN vehiculo AS v ON v.idvehiculo = p.idvehiculo "
                 + " WHERE p.idplanilla = '" + numero + "'"; //Esta consulta se puede optimizar
@@ -1054,6 +1054,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
                     this.jCheckBoxFacturado.setSelected(true);  //Facturado
                 this.jTextFieldDescripcion.setText(rs.getString(9));  //Descripcion
                 this.jCheckBoxEntregado.setSelected(rs.getBoolean(10)); //Entregado
+                this.jCheckBoxNotificar.setSelected(rs.getBoolean(11));  //Notificar
                 this.jTextFieldDueñoCliente.setText("Cliente: " + nombreApellido);
                 this.jLabelVh.setText(" ,Camión: " + marcaModeloPat);
             }
@@ -1472,7 +1473,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
             ps.setString(4, this.jTextFieldDescripcion.getText()); //Descripción
             ps.setBoolean(5, this.jCheckBoxFacturado.isSelected()); //facturado
             ps.setBoolean(6, this.jCheckBoxEntregado.isSelected()); //Entregado
-            ps.setBoolean(7, this.jCheckBoxNotificarCh.isSelected()); //Notificar
+            ps.setBoolean(7, this.jCheckBoxNotificar.isSelected()); //Notificar
             int executeUpdate = ps.executeUpdate();
             co.commit(); //Ahora si se acepta que anduvo bien
             JLabel label = new JLabelAriel("Actualizado con éxito");

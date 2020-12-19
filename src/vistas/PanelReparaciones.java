@@ -59,7 +59,7 @@ public class PanelReparaciones extends JPanelCustom {
     }
     
     private String[] getColumnas() { 
-        String columna[] = new String[]{"ID", "Marca y Modelo", "Descripción de Reparación", "completada", "tipo", "periodo (Meses)", "Fecha Fin"};
+        String columna[] = new String[]{"ID", "Marca y Modelo", "Descripción de Reparación", "Notificar", "completada", "tipo", "periodo (Meses)", "Fecha Fin"};
         return columna;
     }
     /**
@@ -359,7 +359,7 @@ public class PanelReparaciones extends JPanelCustom {
         this.controlador = ControladorPrincipal.getInstancia();
         this.ajustarColumnasDeTabla();
         //..
-        String query = "SELECT r.idreparacion, v.marca, v.modelo, r.descripcion, r.completada, r.tipo, r.fecha_terminado, r.periodo FROM "
+        String query = "SELECT r.idreparacion, v.marca, v.modelo, r.descripcion, r.notificar, r.completada, r.tipo, r.fecha_terminado, r.periodo FROM "
                 + "reparacion AS r INNER JOIN planilla AS p ON p.idplanilla = r.idplanilla INNER JOIN vehiculo AS v ON v.idvehiculo = p.idvehiculo";
         this.cargarReparaciones(query);
         this.cargarVh("");
@@ -381,7 +381,7 @@ public class PanelReparaciones extends JPanelCustom {
                 break;
             }
         }
-        String query = "SELECT r.idreparacion, v.marca, v.modelo, r.descripcion, r.completada, r.tipo, r.fecha_terminado, r.periodo FROM "
+        String query = "SELECT r.idreparacion, v.marca, v.modelo, r.descripcion, r.notificar, r.completada, r.tipo, r.fecha_terminado, r.periodo FROM "
                 + "reparacion AS r INNER JOIN planilla AS p ON p.idplanilla = r.idplanilla INNER JOIN vehiculo AS v ON v.idvehiculo = p.idvehiculo"
                 + " WHERE p.idvehiculo = '"+idCamion+"' AND r.tipo = 'mantenimiento' ";
         this.cargarReparaciones(query);
@@ -446,7 +446,7 @@ public class PanelReparaciones extends JPanelCustom {
     
     public void filtrarReparaciones(){
         //Método que permite "usarse desde afuera" para filtrar las reparaciones o vehículos correspondientes
-    String query = "SELECT r.idreparacion, v.marca, v.modelo, r.descripcion, r.completada, r.tipo, r.fecha_terminado, r.periodo FROM "
+    String query = "SELECT r.idreparacion, v.marca, v.modelo, r.descripcion, r.notificar, r.completada, r.tipo, r.fecha_terminado, r.periodo FROM "
             + "vehiculo AS v INNER JOIN planilla AS p ON p.idvehiculo = v.idvehiculo INNER JOIN reparacion AS r ON r.idplanilla = p.idplanilla ";
         int i = 0;
         if(this.jCheckBoxTipoRep.isSelected()){
@@ -484,13 +484,18 @@ public class PanelReparaciones extends JPanelCustom {
         //Ajusta los tamaños de las columnas de la tabla
         this.jTableVh.getColumnModel().getColumn(0).setMaxWidth(60);
         this.jTableVh.getColumnModel().getColumn(0).setMinWidth(40);
-        this.jTableVh.getColumnModel().getColumn(1).setMinWidth(215);
-        this.jTableVh.getColumnModel().getColumn(2).setMinWidth(490);  //La descripción
-        this.jTableVh.getColumnModel().getColumn(3).setMinWidth(105);
-        this.jTableVh.getColumnModel().getColumn(4).setMinWidth(95);
-        this.jTableVh.getColumnModel().getColumn(4).setMinWidth(140);
+        this.jTableVh.getColumnModel().getColumn(1).setMinWidth(190);
+        this.jTableVh.getColumnModel().getColumn(1).setMaxWidth(260);
+        this.jTableVh.getColumnModel().getColumn(2).setMinWidth(405);  //La descripción
+        this.jTableVh.getColumnModel().getColumn(3).setMinWidth(80);
+        this.jTableVh.getColumnModel().getColumn(3).setMaxWidth(95);
+        this.jTableVh.getColumnModel().getColumn(4).setMinWidth(105);
+        this.jTableVh.getColumnModel().getColumn(4).setMaxWidth(120);
         this.jTableVh.getColumnModel().getColumn(5).setMinWidth(140);
-        this.jTableVh.getColumnModel().getColumn(6).setMinWidth(230);
+        this.jTableVh.getColumnModel().getColumn(5).setMaxWidth(155);
+        this.jTableVh.getColumnModel().getColumn(6).setMinWidth(150);
+        this.jTableVh.getColumnModel().getColumn(6).setMaxWidth(180); //Periodo
+        this.jTableVh.getColumnModel().getColumn(7).setMinWidth(120);  //Fecha fin
     //    this.jTableVh.removeColumn(this.jTableVh.getColumnModel().getColumn(6));  //No se usa más
     }
     
@@ -499,7 +504,7 @@ public class PanelReparaciones extends JPanelCustom {
         //Descripción de Reparación", "completada", "tipo", "periodo", "Fecha Terminada
         DefaultTableModel dtm = (DefaultTableModel) this.jTableVh.getModel();
         dtm.setRowCount(0);  //Magicamente anduvo y sirve para eliminar las filas de la tabla
-        Object datos[] = new String[7];
+        Object datos[] = new String[8];
         datos[1] = "No";
         try {
             Statement st = this.controlador.obtenerConexion().createStatement();
@@ -508,21 +513,25 @@ public class PanelReparaciones extends JPanelCustom {
                 datos[0] = ""+rs.getInt(1);  //ID de la reparación
                 datos[1] = rs.getString(2)+" "+rs.getString(3);  //Marca y modelo
                 datos[2] = rs.getString(4);  //La descripción de la reparación
-                if (rs.getBoolean(5)) //Completada
-                    datos[3] = "      Sí";
+                if(rs.getBoolean(5)) //Notificar
+                    datos[3] = "     Sí";
                 else
-                    datos[3] = "      No";
+                    datos[3] = "     No";
+                if (rs.getBoolean(6)) //Completada
+                    datos[4] = "     Sí";
+                else
+                    datos[4] = "     No";
                
-                datos[4] = rs.getString(6);  //Tipo
-                if (rs.getDate(7) == null)
-                    datos[6] = "Sin Fecha";
+                datos[5] = rs.getString(7);  //Tipo
+                if (rs.getDate(8) == null)
+                    datos[7] = "Sin Fecha";
                 else
-                    datos[6] = rs.getDate(7) + "";  // Fecha Terminado
+                    datos[7] = rs.getDate(8) + "";  // Fecha Terminado
  //Marca y Modelo", "Descripción de Reparación", "completada", "tipo", "periodo (Meses)", "Fecha Terminada"
-                if(rs.getString(6).equals("reparacion"))
-                    datos[5] = "-";  //No hay periódo para una reparación común
+                if(rs.getString(7).equals("reparacion"))
+                    datos[6] = "-";  //No hay periódo para una reparación común
                 else
-                    datos[5] = "        " + rs.getInt(8);  //Periodo
+                    datos[6] = "        " + rs.getInt(9);  //Periodo
                 this.modelo.addRow(datos);
                 this.jTableVh.updateUI();
             }
