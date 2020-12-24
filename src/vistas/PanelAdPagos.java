@@ -44,6 +44,7 @@ public class PanelAdPagos extends JPanelCustom {
         iniciarCosasEnComun();
         this.cargarCli("");  //Cargo los Clientes del JComboBox
         this.jRadioButtonCheque.setSelected(true);  //Por defecto muestro los cheques
+        this.jRadioButtonACobrar.setSelected(true);
         this.jTextFieldCC.setEditable(false); 
         String query = this.decidirQuery();
         
@@ -377,7 +378,7 @@ public class PanelAdPagos extends JPanelCustom {
         jCheckBoxCli = new javax.swing.JCheckBox();
         jRadioButtonCheque = new javax.swing.JRadioButton();
         jRadioButtonContado = new javax.swing.JRadioButton();
-        jRadioButtonTodos = new javax.swing.JRadioButton();
+        jRadioButtonACobrar = new javax.swing.JRadioButton();
         jRadioButtonChVencidos = new javax.swing.JRadioButton();
         jTextFieldCli = new javax.swing.JTextField();
         jButtonBuscarCli = new javax.swing.JButton();
@@ -386,6 +387,7 @@ public class PanelAdPagos extends JPanelCustom {
         jLabel1 = new javax.swing.JLabel();
         jTextFieldCC = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        jRadioButtonTodos = new javax.swing.JRadioButton();
 
         jFrameInfo.setAlwaysOnTop(true);
         jFrameInfo.setFocusable(false);
@@ -524,9 +526,9 @@ public class PanelAdPagos extends JPanelCustom {
         jRadioButtonContado.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jRadioButtonContado.setText("Contado");
 
-        buttonGroup2.add(jRadioButtonTodos);
-        jRadioButtonTodos.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jRadioButtonTodos.setText("Todos");
+        buttonGroup2.add(jRadioButtonACobrar);
+        jRadioButtonACobrar.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jRadioButtonACobrar.setText("A Cobrar");
 
         buttonGroup2.add(jRadioButtonChVencidos);
         jRadioButtonChVencidos.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
@@ -561,6 +563,10 @@ public class PanelAdPagos extends JPanelCustom {
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel2.setText("* Ver Pago abre la planilla que contiene el pago seleccionado. Guiarse por el ID de la columna izquierda de esta Tabla");
 
+        buttonGroup2.add(jRadioButtonTodos);
+        jRadioButtonTodos.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jRadioButtonTodos.setText("Todos");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -573,9 +579,9 @@ public class PanelAdPagos extends JPanelCustom {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButtonSelectPago, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButtonSelectPago, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGap(18, 18, 18)
                         .addComponent(jButtonInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -589,25 +595,31 @@ public class PanelAdPagos extends JPanelCustom {
                                 .addGap(24, 24, 24)
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jRadioButtonTodos)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jRadioButtonChVencidos)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(24, 24, 24)
+                                        .addComponent(jRadioButtonTodos))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jRadioButtonACobrar)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jRadioButtonChVencidos)))))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabelBalance, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jComboBoxCli, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jTextFieldCli, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jButtonBuscarCli))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextFieldCC, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel5)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(jLabelBalance, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel3)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jTextFieldCC, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                         .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -630,14 +642,17 @@ public class PanelAdPagos extends JPanelCustom {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jRadioButtonTodos)
-                                .addComponent(jRadioButtonChVencidos))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jTextFieldCC, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jRadioButtonACobrar)
+                                    .addComponent(jRadioButtonChVencidos))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jRadioButtonTodos))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jTextFieldCC, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel3))
+                                .addGap(14, 14, 14)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel5)
                                     .addComponent(jLabelBalance, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))))
@@ -647,18 +662,20 @@ public class PanelAdPagos extends JPanelCustom {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(8, 8, 8)
+                .addGap(12, 12, 12)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButtonInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(21, 21, 21))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButtonSelectPago)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel2))
-                    .addComponent(jButtonInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -717,10 +734,16 @@ public class PanelAdPagos extends JPanelCustom {
                     + "FROM forma_de_pago AS fdp INNER JOIN " + tipo + " AS ch ON ch.idforma_de_pago = fdp.idforma_de_pago INNER JOIN "
                     + "planilla AS p ON fdp.idplanilla = p.idplanilla INNER JOIN cliente AS c ON p.idcliente = c.idcliente "
                     + "INNER JOIN persona AS per ON per.idpersona = c.idpersona WHERE fdp.tipo = '" + tipo + "' ";
-            if (this.jRadioButtonChVencidos.isSelected()) {
+            if (this.jRadioButtonChVencidos.isSelected()){
                 query += " AND (DATE_PART('day', now()::timestamp - ch.fecha_emision::timestamp) > 30 "
                         + "OR DATE_PART('day', now()::timestamp - ch.fecha_cobro::timestamp) > 30) AND ch.cobrado = 'false' ";
             }
+            else if(this.jRadioButtonACobrar.isSelected()){  //Query para los cheques a Cobrar que no están vencidos
+                query += " AND (DATE_PART('day', now()::timestamp - ch.fecha_emision::timestamp) <= 30 "
+                    + "OR DATE_PART('day', now()::timestamp - ch.fecha_cobro::timestamp) <= 30) AND ch.cobrado = 'false' ";
+            }
+            else  //Todos los cheques - no se agrega nada
+                ;
         } else { ////ID", "Cobrado", "Monto", "Fecha Emisión", "Fecha Cobro", "Notificar", "Nombre del Cliente
             query = "SELECT ch.id" + tipo + ", ch.monto, ch."+fecha+", per.nombre, per.apellido FROM forma_de_pago AS fdp "
                     + "INNER JOIN " + tipo + " AS ch ON ch.idforma_de_pago = fdp.idforma_de_pago INNER JOIN planilla AS p ON "
@@ -840,6 +863,7 @@ public class PanelAdPagos extends JPanelCustom {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabelBalance;
+    private javax.swing.JRadioButton jRadioButtonACobrar;
     private javax.swing.JRadioButton jRadioButtonChVencidos;
     private javax.swing.JRadioButton jRadioButtonCheque;
     private javax.swing.JRadioButton jRadioButtonContado;

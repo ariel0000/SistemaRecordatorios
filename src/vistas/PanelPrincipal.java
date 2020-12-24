@@ -484,7 +484,7 @@ public class PanelPrincipal extends JPanelCustom {
                 fechaEmision = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); //Si lo pasaba directamente explota
                 prioridad = (int) DAYS.between(fechaEmision, fechaHoy); //Mas días --> más prioridad
                 if(prioridad > 30){
-                    prioridad = 30;
+                    prioridad = 10;  //Bajo la prioridad para que aparezcan antes los que se pueden cobrar
                     variable = "Vencido";
                 }
                 else
@@ -524,7 +524,7 @@ public class PanelPrincipal extends JPanelCustom {
                 fechaCobro = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 prioridad = (int) DAYS.between(fechaCobro, fechaHoy);
                 if(prioridad > 30){
-                    prioridad = 30;
+                    prioridad = 10;  //Bajo la prioridad para que aparezcan antes los que se pueden cobrar
                     variable = "Vencido";
                 }
                 else
@@ -560,7 +560,7 @@ public class PanelPrincipal extends JPanelCustom {
                 Date fecha = new Date(rs.getDate(2).getTime());
                 fechaSalida = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 prioridad = (int) DAYS.between(fechaSalida, fechaHoy);
-                if(prioridad > 30)
+                if(prioridad > 30)  
                     prioridad = 30;
                 descripcion = rs.getString(3);
                 nombre = rs.getString(4);
