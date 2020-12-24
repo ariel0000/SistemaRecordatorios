@@ -23,6 +23,7 @@ import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import modelo.Cheque;
 import modelo.Estado;
+import modelo.EstadoCC;
 import modelo.EstadoCheque;
 import modelo.EstadoMantencion;
 import modelo.EstadoNotifHoy;
@@ -54,6 +55,7 @@ public class PanelPrincipal extends JPanelCustom {
     private ArrayList<Notificador> reparaciones;
     private ArrayList<Notificador> planillasImpagas;
     private ArrayList<Notificador> mantenciones;  //Servis
+    private ArrayList<Notificador> estadoCC;  // Estado de Cuenta Corriente
     //  private ArrayList<Notificador> clientes;  -- Todavía no estoy seguro
 
     public PanelPrincipal() {
@@ -434,6 +436,7 @@ public class PanelPrincipal extends JPanelCustom {
         
         //... Cargamos las planillas impagas
         this.planillasImpagas = cargarPlanillasImpagas();
+        this.estadoCC = cargarEstadoCC();
         this.reparaciones = cargarReparaciones();
         this.mantenciones = cargarMantenciones();
         this.notificaciones = new ArrayList<>(); 
@@ -441,6 +444,7 @@ public class PanelPrincipal extends JPanelCustom {
         this.notificaciones.addAll(this.cheques);
         this.notificaciones.addAll(this.reparaciones);
         this.notificaciones.addAll(this.mantenciones);
+        this.notificaciones.addAll(this.estadoCC);
         cargarNotificadoresATabla(this.notificaciones);
     }
 
@@ -551,7 +555,7 @@ public class PanelPrincipal extends JPanelCustom {
         ArrayList<Notificador> planillasImpagass = new ArrayList<>();
         String query = "SELECT p.idplanilla, p.fecha_de_salida, p.descripcion, per.nombre, per.apellido FROM planilla AS p INNER JOIN cliente"
                 + " AS c ON p.idcliente = c.idcliente INNER JOIN persona AS per ON per.idpersona = c.idpersona WHERE p.notificar = TRUE"
-                + " AND p.fecha_de_salida is not null AND p.pagado = false";
+                + " AND p.fecha_de_salida IS NOT NULL AND p.facturado = TRUE AND p.pagado = FALSE";
         
         try{
             Statement st = this.controlador.obtenerConexion().createStatement();
@@ -565,7 +569,7 @@ public class PanelPrincipal extends JPanelCustom {
                 descripcion = rs.getString(3);
                 nombre = rs.getString(4);
                 apellido = rs.getString(5);
-                Planilla planilla = new Planilla(rs.getInt(1), prioridad, "planilla Impaga", descripcion, nombre, apellido);
+                Planilla planilla = new Planilla(rs.getInt(1), prioridad, "Planilla Impaga", descripcion, nombre, apellido);
                 planillasImpagass.add(planilla);
             }
         }catch(SQLException ex){
@@ -575,7 +579,44 @@ public class PanelPrincipal extends JPanelCustom {
         return planillasImpagass;
     }
     
-    
+    public ArrayList<Notificador> cargarEstadoCC(){
+        // Devuelve un ArrayList con los estados de CC de los clientes que están en Naranja o Rojo
+        ArrayList<Notificador> estadoCc = new ArrayList<>();
+        LocalDate fechaHoy = LocalDate.now();
+        String apellido, nombre, tipo;
+        int dias = 0;
+        LocalDate fechaSalida;
+        String variable = "";
+        int prioridad;
+        //Este cheque se puede cobrar dentro de los 30 días posteriores a la fecha de cobro indicada
+        String query = "SELECT c.idcliente, MIN(p.fecha_de_salida), per.nombre, per.apellido FROM planilla AS p INNER JOIN cliente AS c "
+                + "ON p.idcliente = c.idcliente INNER JOIN persona AS per ON per.idpersona = c.idpersona "
+                + "WHERE p.pagado = false AND  p.facturado = true AND p.notificar = true GROUP BY c.idcliente, per.nombre, per.apellido";
+        try {
+            Statement st = this.controlador.obtenerConexion().createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while (rs.next()) { //Cargo todos los cheques
+                //Además de esta consulta hay que hacer una consulta más por los cheques que tienen fecha de cobro
+                Date fecha = new Date(rs.getDate(2).getTime());
+                fechaSalida = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                prioridad = (int) DAYS.between(fechaSalida, fechaHoy);
+                if(prioridad >= 45)
+                    variable = "Complicado";
+                else if(prioridad > 30)
+                        variable = "A tener en cuenta";
+                else
+                    variable = "Normal";
+                nombre = rs.getString(3);
+                apellido = rs.getString(4);
+                EstadoCC estado_cuenta_corriente = new EstadoCC(rs.getInt(1), prioridad, "Estado Cuenta Corriente", "Estado CC: "+variable+".  Días debiendo: ", nombre, apellido, dias);
+                estadoCc.add(estado_cuenta_corriente);  //Se cargan primero los que tienen más prioridad
+            }
+        } catch (SQLException ex) {
+            JLabel label = new JLabelAriel("Error al obtener cheques diferidos: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "¡¡ATENCIÓN!!", JOptionPane.WARNING_MESSAGE);
+        }
+         return estadoCc;
+    }
     
     public ArrayList<Notificador> cargarReparaciones(){
         //Método que devuelve las reparaciones o mantenciones incompletas
