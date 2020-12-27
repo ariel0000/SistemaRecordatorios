@@ -591,7 +591,7 @@ public class PanelPrincipal extends JPanelCustom {
         //Este cheque se puede cobrar dentro de los 30 días posteriores a la fecha de cobro indicada
         String query = "SELECT c.idcliente, MIN(p.fecha_de_salida), per.nombre, per.apellido FROM planilla AS p INNER JOIN cliente AS c "
                 + "ON p.idcliente = c.idcliente INNER JOIN persona AS per ON per.idpersona = c.idpersona "
-                + "WHERE p.pagado = false AND  p.facturado = true AND p.notificar = true GROUP BY c.idcliente, per.nombre, per.apellido";
+                + "WHERE p.pagado = false AND  p.facturado = true AND c.notificar = true GROUP BY c.idcliente, per.nombre, per.apellido";
         try {
             Statement st = this.controlador.obtenerConexion().createStatement();
             ResultSet rs = st.executeQuery(query);
