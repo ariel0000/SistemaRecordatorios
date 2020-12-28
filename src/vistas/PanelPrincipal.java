@@ -237,7 +237,7 @@ public class PanelPrincipal extends JPanelCustom {
                 .addGap(27, 27, 27))
         );
 
-        setPreferredSize(new java.awt.Dimension(1000, 533));
+        setPreferredSize(new java.awt.Dimension(1075, 733));
 
         jButtonAdCamiones.setFont(new java.awt.Font("SansSerif", 0, 24)); // NOI18N
         jButtonAdCamiones.setText("<html><p>Administar</p><p>Camiones</p></html>");
@@ -304,7 +304,7 @@ public class PanelPrincipal extends JPanelCustom {
 
         buttonGroupFiltros.add(jRadioButtonCheques);
         jRadioButtonCheques.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jRadioButtonCheques.setText("Cheques");
+        jRadioButtonCheques.setText("Cheques y EstadoCC");
         jRadioButtonCheques.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButtonChequesActionPerformed(evt);
@@ -340,7 +340,7 @@ public class PanelPrincipal extends JPanelCustom {
 
         buttonGroupFiltros.add(jRadioButtonMantencion);
         jRadioButtonMantencion.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jRadioButtonMantencion.setText("Mantencion");
+        jRadioButtonMantencion.setText("Services");
         jRadioButtonMantencion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButtonMantencionActionPerformed(evt);
@@ -620,13 +620,14 @@ public class PanelPrincipal extends JPanelCustom {
     
     public ArrayList<Notificador> cargarReparaciones(){
         //Método que devuelve las reparaciones o mantenciones incompletas
-        String nombre, apellido, descripcion, incompleto;
+        String nombre, apellido, descripcion, incompleto, marca, modelo;
         int prioridad, idRep;
         String tipoRep;
         ArrayList<Notificador> reparacioness = new ArrayList();
-        String query = "SELECT r.idreparacion, r.descripcion, per.nombre, per.apellido, r.tipo FROM reparacion AS r INNER JOIN planilla AS p"
-                + " ON r.idplanilla = p.idplanilla INNER JOIN cliente AS c ON c.idcliente = p.idcliente INNER JOIN persona AS per ON"
-                + " per.idpersona = c.idpersona WHERE r.completada = false AND r.notificar = true";
+        String query = "SELECT r.idreparacion, r.descripcion, per.nombre, per.apellido, r.tipo, v.marca, v.modelo FROM reparacion AS r "
+                + "INNER JOIN planilla AS p ON r.idplanilla = p.idplanilla INNER JOIN cliente AS c ON c.idcliente = p.idcliente "
+                + "INNER JOIN persona AS per ON per.idpersona = c.idpersona INNER JOIN vehiculo AS v ON v.idvehiculo = p.idvehiculo"
+                + " WHERE r.completada = false AND r.notificar = true";
         try{
             Statement st = this.controlador.obtenerConexion().createStatement();
             ResultSet rs = st.executeQuery(query);
@@ -637,11 +638,13 @@ public class PanelPrincipal extends JPanelCustom {
                 nombre = rs.getString(3);
                 apellido = rs.getString(4);
                 tipoRep = rs.getString(5); 
+                marca = rs.getString(6);    //Marca
+                modelo = rs.getString(7);  //Modelo
                 if("mantenimiento".equals(tipoRep))
                     incompleto = "incompleto";
                 else
                     incompleto = "incompleta";
-                Reparacion reparacion = new Reparacion(idRep, prioridad, tipoRep+" "+incompleto, descripcion, nombre, apellido);
+                Reparacion reparacion = new Reparacion(idRep, prioridad, tipoRep+" "+incompleto, descripcion, nombre, apellido, marca, modelo);
                 reparacioness.add(reparacion);
             }
         }catch(SQLException ex){
@@ -675,12 +678,12 @@ public class PanelPrincipal extends JPanelCustom {
                 Date fecha = new Date(rs.getDate(7).getTime());  //Fecha de mantención finalizada.
                 fechaSalida = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 int mesesDiferencia = (int) ChronoUnit.MONTHS.between(fechaSalida.withDayOfMonth(1), fechaHoy.withDayOfMonth(1));
-                if(mesesDiferencia-rs.getInt(8) >= -2 && (mesesDiferencia-rs.getInt(8) <= 2)){ 
+                if(mesesDiferencia-rs.getInt(8) >= 0 && (mesesDiferencia-rs.getInt(8) <= 2)){ //En el mismo mes o dos meses atrasado el Serv.
                     // Si la diferencia de meses anterior "coincide" con el periodo agregamos la noti.
                     if(mesesDiferencia-rs.getInt(8) < 2)                                      // 0 a 2
-                        prioridad = 25;  //Aumento la prioridad porque es una mantención para realizar pronto
+                        prioridad = 25;  //Aumento la prioridad porque es una mantención para realizar pronto (1 mes o menos)
                     Mantenimiento mantenimiento = new Mantenimiento(idRep, prioridad, "Service por realizar", descripcion, 
-                        nombre, apellido);    
+                        nombre, apellido, marca, modelo);    
                     reparacioness.add(mantenimiento);
                 }
             }

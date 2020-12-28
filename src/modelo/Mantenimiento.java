@@ -19,8 +19,11 @@ import vistas.PanelReparaciones;
  */
 public class Mantenimiento extends Notificador {
  
-    public Mantenimiento(int id, int prioridad, String tipo, String descripcion, String nombre, String apellido){
+    private String marca, modelo;
+    public Mantenimiento(int id, int prioridad, String tipo, String descripcion, String nombre, String apellido, String marca, String modelo){
         super(id, prioridad, tipo, descripcion, nombre, apellido);  
+        this.marca = marca;
+        this.modelo = modelo;
     }
     
     @Override
@@ -40,8 +43,11 @@ public class Mantenimiento extends Notificador {
     @Override
     public void verNotificacion() {
         //Creo que tendría que abrir la vista de "Ver Reparaciones" con el vehículo seleccionado filtrado por mantenciones
-        String[] options = new String[] {"Ver Service", "Dejar de Notificar: "+this.getDescripcion()};
-        JLabelAriel label1 = new JLabelAriel("Ver Service seleccionado o cancelar aviso de esta notificación");
+        String[] options = new String[] {"Ver Service", "Dejar de Notificar"};
+        String descripAcortada = this.getDescripcion();
+        if(descripAcortada.length() > 30)
+            descripAcortada = descripAcortada.substring(0, 30).concat("...");
+        JLabelAriel label1 = new JLabelAriel("Descripción: "+descripAcortada+"  Vh: "+this.getMarca()+this.getModelo());
         int response = JOptionPane.showOptionDialog(null, label1, "", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
         switch (response) {
             case 0:
@@ -71,4 +77,23 @@ public class Mantenimiento extends Notificador {
                 break;
         }
     }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+    
+    
+    
 }

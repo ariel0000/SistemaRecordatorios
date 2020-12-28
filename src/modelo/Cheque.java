@@ -41,8 +41,8 @@ public class Cheque extends Notificador {
     public void verNotificacion() {
         int idPlanilla = 0;
         PanelPlanillaNueva planilla;
-        String[] options = new String[] {"Ver Planilla", "Dejar de Notificar el Cheque N°: "+this.getNumeroCheque()};
-        JLabelAriel label1 = new JLabelAriel("Vea la planilla que contiene el cheque seleccionado o cancele aviso de esta notificación");
+        String[] options = new String[] {"Ver Planilla", "Dejar de Notificar"};
+        JLabelAriel label1 = new JLabelAriel("Cheque N°: "+this.getNumeroCheque()+"  Pertenece a: "+this.getNombre()+" "+this.getApellido());
         int response = JOptionPane.showOptionDialog(null, label1, "", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
         switch (response) {
             case 0:

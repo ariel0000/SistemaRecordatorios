@@ -43,8 +43,8 @@ public class EstadoCC extends Notificador{
     public void verNotificacion() {
         // Abriría la vista "Ver Planillas" del cliente para que aparezcan las que tiene adeudadas.
         //El id de esta clase es el del cliente (idcliente)
-        String[] options = new String[] {"Ver Planillas", "Dejar de Notificar Cuenta Corriente del Cliente: "+this.getNombre()+" "+this.getApellido()};
-        JLabelAriel label1 = new JLabelAriel("Ver Estado de CC del Cliente o Cancelar aviso de esta notificación");
+        String[] options = new String[] {"Ver Planillas", "Dejar de Notificar"};
+        JLabelAriel label1 = new JLabelAriel("Cuenta Corriente del Cliente: "+this.getNombre()+" "+this.getApellido());
         PanelVerPlanillas panelVerPlanillas = new PanelVerPlanillas(super.getId());  //Creo la nueva vista
         int response = JOptionPane.showOptionDialog(null, label1, "", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
         switch(response){

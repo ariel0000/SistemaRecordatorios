@@ -37,8 +37,8 @@ public class Planilla extends Notificador {
     @Override
     public void verNotificacion() {
         //Desde acá se abre la vista correspondiente para poder ver la Planilla. Será la vista principal?
-        String[] options = new String[] {"Ver Planilla", "Dejar de Notificar la Planilla"};
-        JLabelAriel label1 = new JLabelAriel("Vea la planilla seleccionada o cancele aviso de esta notificación");
+        String[] options = new String[] {"Ver Planilla", "Dejar de Notificar"};
+        JLabelAriel label1 = new JLabelAriel("Planilla de: "+this.getNombre()+" "+this.getApellido());
         int response = JOptionPane.showOptionDialog(null, label1, "", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
         switch (response) {
             case 0:

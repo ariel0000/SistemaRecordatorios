@@ -18,9 +18,11 @@ import vistas.PanelPlanillaNueva;
  * @author Ariel
  */
 public class Reparacion extends Notificador{
-
-    public Reparacion(int id, int prioridad, String tipo, String descripcion, String nombre, String apellido){
-        super(id, prioridad, tipo, descripcion, nombre, apellido); 
+    private String marca, modelo;
+    public Reparacion(int id, int prioridad, String tipo, String descripcion, String nombre, String apellido, String marca, String modelo){
+        super(id, prioridad, tipo, descripcion, nombre, apellido);
+        this.marca = marca;
+        this.modelo = modelo;
     }
 
     @Override
@@ -42,10 +44,13 @@ public class Reparacion extends Notificador{
     public void verNotificacion() {
         //Desde acá se abre la vista correspondiente para poder ver la Reparación.
         int idPlanilla = 0;
-        String[] options = new String[] {"Ver Planilla", "Dejar de Notificar la Reparacion"};
-        JLabelAriel label1 = new JLabelAriel("Vea la planilla de la reparación o cancelar aviso de esta notificación");
+        String descripAcortada = this.getDescripcion();
+        String[] options = new String[] {"Ver Planilla", "Dejar de Notificar"};
+        if(this.getDescripcion().length() > 40)
+            descripAcortada = this.getDescripcion().substring(0, 40).concat("...");
+        JLabelAriel label1 = new JLabelAriel("Reparación: "+descripAcortada+".  Vh: "+this.getMarca()+" "+this.getModelo());//No más de 40 chars
         int response = JOptionPane.showOptionDialog(null, label1, "", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
-        
+            
         // JOptionPane.showMessageDialog(null, label1, "INFO", JOptionPane.INFORMATION_MESSAGE);
         switch (response) {
             case 0:
@@ -70,4 +75,21 @@ public class Reparacion extends Notificador{
                 break;
         }
     }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+    
 }
