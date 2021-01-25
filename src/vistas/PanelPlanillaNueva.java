@@ -1227,11 +1227,19 @@ public class PanelPlanillaNueva extends JPanelCustom {
 
     private void jButtonAgregarChequeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAgregarChequeActionPerformed
         //Método agregar cheque --- La fecha de emisión puede ser nula --Deberá contemplar si es un cheque siendo modificado
-        if(!this.jCheckBoxChequeNuevo.isSelected()){ //Si no está seleccionado --> No es un cheque nuevo
-            actualizarCheque();
+        
+        if(!(this.jTextFieldNCheque.getText().equals("") || this.jDateChooserChEmision.getDate() == null || this.jTextFieldMontoCheque.getText().equals("")))
+        {  //Si número de cheque, fecha o contado son nulos no se agrega el cheque;
+            if(!this.jCheckBoxChequeNuevo.isSelected()){ //Si no está seleccionado --> No es un cheque nuevo
+                actualizarCheque();
+            }
+            else{
+                grabarNuevoCheque();
+            }
         }
         else{
-            grabarNuevoCheque();
+            JLabel label = new JLabelAriel(" El número de cheque, monto y la fecha de emisión no pueden quedar vacíos");
+            JOptionPane.showMessageDialog(null, label, "INFO", JOptionPane.WARNING_MESSAGE);   
         }
         //----------
     }//GEN-LAST:event_jButtonAgregarChequeActionPerformed

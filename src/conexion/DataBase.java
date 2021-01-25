@@ -15,7 +15,7 @@ import java.sql.SQLException;
  */
 public class DataBase {
     private final String usuario = "postgres";
-    private final String contraseña = "postgres";  //para usuario leo - contraseña: h24e89{Q3
+    private final String contraseña = "postgres";  //para usuario leo - contraseña: h24e89{Q3.  //Se puede usar "postgres" sino
     private final String url = "jdbc:postgresql://127.0.0.1:5432/bddLeo";
     Connection conn;
     private static DataBase instancia;
