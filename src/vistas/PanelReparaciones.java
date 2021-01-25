@@ -109,7 +109,7 @@ public class PanelReparaciones extends JPanelCustom {
         jFrameInfo.setType(java.awt.Window.Type.POPUP);
 
         jLabel24.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel24.setText("Esta vista permite ver las Reparaciones o Mantenciones de todos los Vehículos o de uno en particular");
+        jLabel24.setText("Esta vista permite ver las Reparaciones o Mantenimientos de los Vehículos");
 
         jLabel25.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabel25.setText("  * Filtro por Vehículo - Con la posibilidad de buscar el Vehículo por Marca.");
@@ -172,7 +172,7 @@ public class PanelReparaciones extends JPanelCustom {
                             .addComponent(jLabel25)
                             .addComponent(jLabel32)
                             .addComponent(jLabel29))
-                        .addGap(0, 3, Short.MAX_VALUE)))
+                        .addGap(0, 10, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jFrameInfoLayout.setVerticalGroup(

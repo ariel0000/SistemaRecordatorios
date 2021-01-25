@@ -80,6 +80,7 @@ public class PanelAdReparaciones extends JPanelCustom {
         jLabel31 = new javax.swing.JLabel();
         jLabel32 = new javax.swing.JLabel();
         jLabel33 = new javax.swing.JLabel();
+        jLabel34 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jButtonInfo = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
@@ -112,8 +113,9 @@ public class PanelAdReparaciones extends JPanelCustom {
 
         jFrameInfo.setAlwaysOnTop(true);
         jFrameInfo.setLocationByPlatform(true);
+        jFrameInfo.setPreferredSize(new java.awt.Dimension(810, 465));
         jFrameInfo.setResizable(false);
-        jFrameInfo.setSize(new java.awt.Dimension(825, 415));
+        jFrameInfo.setSize(new java.awt.Dimension(810, 465));
         jFrameInfo.setType(java.awt.Window.Type.POPUP);
 
         jLabel24.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
@@ -129,11 +131,11 @@ public class PanelAdReparaciones extends JPanelCustom {
         jLabel27.setText("* La longitud de la descripción es infinita");
 
         jLabel28.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel28.setText("* Cuando se selecciona hacer una reparación de tipo mantención se activa el periodo de días");
+        jLabel28.setText("* Cuando se selecciona hacer una reparación de tipo mantenimiento se activa el periodo de días");
 
         jLabel29.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabel29.setForeground(new java.awt.Color(255, 0, 51));
-        jLabel29.setText("* Las notificaciones son por reparaciones incompletas o mantenciones incompletas y por realizar");
+        jLabel29.setText("* Las notificaciones son por reparaciones incompletas o mantenimientos incompletos");
 
         jButton1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jButton1.setText("Aceptar");
@@ -144,18 +146,22 @@ public class PanelAdReparaciones extends JPanelCustom {
         });
 
         jLabel30.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel30.setText("* Cuando pasan los días indicados el sistema notifica al usuario para hacer una nueva mantención");
+        jLabel30.setText("* Cuando pasan los días indicados el sistema solicita al usuario hacer un nuevo mantenimiento");
 
         jLabel31.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel31.setText("Ej: \"Cambio de aceite y filtro. Costo de repuestos: Acceite $3500 - $Correa $5000\"");
+        jLabel31.setText("Ej: \"Cambio de aceite y filtro. Costo de repuestos: Aceite $3500 - $Correa $5000\"");
 
         jLabel32.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabel32.setForeground(new java.awt.Color(255, 0, 51));
-        jLabel32.setText("* El atributo \"notificar\" se puede destildar:");
+        jLabel32.setText("para la reparación que esta editando");
 
         jLabel33.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabel33.setForeground(new java.awt.Color(255, 0, 51));
-        jLabel33.setText("Al destildar no se notifica de mantenciones por realizar ni reparaciones incompletas");
+        jLabel33.setText("Al destildar no se notifica de mantenimientos por realizar ni reparaciones incompletas");
+
+        jLabel34.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel34.setForeground(new java.awt.Color(255, 0, 51));
+        jLabel34.setText("* El atributo \"notificar\" se puede destildar:");
 
         javax.swing.GroupLayout jFrameInfoLayout = new javax.swing.GroupLayout(jFrameInfo.getContentPane());
         jFrameInfo.getContentPane().setLayout(jFrameInfoLayout);
@@ -165,26 +171,23 @@ public class PanelAdReparaciones extends JPanelCustom {
                 .addContainerGap()
                 .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jFrameInfoLayout.createSequentialGroup()
-                        .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel31))
+                    .addComponent(jLabel33)
+                    .addComponent(jLabel28)
+                    .addComponent(jLabel24)
+                    .addComponent(jLabel26)
+                    .addComponent(jLabel27)
+                    .addComponent(jLabel29)
+                    .addComponent(jLabel25)
+                    .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jFrameInfoLayout.createSequentialGroup()
                             .addComponent(jLabel32)
-                            .addGroup(jFrameInfoLayout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel31)
-                                    .addComponent(jLabel33))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1))
-                    .addGroup(jFrameInfoLayout.createSequentialGroup()
-                        .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel28)
-                            .addComponent(jLabel30)
-                            .addComponent(jLabel24)
-                            .addComponent(jLabel26)
-                            .addComponent(jLabel27)
-                            .addComponent(jLabel29)
-                            .addComponent(jLabel25))
-                        .addGap(0, 3, Short.MAX_VALUE)))
-                .addContainerGap(15, Short.MAX_VALUE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton1))
+                        .addComponent(jLabel30, javax.swing.GroupLayout.Alignment.LEADING))
+                    .addComponent(jLabel34))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
         jFrameInfoLayout.setVerticalGroup(
             jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -212,10 +215,12 @@ public class PanelAdReparaciones extends JPanelCustom {
                         .addContainerGap())
                     .addGroup(jFrameInfoLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel32)
+                        .addComponent(jLabel34)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel33)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel32)
+                        .addContainerGap(29, Short.MAX_VALUE))))
         );
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
@@ -525,6 +530,7 @@ public class PanelAdReparaciones extends JPanelCustom {
     private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;

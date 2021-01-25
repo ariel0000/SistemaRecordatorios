@@ -496,12 +496,12 @@ public class PanelAdVehiculos extends JPanelCustom {
                 contadorMant++;
             }
         }catch(SQLException ex){
-            JLabelAriel label = new JLabelAriel("Error al cargar las mantenciones en la tabla: "+ex.getMessage());
+            JLabelAriel label = new JLabelAriel("Error al cargar las mantenimientos en la tabla: "+ex.getMessage());
             JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
         }
         this.jTablePlanilla.updateUI();
         if(contadorMant == 0){ //No encontró mantenciones para el vehículo
-            JLabelAriel label2 = new JLabelAriel("No se encontraron mantenciones para el vehículo seleccionado: ");
+            JLabelAriel label2 = new JLabelAriel("No se encontraron mantenimientos para el vehículo seleccionado: ");
             JOptionPane.showMessageDialog(null, label2, "INFO", JOptionPane.INFORMATION_MESSAGE);    
         }
     }

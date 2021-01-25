@@ -688,7 +688,7 @@ public class PanelPrincipal extends JPanelCustom {
                 }
             }
         }catch(SQLException ex){
-            JLabel label = new JLabelAriel("Error al obtener Mantenciones (Servi): " + ex.getMessage());
+            JLabel label = new JLabelAriel("Error al obtener los Mantenimientos (Servi): " + ex.getMessage());
             JOptionPane.showMessageDialog(null, label, "¡¡ATENCIÓN!!", JOptionPane.WARNING_MESSAGE);  
         }
         return reparacioness;

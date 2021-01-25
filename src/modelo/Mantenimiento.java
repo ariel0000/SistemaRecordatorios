@@ -70,6 +70,7 @@ public class Mantenimiento extends Notificador {
                     JOptionPane.showMessageDialog(null, label, "¡¡ATENCIÓN!!", JOptionPane.WARNING_MESSAGE);
                 }   break;
             case 1:
+                JLabelAriel label = new JLabelAriel("¿Está seguro de dejar de notificar: "+super.getDescripcion());
                 Notificar(false);  //Cancelo la notificación del mantenimiento
                 break;
             default:

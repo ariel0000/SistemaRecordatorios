@@ -47,7 +47,7 @@
                               <Component id="jLabel32" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel29" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace min="0" pref="3" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="10" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -90,7 +90,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="SansSerif" size="18" style="0"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Esta vista permite ver las Reparaciones o Mantenciones de todos los Veh&#xed;culos o de uno en particular"/>
+            <Property name="text" type="java.lang.String" value="Esta vista permite ver las Reparaciones o Mantenimientos de los Veh&#xed;culos"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel25">
