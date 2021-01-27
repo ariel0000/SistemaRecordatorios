@@ -1209,7 +1209,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
      //       this.montoCheque.setOnlyNums(true);
             this.jCheckBoxChCobrado.setSelected(false);
             this.jFrameCheque.setVisible(true);
-            this.jDateChooserChCobro.setDate(new Date());
+         //   this.jDateChooserChCobro.setDate(new Date());
             // this.jDateChooserChEmision.setDate(new Date());  --Este no porque puede ser nulo
         }
         else  //Hacer lo mismo para el agregado de pagos al contado o cuenta corriente
