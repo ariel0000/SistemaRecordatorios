@@ -277,7 +277,7 @@ public class PanelAdVehiculos extends JPanelCustom {
 
     private void jButtonNuevoVhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNuevoVhActionPerformed
         NuevoModificarVh nuevoVh = new NuevoModificarVh();
-        this.controlador.cambiarDePanel(nuevoVh, "Nuevo Camión");
+        this.controlador.cambiarDePanel(nuevoVh, "Agregar Vehículo");
     }//GEN-LAST:event_jButtonNuevoVhActionPerformed
 
     private void jButtonVerRepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVerRepActionPerformed

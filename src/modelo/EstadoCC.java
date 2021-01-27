@@ -28,6 +28,23 @@ public class EstadoCC extends Notificador{
         // Desde acá se activa o se cancela la notificación del EstadoCC
         //Cancelar la notificación de EstadoCC ¿cancelaría la notificación para la planilla impaga más vieja o para todas?. 
         //Necesidad de un atributo notificar en el Cliente.
+        JLabelAriel label = new  JLabelAriel("¿Está seguro que no quiere recibir más notificaciones del estado de CC de: "
+                +super.getNombre()+" "+super.getApellido());
+        if(!valor){  //False si se desactiva la notificación (única forma en la que se usa por ahora en el sistema)
+            int opcion = JOptionPane.showConfirmDialog(null, label, "INFO", JOptionPane.WARNING_MESSAGE);
+            if(opcion == JOptionPane.OK_OPTION)  //Puse que si, hay que quitar la notificación
+                SetearNotif(valor);
+            else
+                ;  //No quito la notificación porque decidí que no dsps de la pregunta
+        }
+        else
+            SetearNotif(valor); // Estoy seteando para que notifique
+        
+        super.getControlador().getPanelPrincipal().onFocus();  //Recargo al vista
+    }
+
+    private void SetearNotif(boolean valor){
+        //Metodo que se encarga solamente de llamar a la base de datos para setear el atributo notificar 
         String query = "UPDATE cliente SET notificar = '"+valor+"' WHERE idcliente = '"+super.getId()+"' ";
         try{
             PreparedStatement pst = super.getControlador().obtenerConexion().prepareStatement(query);
@@ -36,9 +53,8 @@ public class EstadoCC extends Notificador{
             JLabelAriel label = new JLabelAriel("Error: "+ex.getMessage());
             JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
         }
-        super.getControlador().getPanelPrincipal().onFocus();  //Recargo al vista
     }
-
+    
     @Override
     public void verNotificacion() {
         // Abriría la vista "Ver Planillas" del cliente para que aparezcan las que tiene adeudadas.
