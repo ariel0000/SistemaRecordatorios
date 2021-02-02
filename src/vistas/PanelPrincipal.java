@@ -587,7 +587,7 @@ public class PanelPrincipal extends JPanelCustom {
         int dias = 0;
         LocalDate fechaSalida;
         String variable = "";
-        int prioridad;
+        int prioridad = 0;
         //Este cheque se puede cobrar dentro de los 30 días posteriores a la fecha de cobro indicada
         String query = "SELECT c.idcliente, MIN(p.fecha_de_salida), per.nombre, per.apellido FROM planilla AS p INNER JOIN cliente AS c "
                 + "ON p.idcliente = c.idcliente INNER JOIN persona AS per ON per.idpersona = c.idpersona "
@@ -597,9 +597,12 @@ public class PanelPrincipal extends JPanelCustom {
             ResultSet rs = st.executeQuery(query);
             while (rs.next()) { //Cargo todos los cheques
                 //Además de esta consulta hay que hacer una consulta más por los cheques que tienen fecha de cobro
-                Date fecha = new Date(rs.getDate(2).getTime());
-                fechaSalida = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                if(rs.getDate(2) != null){
+                    Date fecha = new Date(rs.getDate(2).getTime());
+                    fechaSalida = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                
                 prioridad = (int) DAYS.between(fechaSalida, fechaHoy);
+                }
                 if(prioridad >= 45)
                     variable = "Complicado";
                 else if(prioridad > 30)

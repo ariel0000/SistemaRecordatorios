@@ -22,7 +22,6 @@ import java.util.Date;
 import java.util.TimeZone;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
-import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import modelo.ComboItem;
 import modelo.JLabelAriel;
