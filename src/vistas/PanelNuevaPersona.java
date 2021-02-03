@@ -1149,34 +1149,36 @@ public class PanelNuevaPersona extends JPanelCustom {
             JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
         }
     }
-    
+
     private void jCheckBoxClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxClienteActionPerformed
         // Activo o desactivo las casillas de Cliente según esté seteado el CheckBox
         if (this.jCheckBoxCliente.isSelected()) {  //Tengo que activar los campos referidos a Cliente
             activarDesactivarCasillasDueño(true);
             //Tengo que saber si es una nueva persona (sin idPersona) o es a modificar. Para saber si cargar datos en la Vista Cliente
             if (this.idPersona == 0) { //Nueva persona --> Tengo que abrir la vista (sin nada) pero tengo que tener la persona guardada
-                if (!this.jTextFieldNombre.getText().equals("")) {
+                if (!this.jTextFieldApellido.getText().equals("")) {
                     grabarNuevaPersona(); //Solo se graba si está el nombre escrito y si es nuevo persona (if de arriba)
                     this.cargarDatosJFrameCliente();
                     this.jFrameCliente.setVisible(true);
+                    this.jCheckBoxNotificar.setSelected(true);  //Arbitrario para que cada nuevo Cliente notifique por defecto
                 } else {  //La persona no existe en la Base de datos y en la vista no está el nombre
-                    JLabel label = new JLabelAriel("No se puede configurar Cliente si la persona no tiene nombre");
+                    JLabel label = new JLabelAriel("No se puede configurar Cliente si la persona no tiene Apellido");
                     JOptionPane.showMessageDialog(null, label, "ATENCIÓN", JOptionPane.ERROR_MESSAGE);
                     this.jCheckBoxCliente.setSelected(false);
                 }
-            } else { //Es una persona a modificar a la cuál le activamos la casilla de Cliente
+            } else { //Es una persona a modificar a la cuál le activamos la casilla de Cliente --> Nuevo Cliente
                 this.cargarDatosJFrameCliente(); //Carga los datos con la variable this.idPersona
                 JLabel label = new JLabelAriel("Agregue los datos del Cliente, el cuil|cuit es obligatorio");
                 JOptionPane.showMessageDialog(null, label, "ATENCIÓN", JOptionPane.INFORMATION_MESSAGE);
+                this.jCheckBoxNotificar.setSelected(true);  //Arbitrario para que cada nuevo Cliente notifique por defecto
                 this.jFrameCliente.setVisible(true);
             }
 
         } else {  //Tengo que desactivar los campos referidos a  Cliente
-        //Acá habría que borrar el Cliente y los vehículos¿? ¿y las Planillas asociadas?. No se puede borrar un Cliente con Vh asociados
-        //La respuesta anterior responde las 2 preguntas            
-            if(this.jComboBoxCli.getItemCount() == 0){  //Se puede borrar la persona como Cliente. Entiendo que no interfiere en las planillas
-                if(borrarCliente())
+            //Acá habría que borrar el Cliente y los vehículos¿? ¿y las Planillas asociadas?. No se puede borrar un Cliente con Vh asociados
+            //La respuesta anterior responde las 2 preguntas            
+            if (this.jComboBoxCli.getItemCount() == 0) {  //Se puede borrar la persona como Cliente. Entiendo que no interfiere en las planillas
+                if (borrarCliente())
                     activarDesactivarCasillasDueño(false); //Estoy desactivando una persona que era cliente pero ahora deja de serlo   
             }
             else{
