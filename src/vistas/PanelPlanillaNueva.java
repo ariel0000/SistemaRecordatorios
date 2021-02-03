@@ -1185,11 +1185,13 @@ public class PanelPlanillaNueva extends JPanelCustom {
         if (estaGuardada()) {
      //       this.montoContado = new RestrictedTextField(this.jTextFieldMontoContado);
      //       this.montoContado.setOnlyNums(true);
-
             this.jFrameContado.setVisible(true);  //Abro la Planilla del pago Contado
             this.jDateChooserContado.setDate(new Date());
             this.jTextFieldMontoContado.setText("");       
-            this.jRadioButtonNuevoPago.setSelected(true); //Es un nuevo pago
+            this.jRadioButtonNuevoPago.setSelected(true); //Es un pago Nuevo
+            this.jButtonAgregarContado.setText("Agregar");
+            this.jRadioButtonNuevoPago.setVisible(true);
+            this.jRadioButtonNuevoPago.setEnabled(false);
             JTextFieldDateEditor dateEditor =(JTextFieldDateEditor) this.jDateChooserContado.getDateEditor();
             dateEditor.setEditable(false);  //Para que no se puede ingresar manualmente la fecha
         }
@@ -1621,8 +1623,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         else{
             JLabel label = new JLabelAriel("Debe seleccionar una fila de la Tabla de Pagos ");
             JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
-        }
-            
+        }     
     }//GEN-LAST:event_jButtonVerPagoActionPerformed
 
     private void jButtonAceptarDeudasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAceptarDeudasActionPerformed
@@ -1833,7 +1834,6 @@ public class PanelPlanillaNueva extends JPanelCustom {
         // Actualizo un pago contado
         int idPago = Integer.valueOf(this.jLabelIdPago.getText());
    //   int numPlanilla = Integer.valueOf(this.jLabelNumPlanilla.getText());
-        this.jRadioButtonNuevoPago.setEnabled(false);
         Date diaCobro = this.jDateChooserContado.getDate();
         Connection co = this.controlador.obtenerConexion();
         try {
@@ -2471,6 +2471,9 @@ public class PanelPlanillaNueva extends JPanelCustom {
         this.jRadioButtonNuevoPago.setVisible(false); //Para que se disimule
         this.jLabelIdPago.setText(""+idPago);
         this.jLabelId.setVisible(true);
+        this.jLabelIdPago.setVisible(true);
+        this.jRadioButtonNuevoPago.setSelected(false);  //Para que actualize y no agregue un nuevo pago
+        this.jButtonAgregarContado.setText("Actualizar");
         JTextFieldDateEditor dateEditor =(JTextFieldDateEditor) this.jDateChooserContado.getDateEditor();
         dateEditor.setEditable(false);  //Para que no se puede ingresar manualmente la fecha
         //----------------------------------------------------

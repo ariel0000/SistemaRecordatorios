@@ -754,7 +754,7 @@ public class PanelAdPagos extends JPanelCustom {
             ComboItem cIt = (ComboItem) this.jComboBoxCli.getSelectedItem();
             if (!cIt.getKey().equals("0")) {
                 query += " AND c.idcliente = '" + cIt.getKey() + "' ";
-            }
+            }   
         }
         query += " ORDER BY per.apellido ";
         return query;
@@ -808,7 +808,7 @@ public class PanelAdPagos extends JPanelCustom {
         int idCli;
         if(!nombre.equals(""))  //Si tengo nombre --> cargo el|los clientes que correspondan según el nombre o apellido
             query = "SELECT c.idcliente, p.nombre, p.apellido FROM persona AS p INNER JOIN cliente AS c ON p.idpersona = c.idpersona"
-                    + " WHERE lower(p.nombre) LIKE '"+nombreApe+"' OR lower(p.apellido) LIKE '"+nombreApe+"' ";
+                    + " WHERE lower(p.nombre) LIKE '"+nombreApe+"%' OR lower(p.apellido) LIKE '"+nombreApe+"%' ";
         Statement st;
         try {
             st = this.controlador.obtenerConexion().createStatement();
