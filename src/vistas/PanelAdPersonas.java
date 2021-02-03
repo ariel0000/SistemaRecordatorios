@@ -40,16 +40,36 @@ public class PanelAdPersonas extends JPanelCustom {
         cargarDatos();
     }
 
+    private void ajustarColumnasDeTabla(){
+        //Ajusta los tamaños de las columnas de la tabla
+        this.jTablePersonas.getColumnModel().getColumn(0).setMaxWidth(70); //Id
+        this.jTablePersonas.getColumnModel().getColumn(0).setMinWidth(40);
+        this.jTablePersonas.getColumnModel().getColumn(1).setMinWidth(250);  //Apellido
+        this.jTablePersonas.getColumnModel().getColumn(1).setMaxWidth(400);
+        this.jTablePersonas.getColumnModel().getColumn(2).setMinWidth(190);  //Nombre
+        this.jTablePersonas.getColumnModel().getColumn(3).setMinWidth(95);   //Es chofer
+        this.jTablePersonas.getColumnModel().getColumn(3).setMaxWidth(115);
+        this.jTablePersonas.getColumnModel().getColumn(4).setMinWidth(95);  //Es cliente
+        this.jTablePersonas.getColumnModel().getColumn(4).setMaxWidth(115);
+        this.jTablePersonas.getColumnModel().getColumn(5).setMinWidth(130);  //DNI|CUIL
+        this.jTablePersonas.getColumnModel().getColumn(5).setMaxWidth(165);  
+        this.jTablePersonas.getColumnModel().getColumn(6).setMinWidth(150); //Planillas Impagas?
+        this.jTablePersonas.getColumnModel().getColumn(6).setMaxWidth(175); 
+        this.jTablePersonas.getColumnModel().getColumn(7).setMinWidth(120);  //Notifica C.C
+    //    this.jTablePersonas.removeColumn(this.jTablePersonas.getColumnModel().getColumn(6));  //No se usa más
+    }
+    
     private void cargarDatos(){
         this.jTablePersonas.getTableHeader().setFont(new Font("SansSerif", Font.PLAIN, 18));
         this.modelo.setColumnIdentifiers(getColumnas());
+        this.ajustarColumnasDeTabla();
         this.controlador = ControladorPrincipal.getInstancia();
         cargarPersonas();
         cargarVhBdD();
     }
     
     private String[] getColumnas() { 
-        String columna[] = new String[]{"Id", "Apellido", "Nombre", "Es Chofer", "   Es Cliente   ", "DNI/CUIL",  "Planillas Impagas"};
+        String columna[] = new String[]{"Id", "Apellido", "Nombre", "Es Chofer", "Es Cliente", "DNI/CUIL",  "Planillas Impagas", "¿Notifica C.C?"};
         return columna;
     }
     
@@ -57,8 +77,8 @@ public class PanelAdPersonas extends JPanelCustom {
         //Cargo las persona a la tabla
         DefaultTableModel dtm = (DefaultTableModel) this.jTablePersonas.getModel();
         dtm.setRowCount(0);  //Magicamente anduvo y sirve para eliminar las filas de la tabla
-        String datos[] = new String[7];  //Tipo, Descripción, Patente
-        String consulta = "SELECT p.idpersona, p.nombre, p.apellido, c.idchofer, cl.idcliente, cl.cuil FROM persona AS p "
+        String datos[] = new String[8];  //Tipo, Descripción, Patente
+        String consulta = "SELECT p.idpersona, p.nombre, p.apellido, c.idchofer, cl.idcliente, cl.cuil, cl.notificar FROM persona AS p "
               + "left join chofer AS c on p.idpersona = c.idpersona left join cliente AS cl ON cl.idpersona = p.idpersona ORDER BY p.apellido";
         //Con esta consulta estoy mostrando todas las personas y si son clientes y/o choferes
         try {
@@ -72,6 +92,10 @@ public class PanelAdPersonas extends JPanelCustom {
                 datos[4] = String.valueOf(rs.getString(5) != null); // True si es Cliente
                 datos[5] = rs.getString(6); //cuil
                 datos[6] =  String.valueOf(tienePlanillasImpagas(rs.getInt(1)));
+                if(rs.getBoolean(7))
+                    datos[7] = "     Sí  ";
+                else
+                    datos[7] = "     No  ";
                 this.modelo.addRow(datos);
                 this.jTablePersonas.updateUI();     
             }

@@ -83,9 +83,9 @@ public class PanelVerPlanillas extends JPanelCustom {
                 pagado = rs.getBoolean(3);
                 if (pagado) //Verdadero si pago
                 {
-                    Datos[2] = "No"; //No está impaga la planilla
+                    Datos[2] = "   No"; //No está impaga la planilla
                 } else {
-                    Datos[2] = "Sí";
+                    Datos[2] = "   Sí";
                 }
                 Object fechaNula = rs.getDate(4); //Puede ser nula
                 if (fechaNula != null)
@@ -94,7 +94,7 @@ public class PanelVerPlanillas extends JPanelCustom {
                     Datos[3] = "No Facturado"; 
                 //Si no seteara acá la fecha ocurre el error de que se toma la fecha equivocada de la iteración anterior para una pl. nula
                 nombre = rs.getString(5);
-                String nombreYapellido = nombre.concat(" " + rs.getString(6)); //Agrego el apellido
+                String nombreYapellido = rs.getString(6)+" "+nombre;  //Apellido y Nombre
                 Datos[4] = nombreYapellido;
                 marca = rs.getString(7);
                 String marcaModelo = marca.concat(" " + rs.getString(8));
@@ -449,8 +449,8 @@ public class PanelVerPlanillas extends JPanelCustom {
         this.controlador = ControladorPrincipal.getInstancia();
         this.jTablePlanillas.getColumnModel().getColumn(0).setMinWidth(40);
         this.jTablePlanillas.getColumnModel().getColumn(0).setMaxWidth(50);
-        this.jTablePlanillas.getColumnModel().getColumn(1).setMinWidth(130);
-        this.jTablePlanillas.getColumnModel().getColumn(1).setMaxWidth(240);
+        this.jTablePlanillas.getColumnModel().getColumn(1).setMinWidth(170);
+        this.jTablePlanillas.getColumnModel().getColumn(1).setMaxWidth(230);
         this.jTablePlanillas.getColumnModel().getColumn(2).setMinWidth(75);
         this.jTablePlanillas.getColumnModel().getColumn(2).setMaxWidth(95);
         this.jTablePlanillas.getColumnModel().getColumn(3).setMinWidth(130);
@@ -458,7 +458,7 @@ public class PanelVerPlanillas extends JPanelCustom {
         this.jTablePlanillas.getColumnModel().getColumn(4).setMinWidth(150);
         this.jTablePlanillas.getColumnModel().getColumn(4).setMaxWidth(200);
         this.jTablePlanillas.getColumnModel().getColumn(5).setMinWidth(250);
-        this.jTablePlanillas.getColumnModel().getColumn(6).setMinWidth(620); //La descrición
+        this.jTablePlanillas.getColumnModel().getColumn(6).setMinWidth(400); //La descrición
         cargarClientes(); //Cargo los clientes en el ComboBox
         cargarCamiones();
         //La fecha no se puede modificar a mano - configuración en la línea de abajo
