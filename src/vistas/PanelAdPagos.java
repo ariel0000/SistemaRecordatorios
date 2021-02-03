@@ -113,7 +113,7 @@ public class PanelAdPagos extends JPanelCustom {
                     datos[5] = "SI";
                 else
                     datos[5] = "NO";
-                datos[6] = rs.getString(7)+" "+rs.getString(8);  //Nombre y Apellido
+                datos[6] = rs.getString(8)+" "+rs.getString(7);  //Apellido y Nombre
                 
                 this.modeloCli.addRow(datos);
             }
@@ -756,6 +756,7 @@ public class PanelAdPagos extends JPanelCustom {
                 query += " AND c.idcliente = '" + cIt.getKey() + "' ";
             }
         }
+        query += " ORDER BY per.apellido ";
         return query;
     }
     

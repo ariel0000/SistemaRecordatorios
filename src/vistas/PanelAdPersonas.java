@@ -49,7 +49,7 @@ public class PanelAdPersonas extends JPanelCustom {
     }
     
     private String[] getColumnas() { 
-        String columna[] = new String[]{"Id", "Nombre", "Apellido", "Es Chofer", "   Es Cliente   ", "DNI/CUIL",  "Planillas Impagas"};
+        String columna[] = new String[]{"Id", "Apellido", "Nombre", "Es Chofer", "   Es Cliente   ", "DNI/CUIL",  "Planillas Impagas"};
         return columna;
     }
     
@@ -59,15 +59,15 @@ public class PanelAdPersonas extends JPanelCustom {
         dtm.setRowCount(0);  //Magicamente anduvo y sirve para eliminar las filas de la tabla
         String datos[] = new String[7];  //Tipo, Descripción, Patente
         String consulta = "SELECT p.idpersona, p.nombre, p.apellido, c.idchofer, cl.idcliente, cl.cuil FROM persona AS p "
-              + "left join chofer AS c on p.idpersona = c.idpersona left join cliente AS cl ON cl.idpersona = p.idpersona ORDER BY p.nombre";
+              + "left join chofer AS c on p.idpersona = c.idpersona left join cliente AS cl ON cl.idpersona = p.idpersona ORDER BY p.apellido";
         //Con esta consulta estoy mostrando todas las personas y si son clientes y/o choferes
         try {
             Statement st = this.controlador.obtenerConexion().createStatement();
             ResultSet rs = st.executeQuery(consulta);
             while(rs.next()){
                 datos[0] = rs.getString(1); //Id de la persona
-                datos[1] = rs.getString(2); //nombre
-                datos[2] = rs.getString(3); //apellido
+                datos[1] = rs.getString(3); //Apellido
+                datos[2] = rs.getString(2); //Nombre
                 datos[3] = String.valueOf((rs.getString(4))!= null); //True si no es igual a "null" - Entonces TRUE si es Chofer 
                 datos[4] = String.valueOf(rs.getString(5) != null); // True si es Cliente
                 datos[5] = rs.getString(6); //cuil

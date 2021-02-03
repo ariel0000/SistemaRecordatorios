@@ -588,7 +588,7 @@ public class PanelAdVehiculos extends JPanelCustom {
         dtm.setRowCount(0);  //Magicamente funciona y sirve para eliminar las filas de la tabla 
         String queryVh = "SELECT v.patente, v.marca, v.modelo, p.nombre, p.apellido FROM "
                 + "vehiculo AS v inner join cliente AS c ON v.idduenio = c.idcliente INNER JOIN "
-                + "persona AS p ON p.idpersona = c.idpersona ORDER BY p.nombre";
+                + "persona AS p ON p.idpersona = c.idpersona ORDER BY p.apellido";
         cargarVh(queryVh);
     }
 
@@ -605,8 +605,8 @@ public class PanelAdVehiculos extends JPanelCustom {
                 patente = rs.getString(1);
                 marca = rs.getString(2);
                 modelo = rs.getString(3);
-                nombreApellido = rs.getString(4);
-                nombreApellido = nombreApellido + " " + rs.getString(5);
+                nombreApellido = rs.getString(5);
+                nombreApellido = nombreApellido + " " + rs.getString(4);  //Primero el nombre
                 Datos[0] = patente;
                 Datos[1] = marca;
                 Datos[2] = modelo;
