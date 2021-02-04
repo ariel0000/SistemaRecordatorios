@@ -235,6 +235,7 @@ public class PanelNuevaPersona extends JPanelCustom {
         jTextAreaDescripcion = new javax.swing.JTextArea();
         jLabelNombreChofer = new javax.swing.JLabel();
         jLabelApellidoChofer = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
         jFrameCliente = new javax.swing.JFrame();
         jLabelNombreCli = new javax.swing.JLabel();
         jLabelApeCli = new javax.swing.JLabel();
@@ -374,8 +375,9 @@ public class PanelNuevaPersona extends JPanelCustom {
         jFrameChofer.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         jFrameChofer.setAlwaysOnTop(true);
         jFrameChofer.setLocationByPlatform(true);
+        jFrameChofer.setPreferredSize(new java.awt.Dimension(730, 360));
         jFrameChofer.setResizable(false);
-        jFrameChofer.setSize(new java.awt.Dimension(717, 327));
+        jFrameChofer.setSize(new java.awt.Dimension(730, 360));
 
         jLabel9.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabel9.setText("Apodo:");
@@ -414,6 +416,10 @@ public class PanelNuevaPersona extends JPanelCustom {
         jLabelApellidoChofer.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabelApellidoChofer.setText("jLabel13");
 
+        jLabel20.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel20.setForeground(new java.awt.Color(204, 0, 0));
+        jLabel20.setText("Se pueden dejar estos campos vacíos - Hacer click en guardar igualmente");
+
         javax.swing.GroupLayout jFrameChoferLayout = new javax.swing.GroupLayout(jFrameChofer.getContentPane());
         jFrameChofer.getContentPane().setLayout(jFrameChoferLayout);
         jFrameChoferLayout.setHorizontalGroup(
@@ -422,24 +428,27 @@ public class PanelNuevaPersona extends JPanelCustom {
                 .addContainerGap()
                 .addGroup(jFrameChoferLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrameChoferLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButtonCancelarChofer)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButtonGuardarChofer))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrameChoferLayout.createSequentialGroup()
                         .addComponent(jLabel10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 576, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jFrameChoferLayout.createSequentialGroup()
                         .addComponent(jLabel9)
                         .addGap(61, 61, 61)
                         .addGroup(jFrameChoferLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextFieldApodo)
                             .addGroup(jFrameChoferLayout.createSequentialGroup()
                                 .addComponent(jLabelNombreChofer)
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabelApellidoChofer)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jTextFieldApodo))))
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrameChoferLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jFrameChoferLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFrameChoferLayout.createSequentialGroup()
+                                .addComponent(jButtonCancelarChofer)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButtonGuardarChofer))
+                            .addComponent(jLabel20, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addContainerGap())
         );
         jFrameChoferLayout.setVerticalGroup(
@@ -449,7 +458,9 @@ public class PanelNuevaPersona extends JPanelCustom {
                 .addGroup(jFrameChoferLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelNombreChofer)
                     .addComponent(jLabelApellidoChofer))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addComponent(jLabel20)
+                .addGap(18, 18, 18)
                 .addGroup(jFrameChoferLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jTextFieldApodo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -466,7 +477,6 @@ public class PanelNuevaPersona extends JPanelCustom {
 
         jFrameCliente.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         jFrameCliente.setLocationByPlatform(true);
-        jFrameCliente.setPreferredSize(new java.awt.Dimension(705, 425));
         jFrameCliente.setSize(new java.awt.Dimension(700, 500));
 
         jLabelNombreCli.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
@@ -1117,7 +1127,7 @@ public class PanelNuevaPersona extends JPanelCustom {
                 }
             } else { //Es una persona a modificar a la cuál le activamos la casilla de chofer
                 this.cargarDatosJFrameChofer(); //Carga los datos con la variable this.idepersona
-                JLabel label = new JLabelAriel("Agregue los datos del chofer, el Apodo es obligatorio");
+                JLabel label = new JLabelAriel("Opcionalmente puede agregar datos del chofer");
                 JOptionPane.showMessageDialog(null, label, "ATENCIÓN", JOptionPane.INFORMATION_MESSAGE);
                 this.jFrameChofer.setVisible(true);
             }
@@ -1225,31 +1235,31 @@ public class PanelNuevaPersona extends JPanelCustom {
             guardarChofer("INSERT INTO chofer VALUES (default, ?, ?, ?)");
     }//GEN-LAST:event_jButtonGuardarChoferActionPerformed
 
-    private void guardarChofer(String consulta){
-        if (!this.jTextFieldApodo.getText().equals("")) {  //Action Performed de guardar Chofer | Si el apodo no está vacío -->
-            try {
-                String apodo, descripcion;
-                apodo = this.jTextFieldApodo.getText();
-                descripcion = this.jTextAreaDescripcion.getText();
-                PreparedStatement pst = this.controlador.obtenerConexion().prepareStatement(consulta);
-                pst.setString(1, apodo);
-                pst.setString(2, descripcion);
-                pst.setInt(3, this.idPersona);
-                pst.executeUpdate();
-                JLabel label = new JLabelAriel("Datos guardados");
-                JOptionPane.showMessageDialog(this.jFrameChofer, label, "ATENCIÓN", JOptionPane.INFORMATION_MESSAGE);
-            } catch (SQLException ex) {
-                JLabel label = new JLabelAriel("Error al guardar Chofer: "+ex.getMessage());
-                JOptionPane.showMessageDialog(this.jFrameChofer, label, "ATENCIÓN", JOptionPane.ERROR_MESSAGE);
-            }
-            this.jFrameChofer.dispose();
-            this.cargarCamionesChofer();  //Para que se actualize el apodo en el JComboBox del Chofer
-        } else { //En el lugar del apodo no hay nada y es un dato requerido
+    private void guardarChofer(String consulta) {
+        //   if (!this.jTextFieldApodo.getText().equals("")) {  //Action Performed de guardar Chofer | Si el apodo no está vacío -->
+        try {
+            String apodo, descripcion;
+            apodo = this.jTextFieldApodo.getText();
+            descripcion = this.jTextAreaDescripcion.getText();
+            PreparedStatement pst = this.controlador.obtenerConexion().prepareStatement(consulta);
+            pst.setString(1, apodo);
+            pst.setString(2, descripcion);
+            pst.setInt(3, this.idPersona);
+            pst.executeUpdate();
+            JLabel label = new JLabelAriel("Datos guardados");
+            JOptionPane.showMessageDialog(this.jFrameChofer, label, "ATENCIÓN", JOptionPane.INFORMATION_MESSAGE);
+        } catch (SQLException ex) {
+            JLabel label = new JLabelAriel("Error al guardar Chofer: " + ex.getMessage());
+            JOptionPane.showMessageDialog(this.jFrameChofer, label, "ATENCIÓN", JOptionPane.ERROR_MESSAGE);
+        }
+        this.jFrameChofer.dispose();
+        this.cargarCamionesChofer();  //Para que se actualize el apodo en el JComboBox del Chofer
+        /*   } else { //En el lugar del apodo no hay nada y es un dato requerido
             JLabel label = new JLabelAriel("Error al guardar Chofer, el dato APODO es obligatorio");
             JOptionPane.showMessageDialog(this.jFrameChofer, label, "ERROR", JOptionPane.ERROR_MESSAGE);
-        }
+        } */
     }
-    
+
     private void jButtonCancelarChoferActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarChoferActionPerformed
         //Action Performed de cancelar Chofer. 
         //Si proviene de Ver Datos este cancelar cierra la vista y pone true en los métodos. En cambio, si viene del ActionPerformed
@@ -1522,6 +1532,7 @@ public class PanelNuevaPersona extends JPanelCustom {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
