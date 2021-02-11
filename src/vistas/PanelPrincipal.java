@@ -17,6 +17,7 @@ import static java.time.temporal.ChronoUnit.DAYS;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import javafx.scene.paint.Color;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -34,6 +35,7 @@ import modelo.Mantenimiento;
 import modelo.Notificador;
 import modelo.Planilla;
 import modelo.Reparacion;
+import modelo.ColorearFilas;
 
 /**
  *
@@ -60,14 +62,16 @@ public class PanelPrincipal extends JPanelCustom {
 
     public PanelPrincipal() {
         tablaNotificaciones = new DefaultTableModel(null, getColumnas()) {
+            
             @Override
             public boolean isCellEditable(int row, int column) {
                 //all cells false
                 return false;
             }
         };
-
         initComponents();
+        ColorearFilas colorearFilas = new ColorearFilas();
+        this.jTableNotificaciones.setDefaultRenderer(this.jTableNotificaciones.getColumnClass(0), colorearFilas);
         this.jTableNotificaciones.getTableHeader().setFont(new Font("SansSerif", Font.PLAIN, 18));
         this.jTableNotificaciones.getColumnModel().getColumn(0).setMinWidth(30);
         this.jTableNotificaciones.getColumnModel().getColumn(0).setMaxWidth(55);
@@ -582,11 +586,13 @@ public class PanelPrincipal extends JPanelCustom {
     public ArrayList<Notificador> cargarEstadoCC(){
         // Devuelve un ArrayList con los estados de CC de los clientes que están en Naranja o Rojo
         ArrayList<Notificador> estadoCc = new ArrayList<>();
+        Color color;
         LocalDate fechaHoy = LocalDate.now();
         String apellido, nombre, tipo;
         int dias = 0;
         LocalDate fechaSalida;
         String variable = "";
+       // Color color = Color.rgb(50, 250, 90, 0.7);  //Verdecito
         int prioridad = 0;
         //Este cheque se puede cobrar dentro de los 30 días posteriores a la fecha de cobro indicada
         String query = "SELECT c.idcliente, MIN(p.fecha_de_salida), per.nombre, per.apellido FROM planilla AS p INNER JOIN cliente AS c "
@@ -603,22 +609,29 @@ public class PanelPrincipal extends JPanelCustom {
                 
                 prioridad = (int) DAYS.between(fechaSalida, fechaHoy);
                 }
-                if(prioridad >= 45)
-                    variable = "Complicado";
-                else if(prioridad > 30)
-                        variable = "A tener en cuenta";
-                else
-                    variable = "Normal";
+                if(prioridad >= 45){
+                    variable = "COMPLICADO";
+                    color = Color.rgb(250, 60, 50, 0.7);
+                }
+                else if(prioridad >= 30){
+                        variable = "A TENER EN CUENTA";
+                        color = Color.rgb(255, 115, 0, 0.7);
+                }
+                else{
+                    variable = "NORMAL";
+                    color = Color.rgb(60, 225, 0, 0.7);
+                }
                 nombre = rs.getString(3);
                 apellido = rs.getString(4);
-                EstadoCC estado_cuenta_corriente = new EstadoCC(rs.getInt(1), prioridad, "Estado Cuenta Corriente", "Estado CC: "+variable+".  Días debiendo: ", nombre, apellido, dias);
+                EstadoCC estado_cuenta_corriente = new EstadoCC(rs.getInt(1), prioridad, "Estado Cuenta Corriente", 
+                        "Estado de CC: "+variable+".  Días debiendo: ", nombre, apellido, dias, color);
                 estadoCc.add(estado_cuenta_corriente);  //Se cargan primero los que tienen más prioridad
             }
-        } catch (SQLException ex) {
+        }catch (SQLException ex) {
             JLabel label = new JLabelAriel("Error al obtener cheques diferidos: " + ex.getMessage());
             JOptionPane.showMessageDialog(null, label, "¡¡ATENCIÓN!!", JOptionPane.WARNING_MESSAGE);
         }
-         return estadoCc;
+        return estadoCc;
     }
     
     public ArrayList<Notificador> cargarReparaciones(){
@@ -793,6 +806,11 @@ public class PanelPrincipal extends JPanelCustom {
         }
     }//GEN-LAST:event_jButtonVerNotifActionPerformed
 
+    public Color ColorDeNotificiacion(int row){
+        // Método que retorna el Color que tiene asignada la notificación en la fila 'row'
+        return this.notificaciones.get(row).getColor();
+    }
+    
     private void jButtonInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInfoActionPerformed
        //  Cargar el Frame de información
        this.jFrameInfo.setVisible(true);

@@ -7,6 +7,7 @@ package modelo;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import javafx.scene.paint.Color;
 import javax.swing.JOptionPane;
 import vistas.PanelVerPlanillas;
 
@@ -17,10 +18,12 @@ import vistas.PanelVerPlanillas;
 public class EstadoCC extends Notificador{
     //Aunque EstadoCC no está presente como entidad en la Base de datos se puede representar mediante esta clase
     private int dias;
-    public EstadoCC(int id, int prioridad, String tipo, String descripcion, String nombre, String apellido, int dias){  
+
+    public EstadoCC(int id, int prioridad, String tipo, String descripcion, String nombre, String apellido, int dias, Color color){  
     //int id, int prioridad, String tipo, String descripcion, String nombre, String apellido - id del cliente
         super(id, prioridad, tipo, descripcion, nombre, apellido);
         this.dias = dias;  //Días de Impaga la CC.
+        super.color = color;
     }
     
     @Override  
@@ -79,6 +82,5 @@ public class EstadoCC extends Notificador{
     public int getDias() {
         return dias;
     }
-    
     
 }
