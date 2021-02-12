@@ -9,8 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javafx.scene.paint.Color;
 import javax.swing.JOptionPane;
-import vistas.PanelVerPlanillas;
-
+import vistas.PanelAdPagos;
 /**
  *
  * @author Ariel
@@ -62,13 +61,13 @@ public class EstadoCC extends Notificador{
     public void verNotificacion() {
         // Abriría la vista "Ver Planillas" del cliente para que aparezcan las que tiene adeudadas.
         //El id de esta clase es el del cliente (idcliente)
-        String[] options = new String[] {"Ver Planillas", "Dejar de Notificar"};
-        JLabelAriel label1 = new JLabelAriel("Cuenta Corriente del Cliente: "+this.getNombre()+" "+this.getApellido());
-        PanelVerPlanillas panelVerPlanillas = new PanelVerPlanillas(super.getId());  //Creo la nueva vista
+        String[] options = new String[] {"Ver Estado de CC del Cliente: "+this.getApellido()+" "+this.getNombre(), "Dejar de Notificar"};
+        JLabelAriel label1 = new JLabelAriel(""+this.getNombre()+" "+this.getApellido());
+        PanelAdPagos panelAdPagos = new PanelAdPagos(super.getId());  //Creo la nueva vista
         int response = JOptionPane.showOptionDialog(null, label1, "", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
         switch(response){
             case 0:
-                super.getControlador().cambiarDePanel(panelVerPlanillas, "Ver Planillas");
+                super.getControlador().cambiarDePanel(panelAdPagos, "Administrar Pagos");
                 break;
             case 1:
                 this.Notificar(false);  //Cancelo la notificacion del Cliente
@@ -82,5 +81,4 @@ public class EstadoCC extends Notificador{
     public int getDias() {
         return dias;
     }
-    
 }

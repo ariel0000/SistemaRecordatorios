@@ -18,8 +18,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 
 import javax.swing.JOptionPane;
@@ -1408,8 +1412,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         else{
             //La planilla no tiene fecha de salida y tampoco está marcado como entregada (esta bien logicamente)
             //Debemos actualizar la planilla porque es posible que se hayan modificado otros datos
-            actualizarPlanilla(fSalida == null);
-            
+            actualizarPlanilla(fSalida == null);    
         }
     }
     
@@ -1560,7 +1563,70 @@ public class PanelPlanillaNueva extends JPanelCustom {
                 monto += rs.getLong(1); //El monto suma el importe de todas las reparaciones enmarcadas por esta planilla
             }
         } catch (SQLException ex) {
-
+            JLabelAriel label = new JLabelAriel("Error al consultar monto " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
+        }
+        return monto;
+    }
+    
+    private long montoPorReparaciones(int idCliente) {
+        //Obtiene la suma de los importes de las reparaciones asignadas a las planillas marcadas como impagas y facturadas
+        long suma = 0;
+        Connection co = this.controlador.obtenerConexion();
+        String sql = "SELECT SUM(r.IMPORTE) FROM reparacion AS r INNER JOIN planilla as p ON p.idplanilla = r.idplanilla INNER JOIN cliente"
+                + " AS c ON p.idcliente = c.idcliente WHERE c.idcliente = '"+idCliente+"' AND p.pagado = false AND p.facturado = true ";
+        Statement st;
+        try {
+            st = co.createStatement();
+        ResultSet rs = st.executeQuery(sql);
+        while(rs.next()){
+            suma+= rs.getLong(1);  //El while solo se ejecuta una vez
+        }
+        } catch (SQLException ex) {
+            JLabelAriel label = new JLabelAriel("Error al consultar monto por reparaciones: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
+        }
+        return suma;
+    }
+    
+    private long montoPagos(int idCliente, int recarga){
+        //Método que retorna el importe total de pagos del cliente.
+        String sql = "SELECT p.idplanilla FROM planilla as p INNER JOIN cliente AS c ON p.idcliente = c.idcliente "
+                + "WHERE c.idcliente = '"+idCliente+"' AND p.facturado = true"; //todas las planillas del Cliente
+        long monto = 0;
+        try{
+            Statement st = this.controlador.obtenerConexion().createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while(rs.next()){
+                monto += montoPagosPlanilla(rs.getInt(1));  //Paso la planilla del cliente y le calculo el importe que tiene
+            }
+        }catch(SQLException ex){
+            JLabelAriel label = new JLabelAriel("Error al consultar montos de Pagos: "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
+        }
+        return monto;
+    }
+    
+    private Long montoPagosPlanilla(int idPlanilla){
+        //Método que calcula cuanto dinero se recibió - Los cheques no cobrados se suman como pagos igualmente.
+        //
+        long monto = 0;
+        //Esta consulta Retorna dos valores para los montos de pago de cheques y contado 
+        String consulta = "Select sum(ch.monto) from cheque as ch inner join forma_de_pago as fdp on fdp.idforma_de_pago = ch.idforma_de_pago "
+                + "inner join planilla as p on p.idplanilla = fdp.idplanilla where p.idplanilla= '"+idPlanilla+"' "
+                + "UNION"
+                + " select sum(c.monto) from contado as c inner join forma_de_pago as fdp on fdp.idforma_de_pago = c.idforma_de_pago "
+                + "inner join planilla as p on p.idplanilla = fdp.idplanilla where p.idplanilla = '"+idPlanilla+"'";
+        try {
+            Statement st = this.controlador.obtenerConexion().createStatement();
+            ResultSet rs = st.executeQuery(consulta);
+            while(rs.next()){
+                monto += rs.getLong(1); //Hay que probar si anda - Entiendo que primero toma el monto de cheque y en el siguiente el de contado
+            }
+            
+        } catch (SQLException ex) {
+            JLabelAriel label = new JLabelAriel(" Error al cargar pagos: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
         }
         return monto;
     }
@@ -1928,12 +1994,13 @@ public class PanelPlanillaNueva extends JPanelCustom {
             this.agregarListenersJComboBox();
 
             if (idcli != 0) { //Me fijo si el idcliente es distinto de 0 para consultar si tiene deuda
+                this.mostrarMensajeDeBalance(idcli);  //Avisa del saldo a favor o en contra que tiene el cliente
                 if (clienteTieneDeuda(idcli)) {
-                    int opcion = OptionPanePerzonalizado();
-                    if (opcion == 1) //0: Continuar;   1: Ver Planillas;   -1|3: Salir
+                    int opcion = OptionPanePerzonalizado(idcli);
+                    if (opcion == 0) //0: Continuar;   1: Ver Planillas;   -1|3: Salir
                     {
-                        abrirVerPlanillasConCliente(idcli);  //Abro la vista de VerPlanillas para el cliente especificado
-                    } else if (opcion == -1 || opcion == 2) {
+                        //Continuo normalmente. Muestro otro OptionPane que diga cuanto debe y desde cuando
+                    } else if (opcion == -1 || opcion == 1) {
                         this.controlador.cerrarPanelSeleccionado(); //Cierro el panel
                     }
                 }
@@ -1947,8 +2014,8 @@ public class PanelPlanillaNueva extends JPanelCustom {
         //Método que se fija si el cliente seleccionado tiene deuda para avisarle al usuario
         boolean valor = false;
         
-        String consulta = "SELECT count(*) FROM cliente AS c INNER JOIN planilla AS p ON c.idcliente = p.idplanilla "
-                + "WHERE c.idcliente = '"+idcli+"' AND p.entregado = true AND p.pagado = false";
+        String consulta = "SELECT count(*) FROM cliente AS c INNER JOIN planilla AS p ON c.idcliente = p.idcliente "
+                + "WHERE c.idcliente = '"+idcli+"' AND p.pagado = false";
         try{
             Statement st = this.controlador.obtenerConexion().createStatement();
             ResultSet rs = st.executeQuery(consulta);
@@ -1963,21 +2030,68 @@ public class PanelPlanillaNueva extends JPanelCustom {
         return valor;
     };
     
-    private int OptionPanePerzonalizado(){
+    private int OptionPanePerzonalizado(int idcli){
         //Retorna un JOptionPane perzonalizado
-        String[] options = new String[] {"CONTINUAR", "VER PLANILLAS DEL CLIENTE", "SALIR"};
-        JLabel label = new JLabelAriel("El cliente tiene planillas impagas, ¿Qué desea hacer?");
+        String[] options = new String[] {"CONTINUAR", "SALIR"};
+        JLabel label = new JLabelAriel("El cliente tiene planillas impagas por: "+diasPorPlanillasImpagas(idcli)+" días ¿Qué desea hacer?");
         return JOptionPane.showOptionDialog(null, label, "AVISO", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
-        null, options, options[0]);
+        null, options, options[1]);
         
     }
     
+    private void mostrarMensajeDeBalance(int idcli){
+        //Muestra un JOptionPane que muestra el saldo (balance) del Cliente y desde cuando debe (si aplica).
+        //Carga el balance de saldo del cliente seleccionado
+        long montoRep, montoPagos;
+ 
+        montoRep = montoPorReparaciones(idcli);
+        montoPagos = this.montoPagos(idcli, 0);
+        long suma = montoPagos - montoRep;
+        JLabel label = new JLabelAriel("El balance de la cuenta del cliente es: "+suma+" con signo negativo si debe");
+        JOptionPane.showMessageDialog(null, label, "BALANCE", JOptionPane.WARNING_MESSAGE);
+    }
     
+    
+    private int diasPorPlanillasImpagas(int idCliente){
+        //Método que servirá para averiguar la cantidad de días como máximo que tienen las planillas del cliente
+        LocalDate fecha_hoy, fecha_salida_vh;
+        java.sql.Date fecha_salida;
+        java.sql.Date fechaHoy = new java.sql.Date(System.currentTimeMillis());
+        fecha_hoy = fechaHoy.toLocalDate();
+        int actual;
+        int estadoCC = 0; //Podría usarse en base a días desde que una planilla está impaga. 
+        String consulta = "SELECT MIN(pl.fecha_de_salida) FROM planilla as pl INNER JOIN cliente AS c ON c.idcliente = pl.idcliente "
+                + "WHERE pl.facturado = true AND pl.pagado = false AND c.idcliente = '"+idCliente+"' ";
+        Connection co = this.controlador.obtenerConexion();
+
+        Statement st;
+        try {
+            st = co.createStatement();
+            ResultSet rs = st.executeQuery(consulta);
+            while (rs.next()) {
+                fecha_salida = rs.getDate(1);
+                if (fecha_salida != null) {
+                    fecha_salida_vh = fecha_salida.toLocalDate();
+                    actual = (int) ChronoUnit.DAYS.between(fecha_salida_vh, fecha_hoy);
+                    if (actual > estadoCC) {
+                        estadoCC = actual;
+                    }
+                }
+                // else{...}  //La fecha es nula, se retorna el valor por defecto 0  
+            }
+        } catch (SQLException ex) {
+            JLabel label = new JLabelAriel("Error al contar días de planilla impaga: "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
+        }
+        return estadoCC;
+    }
+
+    /*  //Se quito de las opciones para planillas imapgas. Ver ActionPerformed de ItemStateChage
     private void abrirVerPlanillasConCliente(int idcliente){
         // Método que abre Ver Planillas, también podría ser la planilla Administrar Pagos
         PanelVerPlanillas pVp = new PanelVerPlanillas(idcliente);
         this.controlador.cambiarDePanel(pVp, "Planillas(Cliente: "+this.jTextFieldDueñoCliente.getText()+")");
-    }
+    } */
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroupNPago;

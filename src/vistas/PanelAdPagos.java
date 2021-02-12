@@ -57,6 +57,27 @@ public class PanelAdPagos extends JPanelCustom {
         return columnas;
     }
     
+    public PanelAdPagos(int idCliente){
+        modeloCli = new DefaultTableModel(null, this.getColumnasPagos()) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                //all cells false. No se puede editar ninguna celda
+                return false;
+            }
+        };
+        initComponents();
+        iniciarCosasEnComun();
+        this.cargarCli("");  //Cargo los Clientes del JComboBox
+        this.jRadioButtonCheque.setSelected(true);  //Por defecto muestro los cheques
+        this.jRadioButtonACobrar.setSelected(true);
+        this.jTextFieldCC.setEditable(false); 
+        this.seleccionarClienteEnComboBox(idCliente);
+        this.jCheckBoxCli.setSelected(true);
+        String query = this.decidirQuery();
+        this.cargarLabelBalance();
+        this.cargarTablaPagos(query);
+    }
+    
     private void iniciarCosasEnComun(){
         //Método que carga datos e info común a todos los constructores de la vista (Por ahora tenemos solo 1)
         this.controlador = ControladorPrincipal.getInstancia();
@@ -215,7 +236,7 @@ public class PanelAdPagos extends JPanelCustom {
     private long montoPagos(int idCliente){
         //Método que retorna el importe total de pagos del cliente.
         String sql = "SELECT p.idplanilla FROM planilla as p INNER JOIN cliente AS c ON p.idcliente = c.idcliente "
-                + "WHERE c.idcliente = '"+idCliente+"' AND p.pagado = false AND p.facturado = true"; //todas las planillas del Cliente
+                + "WHERE c.idcliente = '"+idCliente+"' AND p.facturado = true"; //todas las planillas del Cliente
         long monto = 0;
         try{
             Statement st = this.controlador.obtenerConexion().createStatement();
@@ -767,16 +788,16 @@ public class PanelAdPagos extends JPanelCustom {
         if(!(cIe.getKey().equals("0")) && (!(cIe.getKey().equals("-1")))){
             try {
                 dias = this.diasPorPlanillasImpagas(Integer.valueOf(cIe.getKey()));
-                if(dias <= 15){
-                    this.jTextFieldCC.setForeground(Color.GREEN);
+                if(dias >= 45){
+                    this.jTextFieldCC.setForeground(Color.red);
                     this.jTextFieldCC.setText("Estado CC: "+dias+" días con deuda");
                 }
-                else if(dias > 15 && dias <= 30){
+                else if(dias >= 30){
                     this.jTextFieldCC.setForeground(Color.orange);
-                    this.jTextFieldCC.setText("Estado CC: "+dias+ "días con deuda");
+                    this.jTextFieldCC.setText("Estado CC: "+dias+ " días con deuda");
                 }
                 else{
-                    this.jTextFieldCC.setForeground(Color.red);
+                    this.jTextFieldCC.setForeground(Color.green);
                     this.jTextFieldCC.setText("Estado CC: "+dias+" días con deuda");
                 }
             } catch (SQLException ex) {
@@ -793,8 +814,7 @@ public class PanelAdPagos extends JPanelCustom {
         montoRep = this.montoPorReparaciones(Integer.valueOf(cIe.getKey()));
         montoPagos = this.montoPagos(Integer.valueOf(cIe.getKey()));
         long suma = montoPagos - montoRep;
-        this.jLabelBalance.setText(""+suma);
-        
+        this.jLabelBalance.setText(""+suma);   
     }
     
     private void cargarCli(String nombre){
@@ -824,6 +844,18 @@ public class PanelAdPagos extends JPanelCustom {
             JLabel label = new JLabelAriel("Error al cargar el/los clientes "+ex.getMessage());
             JOptionPane.showMessageDialog(null, label, "ERROR!!", JOptionPane.WARNING_MESSAGE); 
         }  
+    }
+    
+    public final void seleccionarClienteEnComboBox(int idCliente){
+        //Método que sirve para seleccionar un cliente al cuál ya se le conoce el id. Se puede usar para llamar desde afuera de la clase
+        ComboItem cmItem;
+        for(int i = 0; i < this.jComboBoxCli.getItemCount(); i++){
+            cmItem = this.jComboBoxCli.getItemAt(i);
+            if(cmItem.getKey().equals(""+idCliente)){
+                this.jComboBoxCli.setSelectedIndex(i);
+                break;
+            }
+        }
     }
     
     @Override
