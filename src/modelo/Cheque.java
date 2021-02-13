@@ -5,11 +5,11 @@
  */
 package modelo;
 
-import javafx.scene.paint.Color;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.awt.Color;
 import javax.swing.JOptionPane;
 import vistas.PanelPlanillaNueva;
 /**

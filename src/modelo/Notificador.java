@@ -6,7 +6,7 @@
 package modelo;
 
 import controladores.ControladorPrincipal;
-import javafx.scene.paint.Color;
+import java.awt.Color;
 
 /**
  *
@@ -17,7 +17,7 @@ public abstract class Notificador implements Comparable<Notificador>{
     private int prioridad;
     private String tipo, nombre, apellido, descripcion;
     private static ControladorPrincipal controlador;
-    protected Color color = Color.rgb(220, 235, 210, 0.8);
+    protected Color color = new Color(220, 235, 210, 250);
     
     public Notificador(){
 

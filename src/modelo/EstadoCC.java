@@ -7,7 +7,7 @@ package modelo;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import javafx.scene.paint.Color;
+import java.awt.Color;
 import javax.swing.JOptionPane;
 import vistas.PanelAdPagos;
 /**

@@ -6,7 +6,7 @@
 package modelo;
 
 import controladores.ControladorPrincipal;
-import javafx.scene.paint.Color;
+import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -28,12 +28,8 @@ public class ColorearFilas extends DefaultTableCellRenderer {
         super.getTableCellRendererComponent(table, value, Selected, hasFocus, row, col);
         //if()
         color = obtenerColorDeFila(row);
-        java.awt.Color awtColor = new java.awt.Color((float) color.getRed(),
-                                                    (float) color.getGreen(),
-                                                    (float) color.getBlue(),
-                                                    (float) color.getOpacity());
         
-        setBackground(awtColor);
+        setBackground(color);
         table.setSelectionForeground(java.awt.Color.blue);
         return this;
     }

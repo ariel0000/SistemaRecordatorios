@@ -17,7 +17,7 @@ import static java.time.temporal.ChronoUnit.DAYS;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import javafx.scene.paint.Color;
+import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -478,7 +478,7 @@ public class PanelPrincipal extends JPanelCustom {
         String variable = "";
         String nombre, apellido;
         
-        Color color = Color.rgb(220, 235, 210, 0.8);
+        Color color = new Color(220, 235, 210, 250);
         int prioridad;
         int diferencia;
         //Query para cargar los cheques sin fecha de cobro. Estos se pueden cobrar 30 días después de emitidos
@@ -497,12 +497,12 @@ public class PanelPrincipal extends JPanelCustom {
                 if(prioridad > 30){  //Ta vencido
                     prioridad = 10;  //Bajo la prioridad para que aparezcan antes los que se pueden cobrar
                     variable = "VENCIDO";
-                    color = Color.rgb(255, 125, 0, 0.8);  //Naranja
+                    color = new Color(255, 125, 0, 250);  //Naranja
                 }
                 else if(prioridad <= 30 && prioridad >=25) { //Por vencer{
                     diferencia = 30 - prioridad;
                     variable = "POR VENCER, en: "+diferencia+" días";
-                    color = Color.rgb(250, 60, 50, 0.8);
+                    color = new Color(250, 60, 50, 250);
                 }
                 nombre = rs.getString(4);
                 apellido = rs.getString(5);
@@ -524,7 +524,7 @@ public class PanelPrincipal extends JPanelCustom {
         ArrayList<Notificador> chequesComunes = new ArrayList<>();
         LocalDate fechaCobro;
         String variable = "";
-        Color color = Color.rgb(220, 235, 210, 0.8);
+        Color color = new Color(220, 235, 210, 250);
         int diferencia;
         int prioridad;
         //Este cheque se puede cobrar dentro de los 30 días posteriores a la fecha de cobro indicada
@@ -543,12 +543,12 @@ public class PanelPrincipal extends JPanelCustom {
                 if(prioridad > 30){  //Ta vencido
                     prioridad = 10;  //Bajo la prioridad para que aparezcan antes los que se pueden cobrar
                     variable = "VENCIDO";
-                    color = Color.rgb(255, 125, 0, 0.8);  //Naranja
+                    color = new Color(255, 125, 0, 250);  //Naranja
                 }
                 else if(prioridad <= 30 && prioridad >=25) { //Por vencer{
                     diferencia = 30 - prioridad;
                     variable = "POR VENCER, en: "+diferencia+" días";
-                    color = Color.rgb(250, 40, 50, 0.8);
+                    color = new Color(250, 40, 50, 250);
                 }
                 nombre = rs.getString(4);
                 apellido = rs.getString(5);
@@ -624,15 +624,15 @@ public class PanelPrincipal extends JPanelCustom {
                 }
                 if(prioridad >= 45){
                     variable = "COMPLICADO";
-                    color = Color.rgb(250, 40, 50, 0.8);
+                    color = new Color(250, 40, 50, 250);
                 }
                 else if(prioridad >= 30){
                         variable = "A TENER EN CUENTA";
-                        color = Color.rgb(255, 125, 0, 0.8);
+                        color = new Color(255, 125, 0, 250);
                 }
                 else{
                     variable = "NORMAL";
-                    color = Color.rgb(220, 235, 210, 0.8);
+                    color = new Color(220, 235, 210, 250);
                 }
                 nombre = rs.getString(3);
                 apellido = rs.getString(4);
