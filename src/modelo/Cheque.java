@@ -5,6 +5,7 @@
  */
 package modelo;
 
+import javafx.scene.paint.Color;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,8 +19,15 @@ import vistas.PanelPlanillaNueva;
 public class Cheque extends Notificador {
     
     private long numeroDeCheque;
+    
     public Cheque(int id, int prioridad, long numeroCheque, String tipo, String descripcion, String nombre, String apellido) {
         super(id, prioridad, tipo, descripcion, nombre, apellido);
+        this.numeroDeCheque = numeroCheque;
+    }
+    
+    public Cheque(int id, int prioridad, long numeroCheque, String tipo, String descripcion, String nombre, String apellido, Color color) {
+        super(id, prioridad, tipo, descripcion, nombre, apellido);
+        super.color = color;
         this.numeroDeCheque = numeroCheque;
     }
 

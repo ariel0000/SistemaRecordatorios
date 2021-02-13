@@ -477,7 +477,10 @@ public class PanelPrincipal extends JPanelCustom {
         LocalDate fechaEmision;
         String variable = "";
         String nombre, apellido;
+        
+        Color color = Color.rgb(220, 235, 210, 0.8);
         int prioridad;
+        int diferencia;
         //Query para cargar los cheques sin fecha de cobro. Estos se pueden cobrar 30 días después de emitidos
         String query = "SELECT k.idcheque, k.fecha_emision, k.numerocheque, p.nombre, p.apellido, k.monto FROM cheque AS k "
                 + "NATURAL JOIN forma_de_pago AS f INNER JOIN planilla AS pl ON pl.idplanilla = f.idplanilla INNER JOIN cliente AS c "
@@ -491,16 +494,20 @@ public class PanelPrincipal extends JPanelCustom {
                 Date fecha = new Date(rs.getDate(2).getTime());
                 fechaEmision = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); //Si lo pasaba directamente explota
                 prioridad = (int) DAYS.between(fechaEmision, fechaHoy); //Mas días --> más prioridad
-                if(prioridad > 30){
+                if(prioridad > 30){  //Ta vencido
                     prioridad = 10;  //Bajo la prioridad para que aparezcan antes los que se pueden cobrar
-                    variable = "Vencido";
+                    variable = "VENCIDO";
+                    color = Color.rgb(255, 125, 0, 0.8);  //Naranja
                 }
-                else
-                    variable = "a cobrar";
+                else if(prioridad <= 30 && prioridad >=25) { //Por vencer{
+                    diferencia = 30 - prioridad;
+                    variable = "POR VENCER, en: "+diferencia+" días";
+                    color = Color.rgb(250, 60, 50, 0.8);
+                }
                 nombre = rs.getString(4);
                 apellido = rs.getString(5);
                 Cheque cheque = new Cheque(rs.getInt(1), prioridad, rs.getLong(3), "cheque",
-                        "Cheque Pago inmediato "+variable+". monto: "+rs.getLong(6), nombre, apellido); //idcheque, prioridad, numeroDeCheque
+                        "Cheque Pago inmediato "+variable+". monto: "+rs.getLong(6), nombre, apellido, color); //idcheque, prioridad, numeroDeCheque
                 chequesComunes.add(cheque);  //Se cargan primero los que tienen más prioridad
             }
         } catch (SQLException ex) {
@@ -517,6 +524,8 @@ public class PanelPrincipal extends JPanelCustom {
         ArrayList<Notificador> chequesComunes = new ArrayList<>();
         LocalDate fechaCobro;
         String variable = "";
+        Color color = Color.rgb(220, 235, 210, 0.8);
+        int diferencia;
         int prioridad;
         //Este cheque se puede cobrar dentro de los 30 días posteriores a la fecha de cobro indicada
         String query = "SELECT k.idcheque, k.fecha_cobro, k.numerocheque, p.nombre, p.apellido, k.monto FROM cheque AS k NATURAL JOIN "
@@ -531,16 +540,20 @@ public class PanelPrincipal extends JPanelCustom {
                 Date fecha = new Date(rs.getDate(2).getTime());
                 fechaCobro = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 prioridad = (int) DAYS.between(fechaCobro, fechaHoy);
-                if(prioridad > 30){
+                if(prioridad > 30){  //Ta vencido
                     prioridad = 10;  //Bajo la prioridad para que aparezcan antes los que se pueden cobrar
-                    variable = "Vencido";
+                    variable = "VENCIDO";
+                    color = Color.rgb(255, 125, 0, 0.8);  //Naranja
                 }
-                else
-                    variable = "sin cobrar";
+                else if(prioridad <= 30 && prioridad >=25) { //Por vencer{
+                    diferencia = 30 - prioridad;
+                    variable = "POR VENCER, en: "+diferencia+" días";
+                    color = Color.rgb(250, 40, 50, 0.8);
+                }
                 nombre = rs.getString(4);
                 apellido = rs.getString(5);
                 Cheque cheque = new Cheque(rs.getInt(1), prioridad, rs.getLong(3), "cheque",
-                        "Cheque Pago Diferido "+variable+". monto:"+rs.getLong(6), nombre, apellido);
+                        "Cheque Pago Diferido "+variable+". monto:"+rs.getLong(6), nombre, apellido, color);
                 chequesComunes.add(cheque);  //Se cargan primero los que tienen más prioridad
             }
         } catch (SQLException ex) {
@@ -611,15 +624,15 @@ public class PanelPrincipal extends JPanelCustom {
                 }
                 if(prioridad >= 45){
                     variable = "COMPLICADO";
-                    color = Color.rgb(250, 60, 50, 0.7);
+                    color = Color.rgb(250, 40, 50, 0.8);
                 }
                 else if(prioridad >= 30){
                         variable = "A TENER EN CUENTA";
-                        color = Color.rgb(255, 115, 0, 0.7);
+                        color = Color.rgb(255, 125, 0, 0.8);
                 }
                 else{
                     variable = "NORMAL";
-                    color = Color.rgb(60, 225, 0, 0.7);
+                    color = Color.rgb(220, 235, 210, 0.8);
                 }
                 nombre = rs.getString(3);
                 apellido = rs.getString(4);
