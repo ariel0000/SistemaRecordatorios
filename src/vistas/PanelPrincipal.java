@@ -548,7 +548,7 @@ public class PanelPrincipal extends JPanelCustom {
                 else if(prioridad <= 30 && prioridad >=25) { //Por vencer{
                     diferencia = 30 - prioridad;
                     variable = "POR VENCER, en: "+diferencia+" días";
-                    color = new Color(250, 40, 50, 250);
+                    color = new Color(250, 60, 50, 250);
                 }
                 nombre = rs.getString(4);
                 apellido = rs.getString(5);
@@ -624,7 +624,7 @@ public class PanelPrincipal extends JPanelCustom {
                 }
                 if(prioridad >= 45){
                     variable = "COMPLICADO";
-                    color = new Color(250, 40, 50, 250);
+                    color = new Color(250, 60, 50, 250);
                 }
                 else if(prioridad >= 30){
                         variable = "A TENER EN CUENTA";
