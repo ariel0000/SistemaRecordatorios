@@ -504,6 +504,11 @@ public class PanelPrincipal extends JPanelCustom {
                     variable = "POR VENCER, en: "+diferencia+" días";
                     color = new Color(250, 60, 50, 250);
                 }
+                else{  //Para los cheques que no tienen lugar entre los vencidos y los por vencer
+                    diferencia = 30 - prioridad;
+                    variable = "POR VENCER, en: "+diferencia+" días";
+                    color = new Color(220, 235, 210, 250);
+                }
                 nombre = rs.getString(4);
                 apellido = rs.getString(5);
                 Cheque cheque = new Cheque(rs.getInt(1), prioridad, rs.getLong(3), "cheque",
@@ -549,6 +554,11 @@ public class PanelPrincipal extends JPanelCustom {
                     diferencia = 30 - prioridad;
                     variable = "POR VENCER, en: "+diferencia+" días";
                     color = new Color(250, 60, 50, 250);
+                }
+                else{  //Para los cheques que no tienen lugar entre los vencidos y los por vencer
+                    diferencia = 30 - prioridad;
+                    variable = "POR VENCER, en: "+diferencia+" días";
+                    color = new Color(220, 235, 210, 250);
                 }
                 nombre = rs.getString(4);
                 apellido = rs.getString(5);
