@@ -81,4 +81,36 @@ public class EstadoCC extends Notificador{
     public int getDias() {
         return dias;
     }
+    
+    @Override
+    public void verNotificacion(int sobrecarga) {
+    // Método para que su muestre la notificación emergente al inicio del programa. No permite "Ver Notificación" pero sí "Dejar de notficar"
+        String[] options = new String[] {"Aceptar ", "Dejar de Notificar"};
+        JLabelAriel label1 = new JLabelAriel("Cambio el Estado de CC de: "+this.getApellido()+" "+this.getNombre());
+
+        int response = JOptionPane.showOptionDialog(null, label1, "", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+        switch(response){
+            case 0:
+                // Click en Aceptar, nada que hacer
+                break;
+            case 1:
+                this.Notificar(false);  //Cancelo la notificacion del Cliente
+                break;
+            default:
+                ;
+                break;
+        }
+    }
+    
+    @Override
+    public boolean esNotificacionInmediata(){
+        // Sirve para consultar a la notificación si es notificación inmediata (En EstadoCC es notif. inmediata cuando cambia de estado)
+        boolean valor = false;
+        if(super.getPrioridad() == 30)
+            valor = true;
+        else if(super.getPrioridad() == 45)
+            valor = true;
+        return valor;
+    }
+    
 }

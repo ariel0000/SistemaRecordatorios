@@ -37,7 +37,11 @@ public abstract class Notificador implements Comparable<Notificador>{
     //Valor Booleano que determina si el Notificador sigue o no enviando avisos
     
     public abstract void verNotificacion();
+    
+    public abstract void verNotificacion(int sobrecarga);  //Usaremos este método para las notificaciones inmediatas
 
+    public abstract boolean esNotificacionInmediata();
+    
     public int getPrioridad() {
         return prioridad;
     }
@@ -82,4 +86,5 @@ public abstract class Notificador implements Comparable<Notificador>{
     public Color getColor(){
         return this.color;
     }
+
 }

@@ -91,5 +91,16 @@ public class Reparacion extends Notificador{
     public void setModelo(String modelo) {
         this.modelo = modelo;
     }
+
+    @Override
+    public void verNotificacion(int sobrecarga) {
+        // Método para que su muestre la notificación emergente al inicio del programa. No permite "Ver Notificación" pero sí "Dejar de notficar"
+    }
     
+    @Override
+    public boolean esNotificacionInmediata(){
+        boolean valor = false;
+        // Por ahora no se utilizan notificaciones inmediatas (al inicio del programa) para reparaciones --> Siempre devuelve 'faslse'
+        return valor;
+    }
 }

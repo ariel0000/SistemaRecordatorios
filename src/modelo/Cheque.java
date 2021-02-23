@@ -81,4 +81,31 @@ public class Cheque extends Notificador {
     private long getNumeroCheque(){
         return this.numeroDeCheque;
     }
+
+    @Override
+    public void verNotificacion(int sobrecarga) {
+        // Método para que su muestre la notificación emergente al inicio del programa. No permite "Ver Notificación" pero sí "Dejar de notficar"
+        String[] options = new String[] {"Aceptar", "Dejar de Notificar"};
+        JLabelAriel label1 = new JLabelAriel("Cheque A Cobrar N°: "+this.getNumeroCheque()+" | De: "+this.getNombre()+" "+this.getApellido());
+        int response = JOptionPane.showOptionDialog(null, label1, "", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+        switch (response) {
+            case 0:
+                break;  //Apreté aceptar
+            case 1:
+                Notificar(false); //Cancelo la notificación
+                break;
+            default:
+                ;  //Se cerró la vista - nada que hacer
+                break;
+        } 
+    }
+    
+    @Override
+    public boolean esNotificacionInmediata(){
+        boolean valor = false;
+        if(super.getPrioridad() == 30){
+            valor = true;  //Es para notificación inmediata
+        }
+        return valor;
+    }
 }

@@ -126,6 +126,7 @@ public class PanelPrincipal extends JPanelCustom {
      //   this.jTableNotificaciones.
         Font fuente = new Font("Sans Serif", Font.PLAIN, 18);  //Dos líneas que sirven para acomodar el tamaño de letra de los botones de
         UIManager.put("OptionPane.buttonFont", fuente);  // los JOptionPane...
+        mensajesIniciales();  //Método que carga JOptionsPane con mensajes iniciales
     }
 
     @SuppressWarnings("unchecked")
@@ -503,6 +504,7 @@ public class PanelPrincipal extends JPanelCustom {
                     diferencia = 30 - prioridad;
                     variable = "POR VENCER, en: "+diferencia+" días";
                     color = new Color(250, 60, 50, 250);
+                    prioridad = 30; //Este valor servirá para avisar de las notificaciones inmediatas al iniciar el programa
                 }
                 else{  //Para los cheques que no tienen lugar entre los vencidos y los por vencer
                     diferencia = 30 - prioridad;
@@ -554,6 +556,7 @@ public class PanelPrincipal extends JPanelCustom {
                     diferencia = 30 - prioridad;
                     variable = "POR VENCER, en: "+diferencia+" días";
                     color = new Color(250, 60, 50, 250);
+                    prioridad = 30;
                 }
                 else{  //Para los cheques que no tienen lugar entre los vencidos y los por vencer
                     diferencia = 30 - prioridad;
@@ -611,7 +614,7 @@ public class PanelPrincipal extends JPanelCustom {
         ArrayList<Notificador> estadoCc = new ArrayList<>();
         Color color;
         LocalDate fechaHoy = LocalDate.now();
-        String apellido, nombre, tipo;
+        String apellido, nombre;
         int dias = 0;
         LocalDate fechaSalida;
         String variable = "";
@@ -842,6 +845,14 @@ public class PanelPrincipal extends JPanelCustom {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         this.jFrameInfo.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+    
+    private void mensajesIniciales(){
+        //Muestra mensajes de avisos que necesitan inmediata atención. Ej: Cambio de Estado de CC. Cheque a cobrar en 5 días o menos, etc...
+        for(Notificador notif : this.notificaciones){
+            if(notif.esNotificacionInmediata())
+                notif.verNotificacion(1);  //Muestro la notif si es notificación inmediata. Cada una de ellas sabe si los es (Patrón State).
+        }
+    }
     
     public PanelAdPersonas getPanelPersonas() {
         return panelPersonas;
