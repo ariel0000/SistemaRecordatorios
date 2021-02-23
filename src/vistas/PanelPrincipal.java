@@ -143,6 +143,7 @@ public class PanelPrincipal extends JPanelCustom {
         jLabel29 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jLabel30 = new javax.swing.JLabel();
+        jLabel31 = new javax.swing.JLabel();
         jButtonAdCamiones = new javax.swing.JButton();
         jButtonAdPersonas = new javax.swing.JButton();
         jButtonNuevaPlanilla = new javax.swing.JButton();
@@ -163,7 +164,7 @@ public class PanelPrincipal extends JPanelCustom {
         jFrameInfo.setAlwaysOnTop(true);
         jFrameInfo.setLocationByPlatform(true);
         jFrameInfo.setResizable(false);
-        jFrameInfo.setSize(new java.awt.Dimension(900, 385));
+        jFrameInfo.setSize(new java.awt.Dimension(900, 422));
         jFrameInfo.setType(java.awt.Window.Type.POPUP);
 
         jLabel24.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
@@ -173,7 +174,7 @@ public class PanelPrincipal extends JPanelCustom {
         jLabel25.setText(" * Mantenimiento incompleto: Reparación de tipo mantenimiento marcada como incompleta");
 
         jLabel26.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel26.setText(" * Planillas impagas. Son las planillas marcadas como facturadas pero que todavían no se pagaron ");
+        jLabel26.setText(" * Planillas impagas. Son las planillas marcadas como facturadas pero marcadas como impagas.");
 
         jLabel27.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabel27.setText(" * Reparaciones incompletas: Son las reparaciones creadas que todavía no se marcaron como terminadas  ");
@@ -196,6 +197,9 @@ public class PanelPrincipal extends JPanelCustom {
         jLabel30.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabel30.setText(" * Service por realizar: Mantenimiento de un Camión que debe ser realizado porque se cumplió el periodo.");
 
+        jLabel31.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel31.setText("* Estado de CC: A partir de la planilla impagas (más antigua) de un Cliente que figuren como facturada");
+
         javax.swing.GroupLayout jFrameInfoLayout = new javax.swing.GroupLayout(jFrameInfo.getContentPane());
         jFrameInfo.getContentPane().setLayout(jFrameInfoLayout);
         jFrameInfoLayout.setHorizontalGroup(
@@ -216,8 +220,10 @@ public class PanelPrincipal extends JPanelCustom {
                             .addComponent(jLabel30)
                             .addGroup(jFrameInfoLayout.createSequentialGroup()
                                 .addGap(10, 10, 10)
-                                .addComponent(jLabel29)))
-                        .addGap(0, 18, Short.MAX_VALUE)))
+                                .addGroup(jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel31)
+                                    .addComponent(jLabel29))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jFrameInfoLayout.setVerticalGroup(
@@ -237,7 +243,9 @@ public class PanelPrincipal extends JPanelCustom {
                 .addComponent(jLabel30)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel29)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel31)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addGap(27, 27, 27))
         );
@@ -610,7 +618,8 @@ public class PanelPrincipal extends JPanelCustom {
     }
     
     public ArrayList<Notificador> cargarEstadoCC(){
-        // Devuelve un ArrayList con los estados de CC de los clientes que están en Naranja o Rojo
+        // Devuelve un ArrayList con los estados de CC de los clientes que están en Naranja o Rojo. El Estado de CC es con planillas impagas
+                // y facturadas
         ArrayList<Notificador> estadoCc = new ArrayList<>();
         Color color;
         LocalDate fechaHoy = LocalDate.now();
@@ -914,6 +923,7 @@ public class PanelPrincipal extends JPanelCustom {
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
     private javax.swing.JRadioButton jRadioButtonCheques;
     private javax.swing.JRadioButton jRadioButtonMantencion;
     private javax.swing.JRadioButton jRadioButtonNotifHoy;

@@ -690,7 +690,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         jComboBoxVh.setFont(new java.awt.Font("Segoe UI Semibold", 0, 20)); // NOI18N
 
         jLabelFPatente.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabelFPatente.setText("Filtrar por Marca:");
+        jLabelFPatente.setText("Filtrar por Patente:");
 
         jTextFieldFPatente.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jTextFieldFPatente.setToolTipText("ABC123CD ó ABC123");
@@ -1315,7 +1315,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
             patenteFiltro = patenteFiltro.toLowerCase();
 
             PreparedStatement ps = this.controlador.obtenerConexion().prepareStatement("SELECT v.idvehiculo, v.marca, v.modelo, v.patente "
-                    + "FROM vehiculo AS v WHERE lower(v.marca) LIKE ? ");
+                    + "FROM vehiculo AS v WHERE lower(v.patente) LIKE ? ");
             ps.setString(1, "%"+patenteFiltro+"%");
             // En este método el ActionItemListener debería haber sido quitado
             this.jComboBoxVh.removeAllItems();

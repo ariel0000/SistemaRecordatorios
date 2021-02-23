@@ -234,9 +234,9 @@ public class PanelAdPagos extends JPanelCustom {
     }
     
     private long montoPagos(int idCliente){
-        //Método que retorna el importe total de pagos del cliente.
+        //Método que retorna el importe total de pagos del cliente. --Cambio 23/02/2021 -Se quito el AND p.facturado = TRUE;
         String sql = "SELECT p.idplanilla FROM planilla as p INNER JOIN cliente AS c ON p.idcliente = c.idcliente "
-                + "WHERE c.idcliente = '"+idCliente+"' AND p.facturado = true"; //todas las planillas del Cliente
+                + "WHERE c.idcliente = '"+idCliente+"' "; //todas las planillas del Cliente
         long monto = 0;
         try{
             Statement st = this.controlador.obtenerConexion().createStatement();
@@ -337,7 +337,7 @@ public class PanelAdPagos extends JPanelCustom {
         } 
     }
     */
-    
+ /*   
     private long cargarImporteReparaciones(int nPlanilla, Connection co) throws SQLException{
         //Obtiene la suma de los importes de las reparaciones asignadas a una planilla y la retorna
         long suma = 0;
@@ -349,13 +349,14 @@ public class PanelAdPagos extends JPanelCustom {
         }
         return suma;
     }
+    */
     
     private long montoPorReparaciones(int idCliente) {
-        //Obtiene la suma de los importes de las reparaciones asignadas a las planillas marcadas como impagas y facturadas
+        //Obtiene la suma de los importes de las reparaciones asignadas a las planillas (Sean pagas o impagas)
         long suma = 0;
         Connection co = this.controlador.obtenerConexion();
         String sql = "SELECT SUM(r.IMPORTE) FROM reparacion AS r INNER JOIN planilla as p ON p.idplanilla = r.idplanilla INNER JOIN cliente"
-                + " AS c ON p.idcliente = c.idcliente WHERE c.idcliente = '"+idCliente+"' AND p.pagado = false AND p.facturado = true ";
+                + " AS c ON p.idcliente = c.idcliente WHERE c.idcliente = '"+idCliente+"' ";
         Statement st;
         try {
             st = co.createStatement();
@@ -417,10 +418,10 @@ public class PanelAdPagos extends JPanelCustom {
         jFrameInfo.setType(java.awt.Window.Type.POPUP);
 
         jLabel18.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel18.setText("y el monto total de pagos de las mismas planillas");
+        jLabel18.setText("un Cliente y el monto total de pagos de las mismas planillas (todas).");
 
         jLabel16.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel16.setText(". Balance de saldo entre los importes de reparaciones de las planillas impagas");
+        jLabel16.setText(". Balance de saldo entre los importes de todas las reparaciones de las planillas de");
 
         jLabel15.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabel15.setText(". Estado de la Cuenta Corriente de un Cliente. A partir de una planilla facturada");
@@ -475,7 +476,7 @@ public class PanelAdPagos extends JPanelCustom {
                                     .addComponent(jLabel17)
                                     .addComponent(jLabel18)
                                     .addComponent(jLabel21))))
-                        .addGap(0, 29, Short.MAX_VALUE))))
+                        .addGap(0, 6, Short.MAX_VALUE))))
         );
         jFrameInfoLayout.setVerticalGroup(
             jFrameInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
