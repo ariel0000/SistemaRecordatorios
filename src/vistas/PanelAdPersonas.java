@@ -64,7 +64,7 @@ public class PanelAdPersonas extends JPanelCustom {
         this.modelo.setColumnIdentifiers(getColumnas());
         this.ajustarColumnasDeTabla();
         this.controlador = ControladorPrincipal.getInstancia();
-        cargarPersonas();
+        cargarPersonas(armarQuery());
      //   cargarVhBdD();
     }
     
@@ -73,13 +73,13 @@ public class PanelAdPersonas extends JPanelCustom {
         return columna;
     }
     
-    private void cargarPersonas() {
+    private void cargarPersonas(String consulta) {
         //Cargo las persona a la tabla
         DefaultTableModel dtm = (DefaultTableModel) this.jTablePersonas.getModel();
         dtm.setRowCount(0);  //Magicamente anduvo y sirve para eliminar las filas de la tabla
         String datos[] = new String[8];  //Tipo, Descripción, Patente
-        String consulta = "SELECT p.idpersona, p.nombre, p.apellido, c.idchofer, cl.idcliente, cl.cuil, cl.notificar FROM persona AS p "
-              + "left join chofer AS c on p.idpersona = c.idpersona left join cliente AS cl ON cl.idpersona = p.idpersona ORDER BY p.apellido";
+     //   String consulta = "SELECT p.idpersona, p.nombre, p.apellido, c.idchofer, cl.idcliente, cl.cuil, cl.notificar FROM persona AS p "
+      //        + "left join chofer AS c on p.idpersona = c.idpersona left join cliente AS cl ON cl.idpersona = p.idpersona ORDER BY p.apellido";
         //Con esta consulta estoy mostrando todas las personas y si son clientes y/o choferes
         try {
             Statement st = this.controlador.obtenerConexion().createStatement();
@@ -158,10 +158,10 @@ public class PanelAdPersonas extends JPanelCustom {
         jButtonAgregarPer = new javax.swing.JButton();
         jButtonModificarPer = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
-        jCheckBox3 = new javax.swing.JCheckBox();
-        jCheckBox4 = new javax.swing.JCheckBox();
-        jCheckBox5 = new javax.swing.JCheckBox();
-        jTextField1 = new javax.swing.JTextField();
+        jCheckBoxApeNom = new javax.swing.JCheckBox();
+        jCheckBoxCli = new javax.swing.JCheckBox();
+        jCheckBoxPlImpagas = new javax.swing.JCheckBox();
+        jTextFieldApeNom = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jButtonEliminarPer = new javax.swing.JButton();
         Filtrar = new javax.swing.JButton();
@@ -192,17 +192,17 @@ public class PanelAdPersonas extends JPanelCustom {
         jLabel5.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabel5.setText("Filtros:");
 
-        jCheckBox3.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jCheckBox3.setText("Apodo o Nombre:");
+        jCheckBoxApeNom.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jCheckBoxApeNom.setText("Apellido o Nombre:");
 
-        jCheckBox4.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jCheckBox4.setText("Es Cliente");
+        jCheckBoxCli.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jCheckBoxCli.setText("Es Cliente");
 
-        jCheckBox5.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jCheckBox5.setText("Planillas Impagas");
+        jCheckBoxPlImpagas.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jCheckBoxPlImpagas.setText("Planillas Impagas");
 
-        jTextField1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jTextField1.setAutoscrolls(false);
+        jTextFieldApeNom.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jTextFieldApeNom.setAutoscrolls(false);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1.setText("* Las planillas impagas son las que después de facturada la misma se está esperando que sean saldadas por el Cliente");
@@ -234,13 +234,13 @@ public class PanelAdPersonas extends JPanelCustom {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jCheckBox3)
+                        .addComponent(jCheckBoxApeNom)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
+                        .addComponent(jTextFieldApeNom, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jCheckBox4)
+                        .addComponent(jCheckBoxCli)
                         .addGap(18, 18, 18)
-                        .addComponent(jCheckBox5)
+                        .addComponent(jCheckBoxPlImpagas)
                         .addGap(235, 235, 235)
                         .addComponent(Filtrar))
                     .addGroup(layout.createSequentialGroup()
@@ -259,10 +259,10 @@ public class PanelAdPersonas extends JPanelCustom {
                 .addGap(17, 17, 17)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jCheckBox3)
-                    .addComponent(jCheckBox4)
-                    .addComponent(jCheckBox5)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCheckBoxApeNom)
+                    .addComponent(jCheckBoxCli)
+                    .addComponent(jCheckBoxPlImpagas)
+                    .addComponent(jTextFieldApeNom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Filtrar))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 333, Short.MAX_VALUE)
@@ -309,8 +309,39 @@ public class PanelAdPersonas extends JPanelCustom {
 
     private void FiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FiltrarActionPerformed
         // Filtro de personas
-        String query = "";
+        String query = armarQuery();
+        this.cargarPersonas(query);
     }//GEN-LAST:event_FiltrarActionPerformed
+    
+    private String armarQuery(){
+        //Arma un query para consultar dsps
+        int contador = 0;
+        String consulta = "SELECT p.idpersona, p.nombre, p.apellido, c.idchofer, cl.idcliente, cl.cuil, cl.notificar FROM persona AS p "
+              + "left join chofer AS c on p.idpersona = c.idpersona left join cliente AS cl ON cl.idpersona = p.idpersona "; //ORDER BY p.apellido
+        
+        String nomApe = this.jTextFieldApeNom.getText().toLowerCase();
+        
+        if(this.jCheckBoxApeNom.isSelected()){
+            contador++;
+            consulta = consulta.concat(" WHERE lower(p.nombre) like '"+nomApe+"' OR  lower(p.apellido) like '"+nomApe+"' ");
+        }
+        else if(this.jCheckBoxCli.isSelected()){
+            if(contador == 0)
+                consulta = consulta.concat(" WHERE p.idpersona in (SELECT c.idpersona FROM cliente as c) ");
+            else
+                consulta = consulta.concat(" AND p.idpersona in (SELECT c.idpersona FROM cliente as c) ");;
+        }
+        else if(this.jCheckBoxPlImpagas.isSelected()){
+            if(contador == 0)
+                consulta = consulta.concat(" WHERE p.idpersona in (SELECT c.idpersona FROM cliente as c INNER JOIN planilla AS p "
+                        + "ON p.idcliente = c.idcliente WHERE p.pagado = false) ");
+            else
+                consulta = consulta.concat(" AND p.idpersona in (SELECT c.idpersona FROM cliente as c INNER JOIN planilla AS p "
+                        + "ON p.idcliente = c.idcliente WHERE p.pagado = false) ");
+        }
+            
+        return consulta;
+    }
     
     private void borrarPersona(int idPer){
         //borra la persona con el id: idPer
@@ -326,7 +357,7 @@ public class PanelAdPersonas extends JPanelCustom {
                 label2 = new JLabelAriel("Error al borrar Persona: " + ex.getMessage());
                 JOptionPane.showMessageDialog(null, label2, "ERROR", JOptionPane.WARNING_MESSAGE);
             }
-            this.cargarPersonas(); //Recargo al tabla
+            this.cargarPersonas(armarQuery()); //Recargo al tabla
             }
         else{
             label1 = new JLabelAriel("La persona tiene planillas asociadas");
@@ -340,14 +371,14 @@ public class PanelAdPersonas extends JPanelCustom {
     private javax.swing.JButton jButtonAgregarPer;
     private javax.swing.JButton jButtonEliminarPer;
     private javax.swing.JButton jButtonModificarPer;
-    private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JCheckBox jCheckBox4;
-    private javax.swing.JCheckBox jCheckBox5;
+    private javax.swing.JCheckBox jCheckBoxApeNom;
+    private javax.swing.JCheckBox jCheckBoxCli;
+    private javax.swing.JCheckBox jCheckBoxPlImpagas;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTablePersonas;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextFieldApeNom;
     // End of variables declaration//GEN-END:variables
 
     /*
@@ -385,6 +416,6 @@ public class PanelAdPersonas extends JPanelCustom {
     @Override
     public void onFocus() {
         //Hay que recargar la tabla de Personas
-        cargarPersonas();
+        cargarPersonas(this.armarQuery());
     }
 }
