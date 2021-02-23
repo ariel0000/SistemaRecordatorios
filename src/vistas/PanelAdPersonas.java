@@ -65,7 +65,7 @@ public class PanelAdPersonas extends JPanelCustom {
         this.ajustarColumnasDeTabla();
         this.controlador = ControladorPrincipal.getInstancia();
         cargarPersonas();
-        cargarVhBdD();
+     //   cargarVhBdD();
     }
     
     private String[] getColumnas() { 
@@ -160,12 +160,11 @@ public class PanelAdPersonas extends JPanelCustom {
         jLabel5 = new javax.swing.JLabel();
         jCheckBox3 = new javax.swing.JCheckBox();
         jCheckBox4 = new javax.swing.JCheckBox();
-        jComboBoxVh = new javax.swing.JComboBox<>();
         jCheckBox5 = new javax.swing.JCheckBox();
-        jToggleButton1 = new javax.swing.JToggleButton();
         jTextField1 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jButtonEliminarPer = new javax.swing.JButton();
+        Filtrar = new javax.swing.JButton();
 
         jScrollPane1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
@@ -197,15 +196,10 @@ public class PanelAdPersonas extends JPanelCustom {
         jCheckBox3.setText("Apodo o Nombre:");
 
         jCheckBox4.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jCheckBox4.setText("Dueño de Camión:");
-
-        jComboBoxVh.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jCheckBox4.setText("Es Cliente");
 
         jCheckBox5.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jCheckBox5.setText("Planillas Impagas");
-
-        jToggleButton1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jToggleButton1.setText("Filtrar");
 
         jTextField1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jTextField1.setAutoscrolls(false);
@@ -218,6 +212,14 @@ public class PanelAdPersonas extends JPanelCustom {
         jButtonEliminarPer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonEliminarPerActionPerformed(evt);
+            }
+        });
+
+        Filtrar.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        Filtrar.setText("Filtrar");
+        Filtrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                FiltrarActionPerformed(evt);
             }
         });
 
@@ -234,15 +236,13 @@ public class PanelAdPersonas extends JPanelCustom {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jCheckBox3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jCheckBox4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBoxVh, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(jCheckBox5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jToggleButton1))
+                        .addGap(235, 235, 235)
+                        .addComponent(Filtrar))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButtonAgregarPer)
                         .addGap(18, 18, 18)
@@ -261,10 +261,9 @@ public class PanelAdPersonas extends JPanelCustom {
                     .addComponent(jLabel5)
                     .addComponent(jCheckBox3)
                     .addComponent(jCheckBox4)
-                    .addComponent(jComboBoxVh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jCheckBox5)
-                    .addComponent(jToggleButton1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Filtrar))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 333, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -307,6 +306,11 @@ public class PanelAdPersonas extends JPanelCustom {
         else
             JOptionPane.showMessageDialog(null, label, "ERROR", JOptionPane.WARNING_MESSAGE);
     }//GEN-LAST:event_jButtonEliminarPerActionPerformed
+
+    private void FiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FiltrarActionPerformed
+        // Filtro de personas
+        String query = "";
+    }//GEN-LAST:event_FiltrarActionPerformed
     
     private void borrarPersona(int idPer){
         //borra la persona con el id: idPer
@@ -332,21 +336,21 @@ public class PanelAdPersonas extends JPanelCustom {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Filtrar;
     private javax.swing.JButton jButtonAgregarPer;
     private javax.swing.JButton jButtonEliminarPer;
     private javax.swing.JButton jButtonModificarPer;
     private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JCheckBox jCheckBox4;
     private javax.swing.JCheckBox jCheckBox5;
-    private javax.swing.JComboBox<ComboItem> jComboBoxVh;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTablePersonas;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JToggleButton jToggleButton1;
     // End of variables declaration//GEN-END:variables
 
+    /*
     private void cargarVhBdD(){
         //Carga los vehículos al jComboBox en formato ComboItem(idVh, marca-patente)
         Connection co = this.controlador.obtenerConexion();
@@ -370,6 +374,7 @@ public class PanelAdPersonas extends JPanelCustom {
             //Acá iría la escritura de un log con fecha si es posible. También iría en otros lugares
         }
     }
+    */
     
     @Override
     public boolean sePuedeCerrar() {
