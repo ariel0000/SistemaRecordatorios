@@ -26,9 +26,8 @@ import modelo.Cheque;
 import modelo.Estado;
 import modelo.EstadoCC;
 import modelo.EstadoCheque;
-import modelo.EstadoMantencion;
+import modelo.EstadoMantenimientos;
 import modelo.EstadoNotifHoy;
-import modelo.EstadoPlanilla;
 import modelo.EstadoReparacion;
 import modelo.JLabelAriel;
 import modelo.Mantenimiento;
@@ -36,6 +35,7 @@ import modelo.Notificador;
 import modelo.Planilla;
 import modelo.Reparacion;
 import modelo.ColorearFilas;
+import modelo.EstadoDebeFactura;
 
 /**
  *
@@ -55,7 +55,7 @@ public class PanelPrincipal extends JPanelCustom {
     private ArrayList<Notificador> notificaciones;
     private ArrayList<Notificador> cheques;
     private ArrayList<Notificador> reparaciones;
-    private ArrayList<Notificador> planillasImpagas;
+    private ArrayList<Notificador> debeFacturas;
     private ArrayList<Notificador> mantenciones;  //Servis
     private ArrayList<Notificador> estadoCC;  // Estado de Cuenta Corriente
     //  private ArrayList<Notificador> clientes;  -- Todavía no estoy seguro
@@ -344,7 +344,7 @@ public class PanelPrincipal extends JPanelCustom {
 
         buttonGroupFiltros.add(jRadioButtonPlanillas);
         jRadioButtonPlanillas.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jRadioButtonPlanillas.setText("Planillas");
+        jRadioButtonPlanillas.setText("Debe Factura");
         jRadioButtonPlanillas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButtonPlanillasActionPerformed(evt);
@@ -448,12 +448,12 @@ public class PanelPrincipal extends JPanelCustom {
         this.cheques = cargarCheques(); //Tanto los comunes como los diferidos
         
         //... Cargamos las planillas impagas
-        this.planillasImpagas = cargarPlanillasImpagas();
+        this.debeFacturas = this.cargarDebeFactura();
         this.estadoCC = cargarEstadoCC();
         this.reparaciones = cargarReparaciones();
-        this.mantenciones = cargarMantenciones();
+        this.mantenciones = cargarMantenimientos();
         this.notificaciones = new ArrayList<>(); 
-        this.notificaciones.addAll(this.planillasImpagas);
+        this.notificaciones.addAll(this.debeFacturas);
         this.notificaciones.addAll(this.cheques);
         this.notificaciones.addAll(this.reparaciones);
         this.notificaciones.addAll(this.mantenciones);
@@ -584,30 +584,30 @@ public class PanelPrincipal extends JPanelCustom {
         return chequesComunes;
     }
 
-    public ArrayList<Notificador> cargarPlanillasImpagas(){
-        //Devuelve un ArrayList<Notificador> con todas las planillas impagas
+    public ArrayList<Notificador> cargarDebeFactura(){
+        //Devuelve un ArrayList<Notificador> con todas las planillas con el atributo "Debe Factura"
         LocalDate fechaHoy = LocalDate.now();
-        LocalDate fechaSalida; //Cuando el Vh fue entregado
+        LocalDate fechaEntrada; //Cuando el Vh fue entregado
         String nombre, apellido, descripcion;
         int prioridad = 1;
         ArrayList<Notificador> planillasImpagass = new ArrayList<>();
-        String query = "SELECT p.idplanilla, p.fecha_de_salida, p.descripcion, per.nombre, per.apellido FROM planilla AS p INNER JOIN cliente"
+        String query = "SELECT p.idplanilla, p.fecha_de_entrada, p.descripcion, per.nombre, per.apellido FROM planilla AS p INNER JOIN cliente"
                 + " AS c ON p.idcliente = c.idcliente INNER JOIN persona AS per ON per.idpersona = c.idpersona WHERE p.notificar = TRUE"
-                + " AND p.fecha_de_salida IS NOT NULL AND p.facturado = TRUE AND p.pagado = FALSE";
+                + " AND p.entregado = true";  //Entregado se utiliza como "Debe Factura"
         
         try{
             Statement st = this.controlador.obtenerConexion().createStatement();
             ResultSet rs = st.executeQuery(query);
             while(rs.next()){
                 Date fecha = new Date(rs.getDate(2).getTime());
-                fechaSalida = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                prioridad = (int) DAYS.between(fechaSalida, fechaHoy);
+                fechaEntrada = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                prioridad = (int) DAYS.between(fechaEntrada, fechaHoy);
                 if(prioridad > 30)  
                     prioridad = 30;
                 descripcion = rs.getString(3);
                 nombre = rs.getString(4);
                 apellido = rs.getString(5);
-                Planilla planilla = new Planilla(rs.getInt(1), prioridad, "Planilla Impaga", descripcion, nombre, apellido);
+                Planilla planilla = new Planilla(rs.getInt(1), prioridad, "Debe Factura", descripcion, nombre, apellido, fechaEntrada);
                 planillasImpagass.add(planilla);
             }
         }catch(SQLException ex){
@@ -624,7 +624,6 @@ public class PanelPrincipal extends JPanelCustom {
         Color color;
         LocalDate fechaHoy = LocalDate.now();
         String apellido, nombre;
-        int dias = 0;
         LocalDate fechaSalida;
         String variable = "";
        // Color color = Color.rgb(50, 250, 90, 0.7);  //Verdecito
@@ -659,7 +658,7 @@ public class PanelPrincipal extends JPanelCustom {
                 nombre = rs.getString(3);
                 apellido = rs.getString(4);
                 EstadoCC estado_cuenta_corriente = new EstadoCC(rs.getInt(1), prioridad, "Estado Cuenta Corriente", 
-                        "Estado de CC: "+variable+".  Días debiendo: ", nombre, apellido, dias, color);
+                        "Estado de CC: "+variable+".  Días debiendo: ", nombre, apellido, prioridad, color);
                 estadoCc.add(estado_cuenta_corriente);  //Se cargan primero los que tienen más prioridad
             }
         }catch (SQLException ex) {
@@ -705,7 +704,7 @@ public class PanelPrincipal extends JPanelCustom {
         return reparacioness;
     }
     
-    public ArrayList<Notificador> cargarMantenciones(){
+    public ArrayList<Notificador> cargarMantenimientos(){
             //Método que devuelve una lista de todas las mantenciones por realizar. No devuelve las incompletas
         String nombre, apellido, descripcion, modelo, marca;
         LocalDate fechaSalida, fechaHoy = LocalDate.now();
@@ -813,12 +812,12 @@ public class PanelPrincipal extends JPanelCustom {
 
     private void jRadioButtonPlanillasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonPlanillasActionPerformed
         //Action Performed del RadioButton de selección de Planillas
-        this.estado = new EstadoPlanilla();
+        this.estado = new EstadoDebeFactura();
     }//GEN-LAST:event_jRadioButtonPlanillasActionPerformed
 
     private void jRadioButtonMantencionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMantencionActionPerformed
         //Action Performed del RadioButton de selección de Mantenciones (Servis)
-        this.estado = new EstadoMantencion();
+        this.estado = new EstadoMantenimientos();
     }//GEN-LAST:event_jRadioButtonMantencionActionPerformed
 
     private void jRadioButtonNotifHoyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonNotifHoyActionPerformed

@@ -11,12 +11,12 @@ import java.util.ArrayList;
  *
  * @author Ariel
  */
-public class EstadoMantencion extends Estado{
+public class EstadoMantenimientos extends Estado{
 
     @Override
     public void cargarNotifificaciones() {
         super.getControlador().getPanelPrincipal().borrarTabla();
-        ArrayList mantenciones = super.getControlador().getPanelPrincipal().cargarMantenciones(); //
+        ArrayList mantenciones = super.getControlador().getPanelPrincipal().cargarMantenimientos(); //
         super.getControlador().getPanelPrincipal().cargarNotificadores(mantenciones); 
     }
     

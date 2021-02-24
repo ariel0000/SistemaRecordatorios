@@ -11,13 +11,13 @@ import java.util.ArrayList;
  *
  * @author Ariel
  */
-public class EstadoPlanilla extends Estado{
+public class EstadoDebeFactura extends Estado{
 
     @Override
     public void cargarNotifificaciones() {
         super.getControlador().getPanelPrincipal().borrarTabla();
-        ArrayList planillas = super.getControlador().getPanelPrincipal().cargarPlanillasImpagas(); //
-        super.getControlador().getPanelPrincipal().cargarNotificadores(planillas);
+        ArrayList debeFacturas = super.getControlador().getPanelPrincipal().cargarDebeFactura(); //
+        super.getControlador().getPanelPrincipal().cargarNotificadores(debeFacturas);
     }
     
 }
