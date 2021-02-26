@@ -821,6 +821,8 @@
               <Component id="jDateChooserEntrada" min="-2" pref="172" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jCheckBoxNotificar" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="jCheckBoxDebeFactura" min="-2" pref="148" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
               <Component id="jButtonInfo" min="-2" pref="60" max="-2" attributes="0"/>
           </Group>
@@ -888,10 +890,7 @@
                           <Group type="102" attributes="0">
                               <Component id="jScrollPane2" max="32767" attributes="0"/>
                               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jCheckBoxPagado" max="32767" attributes="0"/>
-                                  <Component id="jCheckBoxEntregado" pref="0" max="32767" attributes="0"/>
-                              </Group>
+                              <Component id="jCheckBoxPagado" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jButtonVerPago" min="-2" max="-2" attributes="0"/>
@@ -901,7 +900,7 @@
                               <Component id="jButtonPagoCheque" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
                               <Component id="jFrameDeudaPlanilla" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="43" max="32767" attributes="0"/>
+                              <EmptySpace pref="258" max="32767" attributes="0"/>
                               <Component id="jButtonCancel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="jButtonGuardar" min="-2" max="-2" attributes="0"/>
@@ -932,7 +931,10 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="jCheckBoxNotificar" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="jCheckBoxNotificar" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jCheckBoxDebeFactura" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
                                           <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
@@ -1001,13 +1003,9 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jButtonBorrarPago" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" attributes="0">
-                              <Component id="jCheckBoxPagado" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jCheckBoxEntregado" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="jCheckBoxPagado" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="42" max="32767" attributes="0"/>
+                      <EmptySpace pref="53" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
@@ -1438,14 +1436,12 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonInfoActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JCheckBox" name="jCheckBoxEntregado">
+    <Component class="javax.swing.JCheckBox" name="jCheckBoxDebeFactura">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="SansSerif" size="18" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="&quot;&lt;html&gt;&lt;p&gt;Veh&amp;iacute;culo&lt;/p&gt;&lt;p&gt;&amp;nbsp;Entregado&lt;/p&gt;&lt;/html&gt;&quot;" type="code"/>
-        </Property>
+        <Property name="text" type="java.lang.String" value="Debe Factura"/>
       </Properties>
     </Component>
   </SubComponents>

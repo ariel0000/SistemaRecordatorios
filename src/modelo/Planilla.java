@@ -7,6 +7,7 @@ package modelo;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import javax.swing.JOptionPane;
 import vistas.PanelPlanillaNueva;
 
@@ -16,8 +17,11 @@ import vistas.PanelPlanillaNueva;
  */
 public class Planilla extends Notificador {
 
-    public Planilla(int id, int prioridad, String tipo, String descripcion, String nombre, String apellido) {
+    private LocalDate fecha_entrada;
+    
+    public Planilla(int id, int prioridad, String tipo, String descripcion, String nombre, String apellido, LocalDate fecha_entrada) {
         super(id, prioridad, tipo, descripcion, nombre, apellido);
+        this.fecha_entrada = fecha_entrada;
     }
 
     @Override
@@ -38,7 +42,7 @@ public class Planilla extends Notificador {
     public void verNotificacion() {
         //Desde acá se abre la vista correspondiente para poder ver la Planilla. Será la vista principal?
         String[] options = new String[] {"Ver Planilla", "Dejar de Notificar"};
-        JLabelAriel label1 = new JLabelAriel("Planilla de: "+this.getNombre()+" "+this.getApellido());
+        JLabelAriel label1 = new JLabelAriel("Planilla de: "+this.getNombre()+" "+this.getApellido()+" con Fecha de Entrada: "+this.fecha_entrada);
         int response = JOptionPane.showOptionDialog(null, label1, "", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
         switch (response) {
             case 0:
@@ -57,6 +61,7 @@ public class Planilla extends Notificador {
     @Override
     public void verNotificacion(int sobrecarga) {
         // Método para que su muestre la notificación emergente al inicio del programa. No permite "Ver Notificación" pero sí "Dejar de notficar"
+        // Por ahora no se usa en este tipo de notificación
     }
 
     @Override

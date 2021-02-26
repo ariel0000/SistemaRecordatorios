@@ -22,8 +22,6 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JLabel;
 
 import javax.swing.JOptionPane;
@@ -205,7 +203,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         jButtonModifRep = new javax.swing.JButton();
         jCheckBoxNotificar = new javax.swing.JCheckBox();
         jButtonInfo = new javax.swing.JButton();
-        jCheckBoxEntregado = new javax.swing.JCheckBox();
+        jCheckBoxDebeFactura = new javax.swing.JCheckBox();
 
         jFrameContado.setAlwaysOnTop(true);
         jFrameContado.setLocationByPlatform(true);
@@ -842,8 +840,8 @@ public class PanelPlanillaNueva extends JPanelCustom {
             }
         });
 
-        jCheckBoxEntregado.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jCheckBoxEntregado.setText("<html><p>Veh&iacute;culo</p><p>&nbsp;Entregado</p></html>");
+        jCheckBoxDebeFactura.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jCheckBoxDebeFactura.setText("Debe Factura");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -866,6 +864,8 @@ public class PanelPlanillaNueva extends JPanelCustom {
                 .addComponent(jDateChooserEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jCheckBoxNotificar)
+                .addGap(18, 18, 18)
+                .addComponent(jCheckBoxDebeFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButtonInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(layout.createSequentialGroup()
@@ -925,9 +925,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jScrollPane2)
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jCheckBoxPagado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jCheckBoxEntregado, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                                .addComponent(jCheckBoxPagado))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jButtonVerPago)
                                 .addGap(6, 6, 6)
@@ -936,7 +934,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
                                 .addComponent(jButtonPagoCheque)
                                 .addGap(10, 10, 10)
                                 .addComponent(jFrameDeudaPlanilla)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 258, Short.MAX_VALUE)
                                 .addComponent(jButtonCancel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jButtonGuardar)))))
@@ -959,7 +957,9 @@ public class PanelPlanillaNueva extends JPanelCustom {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(1, 1, 1)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jCheckBoxNotificar)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jCheckBoxNotificar)
+                                        .addComponent(jCheckBoxDebeFactura))
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
                                             .addGap(3, 3, 3)
@@ -1010,11 +1010,8 @@ public class PanelPlanillaNueva extends JPanelCustom {
                                 .addComponent(jLabel10)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButtonBorrarPago))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jCheckBoxPagado)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jCheckBoxEntregado)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE))
+                            .addComponent(jCheckBoxPagado))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
@@ -1034,7 +1031,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
     }// </editor-fold>//GEN-END:initComponents
 
     private void llenarCampos(int numero) {
-
+            //Consulta y llena los campos de una planilla a modificar con id (int numero)
         this.jLabelNumPlanilla.setText("" + numero);
         String consulta, nombreApellido, marcaModeloPat;
         Connection co = this.controlador.obtenerConexion();
@@ -1057,7 +1054,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
                 if(this.jDateChooserSalida.getDate() != null)
                     this.jCheckBoxFacturado.setSelected(true);  //Facturado
                 this.jTextFieldDescripcion.setText(rs.getString(9));  //Descripcion
-                this.jCheckBoxEntregado.setSelected(rs.getBoolean(10)); //Entregado
+                this.jCheckBoxDebeFactura.setSelected(rs.getBoolean(10)); //Entregado
                 this.jCheckBoxNotificar.setSelected(rs.getBoolean(11));  //Notificar
                 this.jTextFieldDueñoCliente.setText("Cliente: " + nombreApellido);
                 this.jLabelVh.setText(" ,Camión: " + marcaModeloPat);
@@ -1441,7 +1438,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
             ps.setInt(7, Integer.valueOf(chofer.getKey())); //idpersona - para chofer
             ps.setInt(8, Integer.valueOf(vh.getKey()));
             ps.setBoolean(9, this.jCheckBoxFacturado.isSelected()); //facturado
-            ps.setBoolean(10, this.jCheckBoxEntregado.isSelected()); //Entregado
+            ps.setBoolean(10, this.jCheckBoxDebeFactura.isSelected()); //Entregado
             ps.setBoolean(11, this.jCheckBoxNotificar.isSelected());  //Notificar
             int executeUpdate = ps.executeUpdate();
             co.commit(); //Ahora si se acepta que anduvo bien
@@ -1485,7 +1482,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
             ps.setBoolean(3, this.jCheckBoxPagado.isSelected()); //pagado
             ps.setString(4, this.jTextFieldDescripcion.getText()); //Descripción
             ps.setBoolean(5, this.jCheckBoxFacturado.isSelected()); //facturado
-            ps.setBoolean(6, this.jCheckBoxEntregado.isSelected()); //Entregado
+            ps.setBoolean(6, this.jCheckBoxDebeFactura.isSelected()); //Entregado
             ps.setBoolean(7, this.jCheckBoxNotificar.isSelected()); //Notificar
             int executeUpdate = ps.executeUpdate();
             co.commit(); //Ahora si se acepta que anduvo bien
@@ -2115,7 +2112,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
     private javax.swing.JButton jButtonVerPago;
     private javax.swing.JCheckBox jCheckBoxChCobrado;
     private javax.swing.JCheckBox jCheckBoxChequeNuevo;
-    private javax.swing.JCheckBox jCheckBoxEntregado;
+    private javax.swing.JCheckBox jCheckBoxDebeFactura;
     private javax.swing.JCheckBox jCheckBoxFacturado;
     private javax.swing.JCheckBox jCheckBoxNotificar;
     private javax.swing.JCheckBox jCheckBoxNotificarCh;
@@ -2280,6 +2277,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         cargarCamiones(0); //El 0 significa que no hay id de Cliente
         this.jDateChooserEntrada.setDate(new Date()); //Fecha de Hoy por defecto
         agregarListenersJComboBox(); //Ahora el de Vehículos solamente
+        this.jCheckBoxDebeFactura.setSelected(true);  //Por defecto se debe factura
     }
 
     private void cargarCamiones(int idCliente) {
