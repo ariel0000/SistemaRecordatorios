@@ -1567,7 +1567,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
     }
     
     private long montoPorReparaciones(int idCliente) {
-        //Obtiene la suma de los importes de las reparaciones asignadas a las planillas marcadas como impagas y facturadas
+        //Obtiene la suma de los importes de las reparaciones asignadas a las planillas
         long suma = 0;
         Connection co = this.controlador.obtenerConexion();
         String sql = "SELECT SUM(r.IMPORTE) FROM reparacion AS r INNER JOIN planilla as p ON p.idplanilla = r.idplanilla INNER JOIN cliente"
