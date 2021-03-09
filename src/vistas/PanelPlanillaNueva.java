@@ -1567,11 +1567,11 @@ public class PanelPlanillaNueva extends JPanelCustom {
     }
     
     private long montoPorReparaciones(int idCliente) {
-        //Obtiene la suma de los importes de las reparaciones asignadas a las planillas marcadas como impagas y facturadas
+        //Obtiene la suma de los importes de todas las reparaciones asignadas a las planillas
         long suma = 0;
         Connection co = this.controlador.obtenerConexion();
         String sql = "SELECT SUM(r.IMPORTE) FROM reparacion AS r INNER JOIN planilla as p ON p.idplanilla = r.idplanilla INNER JOIN cliente"
-                + " AS c ON p.idcliente = c.idcliente WHERE c.idcliente = '"+idCliente+"' AND p.pagado = false AND p.facturado = true ";
+                + " AS c ON p.idcliente = c.idcliente WHERE c.idcliente = '"+idCliente+"'";
         Statement st;
         try {
             st = co.createStatement();
@@ -1589,7 +1589,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
     private long montoPagos(int idCliente, int recarga){
         //Método que retorna el importe total de pagos del cliente.
         String sql = "SELECT p.idplanilla FROM planilla as p INNER JOIN cliente AS c ON p.idcliente = c.idcliente "
-                + "WHERE c.idcliente = '"+idCliente+"' AND p.facturado = true"; //todas las planillas del Cliente
+                + "WHERE c.idcliente = '"+idCliente+"' "; //todas las planillas del Cliente
         long monto = 0;
         try{
             Statement st = this.controlador.obtenerConexion().createStatement();
