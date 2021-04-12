@@ -705,7 +705,7 @@ public class PanelPrincipal extends JPanelCustom {
     }
     
     public ArrayList<Notificador> cargarMantenimientos(){
-            //Método que devuelve una lista de todas las mantenciones por realizar. No devuelve las incompletas
+            //Método que devuelve una lista de todas los mantenimientos por realizar. No devuelve las incompletas
         String nombre, apellido, descripcion, modelo, marca;
         LocalDate fechaSalida, fechaHoy = LocalDate.now();
         int prioridad, idRep;
@@ -713,7 +713,7 @@ public class PanelPrincipal extends JPanelCustom {
         String query = "SELECT r.idreparacion, r.descripcion, per.nombre, per.apellido, v.marca, v.modelo, r.fecha_terminado, r.periodo"
                 + " FROM reparacion AS r INNER JOIN planilla AS p ON r.idplanilla = p.idplanilla INNER JOIN cliente AS c ON "
                 + "c.idcliente = p.idcliente INNER JOIN persona AS per ON per.idpersona = c.idpersona INNER JOIN vehiculo AS v ON "
-                + " v.idvehiculo = p.idvehiculo WHERE r.tipo = 'mantenimiento' AND r.completada = true AND r.notificar = TRUE";
+                + " v.idvehiculo = p.idvehiculo WHERE r.tipo = 'mantenimiento' AND r.completada = true AND r.notificar = TRUE"; 
         try{
             Statement st = this.controlador.obtenerConexion().createStatement();
             ResultSet rs = st.executeQuery(query);

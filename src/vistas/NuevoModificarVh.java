@@ -71,7 +71,7 @@ public class NuevoModificarVh extends JPanelCustom {
         this.idVh = idVh;
         inicializarCamposEnComun();
         this.jButtonGuardar.setText("Actualizar");
-        this.jTextFieldPatente.setEnabled(false); //No se puede volver a modificar la patente
+     //   this.jTextFieldPatente.setEnabled(false); //Si se puede volver a modificar la patente
         cargarDatos(idVh); //Paso el id del vehículo para que se carguen los datos correctos
         this.cargarChoferesActuales(idVh);
     }
@@ -889,7 +889,7 @@ public class NuevoModificarVh extends JPanelCustom {
                     JOptionPane.showMessageDialog(null, label3, "ATENCIÓN", JOptionPane.WARNING_MESSAGE); 
                 }
             else
-                valor = actualizarVh(); //Lo que debería hacer siendo un Vehículo a modificar
+                valor = actualizarVh(); //Lo que debería hacer siendo un Vehículo a modificar. La patente y el modelo no quedan vacíos
         }
         else{
             label3 = new JLabelAriel("Verifique si los campos de PATENTE y MODELO tienen datos");
@@ -904,6 +904,7 @@ public class NuevoModificarVh extends JPanelCustom {
         boolean valor = false;
         String marca =  this.jComboBoxMarcasVh.getSelectedItem().toString(); //Si no anda así castearlo a String
         String model = this.jTextFieldModelo.getText();
+        String patente = this.jTextFieldPatente.getText();
       //  String patente = this.jTextFieldPatente.getText();
         int modeloAnio = Integer.valueOf(this.jComboBoxAnioModelo.getSelectedItem().toString());
       //  ComboItem cmItem = (ComboItem) (this.jComboBoxCliente.getSelectedItem());  
@@ -912,11 +913,12 @@ public class NuevoModificarVh extends JPanelCustom {
             //Guarda un nuevo Vh
             conexion.setAutoCommit(false);
             PreparedStatement ps = conexion.prepareStatement("UPDATE vehiculo SET modelo = ?, marca = ?, "
-                    + "modeloanio = ?, idduenio = ? WHERE idvehiculo = '"+idVh+"'");
+                    + "modeloanio = ?, idduenio = ?, patente = ? WHERE idvehiculo = '"+idVh+"'");
             ps.setString(1, model);
             ps.setString(2, marca);
             ps.setInt(3, modeloAnio);
             ps.setInt(4, this.idCliente);
+            ps.setString(5, patente);
             ps.executeUpdate();
             
             conexion.commit();

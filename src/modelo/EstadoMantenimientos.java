@@ -16,8 +16,8 @@ public class EstadoMantenimientos extends Estado{
     @Override
     public void cargarNotifificaciones() {
         super.getControlador().getPanelPrincipal().borrarTabla();
-        ArrayList mantenciones = super.getControlador().getPanelPrincipal().cargarMantenimientos(); //
-        super.getControlador().getPanelPrincipal().cargarNotificadores(mantenciones); 
+        ArrayList mantenimientos = super.getControlador().getPanelPrincipal().cargarMantenimientos(); //
+        super.getControlador().getPanelPrincipal().cargarNotificadores(mantenimientos); 
     }
     
 }

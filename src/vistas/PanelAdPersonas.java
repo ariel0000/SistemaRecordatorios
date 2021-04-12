@@ -86,8 +86,16 @@ public class PanelAdPersonas extends JPanelCustom {
                 datos[0] = rs.getString(1); //Id de la persona
                 datos[1] = rs.getString(3); //Apellido
                 datos[2] = rs.getString(2); //Nombre
-                datos[3] = String.valueOf((rs.getString(4))!= null); //True si no es igual a "null" - Entonces TRUE si es Chofer 
-                datos[4] = String.valueOf(rs.getString(5) != null); // True si es Cliente
+                if(rs.getString(4) != null) //La consulta trae el id -> Si es null no es, en este caso, chofer
+                    datos[3] = "Sí";
+                else
+                    datos[3] = "No";
+             //   datos[3] = String.valueOf((rs.getString(4))!= null); //True si no es igual a "null" - Entonces TRUE si es Chofer 
+                if(rs.getString(5) != null)
+                    datos[4] = "Sí";
+                else
+                    datos[4] = "No";
+             //   datos[4] = String.valueOf(rs.getString(5) != null); // True si es Cliente
                 datos[5] = rs.getString(6); //cuil
                 datos[6] =  String.valueOf(tienePlanillasImpagas(rs.getInt(1)));
                 if(rs.getBoolean(7))
