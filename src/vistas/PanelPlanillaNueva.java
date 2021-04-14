@@ -2435,7 +2435,10 @@ public class PanelPlanillaNueva extends JPanelCustom {
                 registros[1] = rs.getString(2);
                 registros[2] = rs.getString(5);
                 registros[3] = rs.getLong(3);
-                registros[4] = rs.getBoolean(4);
+                if(rs.getBoolean(4))
+                    registros[4] = "Si";
+                else
+                    registros[4] = "No";
                 this.tablaReparaciones.addRow(registros);
             }
         } catch (SQLException ex) {
