@@ -277,9 +277,14 @@ public class PanelAdPagos extends JPanelCustom {
     
     private void cargarPlanilla(int idPago){
         //Método para cargar la planilla correspondiente al pago
-        String query = "SELECT p.idplanilla FROM planilla AS p INNER JOIN forma_de_pago AS fdp ON p.idplanilla = fdp.idplanilla " +
-            "WHERE fdp.idforma_de_pago = (SELECT idforma_de_pago FROM cheque WHERE cheque.idcheque = '"+idPago+"') " +
-            "OR fdp.idforma_de_pago = (SELECT idforma_de_pago FROM contado WHERE contado.idcontado = '"+idPago+"')";
+        String query;
+        if(this.jRadioButtonCheque.isSelected()){
+            query = "SELECT p.idplanilla FROM planilla AS p INNER JOIN forma_de_pago AS fdp ON p.idplanilla = fdp.idplanilla " +
+                "WHERE fdp.idforma_de_pago = (SELECT idforma_de_pago FROM cheque WHERE cheque.idcheque = '"+idPago+"') ";       
+        }
+        else
+            query = "SELECT p.idplanilla FROM planilla AS p INNER JOIN forma_de_pago AS fdp ON p.idplanilla = fdp.idplanilla " +
+                "WHERE fdp.idforma_de_pago = (SELECT idforma_de_pago FROM contado WHERE contado.idcontado = '"+idPago+"')";
         int idPlanilla = 0;
         try{
             Statement st = this.controlador.obtenerConexion().createStatement();
