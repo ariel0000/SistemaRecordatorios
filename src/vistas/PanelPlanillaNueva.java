@@ -2458,6 +2458,11 @@ public class PanelPlanillaNueva extends JPanelCustom {
             consulta = "SELECT p.nombre, p.apellido, c.apodo, p.idpersona FROM persona AS p inner JOIN chofer AS c "
                     + "ON p.idpersona = c.idpersona ORDER BY p.nombre";
         }
+        else {  //Se carga la persona que es chofer para la planilla a modificar (El parámetro idpersona en este caso es idplanilla)
+            consulta = "SELECT p.nombre, p.apellido, c.apodo, p.idpersona FROM persona AS p inner JOIN planilla AS pl "
+                    + "ON p.idpersona = pl.idpersona LEFT JOIN chofer AS c ON c.idpersona = p.idpersona "
+                    + "WHERE pl.idplanilla = '"+idpersona+"'  ORDER BY p.nombre";
+        }
 /*       
         consulta = "SELECT p.nombre, p.apellido, c.apodo, p.idpersona FROM persona AS p inner join planilla as pl on "
                 + "pl.idpersona = p.idpersona inner join chofer as c on c.idpersona = p.idpersona "
@@ -2515,7 +2520,7 @@ public class PanelPlanillaNueva extends JPanelCustom {
         this.cargarImporte();
         cargarTablaPagos(numero);
         cargarTablaReparaciones(numero); //Cargo las reparaciones con el numero de planillas
-        cargarPersonas("-1"); //Si es nueva planilla va un -1 que carga --> todas los choferes
+        cargarPersonas(""+numero); //Si es nueva planilla va un -1 que carga --> todas los choferes
         this.jLabelNombreApodo.setText(this.nombre+" "+this.apellido+" 'alias' "+this.apodo); //Sí o sí dsps de la anterior línea
         if (this.jComboBoxPersona.getItemCount() > 1) {
             this.jComboBoxPersona.setSelectedIndex(1);
