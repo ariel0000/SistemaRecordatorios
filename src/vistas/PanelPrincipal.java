@@ -174,7 +174,7 @@ public class PanelPrincipal extends JPanelCustom {
         jLabel25.setText(" * Mantenimiento incompleto: Reparación de tipo mantenimiento marcada como incompleta");
 
         jLabel26.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel26.setText(" * Planillas impagas. Son las planillas marcadas como facturadas pero marcadas como impagas.");
+        jLabel26.setText(" * Debe Factura: Son las planillas que todavía no han sido marcadas como facturadas.");
 
         jLabel27.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabel27.setText(" * Reparaciones incompletas: Son las reparaciones creadas que todavía no se marcaron como terminadas  ");
@@ -195,10 +195,10 @@ public class PanelPrincipal extends JPanelCustom {
         });
 
         jLabel30.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel30.setText(" * Service por realizar: Mantenimiento de un Camión que debe ser realizado porque se cumplió el periodo.");
+        jLabel30.setText(" * Service por realizar: Mantenimiento que debe ser realizado porque se cumplió el periodo.");
 
         jLabel31.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jLabel31.setText("* Estado de CC: A partir de la planilla impagas (más antigua) de un Cliente que figuren como facturada");
+        jLabel31.setText("* Estado de CC: A partir de la planilla impaga (más antigua) de un Cliente que figuren como facturada");
 
         javax.swing.GroupLayout jFrameInfoLayout = new javax.swing.GroupLayout(jFrameInfo.getContentPane());
         jFrameInfo.getContentPane().setLayout(jFrameInfoLayout);
@@ -231,9 +231,9 @@ public class PanelPrincipal extends JPanelCustom {
             .addGroup(jFrameInfoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel24)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel26)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel27)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel25)
@@ -521,7 +521,7 @@ public class PanelPrincipal extends JPanelCustom {
                 }
                 nombre = rs.getString(4);
                 apellido = rs.getString(5);
-                Cheque cheque = new Cheque(rs.getInt(1), prioridad, rs.getLong(3), "cheque",
+                Cheque cheque = new Cheque(rs.getInt(1), prioridad, rs.getString(3), "cheque",
                         "Cheque Pago inmediato "+variable+". monto: "+rs.getLong(6), nombre, apellido, color); //idcheque, prioridad, numeroDeCheque
                 chequesComunes.add(cheque);  //Se cargan primero los que tienen más prioridad
             }
@@ -573,7 +573,7 @@ public class PanelPrincipal extends JPanelCustom {
                 }
                 nombre = rs.getString(4);
                 apellido = rs.getString(5);
-                Cheque cheque = new Cheque(rs.getInt(1), prioridad, rs.getLong(3), "cheque",
+                Cheque cheque = new Cheque(rs.getInt(1), prioridad, rs.getString(3), "cheque",
                         "Cheque Pago Diferido "+variable+". monto:"+rs.getLong(6), nombre, apellido, color);
                 chequesComunes.add(cheque);  //Se cargan primero los que tienen más prioridad
             }
@@ -705,7 +705,7 @@ public class PanelPrincipal extends JPanelCustom {
     }
     
     public ArrayList<Notificador> cargarMantenimientos(){
-            //Método que devuelve una lista de todas las mantenciones por realizar. No devuelve las incompletas
+            //Método que devuelve una lista de todas los mantenimientos por realizar. No devuelve las incompletas
         String nombre, apellido, descripcion, modelo, marca;
         LocalDate fechaSalida, fechaHoy = LocalDate.now();
         int prioridad, idRep;
@@ -713,7 +713,7 @@ public class PanelPrincipal extends JPanelCustom {
         String query = "SELECT r.idreparacion, r.descripcion, per.nombre, per.apellido, v.marca, v.modelo, r.fecha_terminado, r.periodo"
                 + " FROM reparacion AS r INNER JOIN planilla AS p ON r.idplanilla = p.idplanilla INNER JOIN cliente AS c ON "
                 + "c.idcliente = p.idcliente INNER JOIN persona AS per ON per.idpersona = c.idpersona INNER JOIN vehiculo AS v ON "
-                + " v.idvehiculo = p.idvehiculo WHERE r.tipo = 'mantenimiento' AND r.completada = true AND r.notificar = TRUE";
+                + " v.idvehiculo = p.idvehiculo WHERE r.tipo = 'mantenimiento' AND r.completada = true AND r.notificar = TRUE"; 
         try{
             Statement st = this.controlador.obtenerConexion().createStatement();
             ResultSet rs = st.executeQuery(query);
