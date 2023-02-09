@@ -199,7 +199,7 @@ public class PanelAdPersonas extends JPanelCustom {
         jLabel5.setText("Filtros:");
 
         jCheckBoxApeNom.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jCheckBoxApeNom.setText("Nombre o Apellido");
+        jCheckBoxApeNom.setText("Apellido o Nombre:");
 
         jCheckBoxCli.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jCheckBoxCli.setText("Es Cliente");
@@ -241,13 +241,13 @@ public class PanelAdPersonas extends JPanelCustom {
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jCheckBoxApeNom)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextFieldApeNom, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldApeNom, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jCheckBoxCli)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(jCheckBoxPlImpagas)
-                        .addGap(244, 244, 244)
+                        .addGap(235, 235, 235)
                         .addComponent(Filtrar))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButtonAgregarPer)
@@ -256,7 +256,7 @@ public class PanelAdPersonas extends JPanelCustom {
                         .addGap(18, 18, 18)
                         .addComponent(jButtonEliminarPer)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1032, Short.MAX_VALUE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -422,6 +422,6 @@ public class PanelAdPersonas extends JPanelCustom {
     @Override
     public void onFocus() {
         //Hay que recargar la tabla de Personas
-        cargarPersonas(armarQuery());
+        cargarPersonas(this.armarQuery());
     }
 }
