@@ -521,7 +521,7 @@ public class PanelPrincipal extends JPanelCustom {
                 }
                 nombre = rs.getString(4);
                 apellido = rs.getString(5);
-                Cheque cheque = new Cheque(rs.getInt(1), prioridad, rs.getLong(3), "cheque",
+                Cheque cheque = new Cheque(rs.getInt(1), prioridad, rs.getString(3), "cheque",
                         "Cheque Pago inmediato "+variable+". monto: "+rs.getLong(6), nombre, apellido, color); //idcheque, prioridad, numeroDeCheque
                 chequesComunes.add(cheque);  //Se cargan primero los que tienen más prioridad
             }
@@ -573,7 +573,7 @@ public class PanelPrincipal extends JPanelCustom {
                 }
                 nombre = rs.getString(4);
                 apellido = rs.getString(5);
-                Cheque cheque = new Cheque(rs.getInt(1), prioridad, rs.getLong(3), "cheque",
+                Cheque cheque = new Cheque(rs.getInt(1), prioridad, rs.getString(3), "cheque",
                         "Cheque Pago Diferido "+variable+". monto:"+rs.getLong(6), nombre, apellido, color);
                 chequesComunes.add(cheque);  //Se cargan primero los que tienen más prioridad
             }

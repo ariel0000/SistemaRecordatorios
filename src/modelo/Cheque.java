@@ -18,14 +18,14 @@ import vistas.PanelPlanillaNueva;
  */
 public class Cheque extends Notificador {
     
-    private long numeroDeCheque;
+    private String numeroDeCheque;
     
-    public Cheque(int id, int prioridad, long numeroCheque, String tipo, String descripcion, String nombre, String apellido) {
+    public Cheque(int id, int prioridad, String numeroCheque, String tipo, String descripcion, String nombre, String apellido) {
         super(id, prioridad, tipo, descripcion, nombre, apellido);
         this.numeroDeCheque = numeroCheque;
     }
     
-    public Cheque(int id, int prioridad, long numeroCheque, String tipo, String descripcion, String nombre, String apellido, Color color) {
+    public Cheque(int id, int prioridad, String numeroCheque, String tipo, String descripcion, String nombre, String apellido, Color color) {
         super(id, prioridad, tipo, descripcion, nombre, apellido);
         super.color = color;
         this.numeroDeCheque = numeroCheque;
@@ -78,7 +78,7 @@ public class Cheque extends Notificador {
         }
     }
    
-    private long getNumeroCheque(){
+    private String getNumeroCheque(){
         return this.numeroDeCheque;
     }
 
